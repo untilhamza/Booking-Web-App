@@ -9,10 +9,13 @@ const TimeSelector = ({ choosenDate, onChange, time }) => {
   // const [userTime, setUserTime] = useState(time);
   const [day, setDay] = useState(choosenDate.format("dddd DD-MM-YYYY"));
   //console.log("time is ", choosenDate);
-  const handleTimeChange = useCallback((time) => {
-    // setUserTime(time);
-    onChange(time);
-  }, []);
+  const handleTimeChange = useCallback(
+    (time) => {
+      // setUserTime(time);
+      onChange(time);
+    },
+    [onChange]
+  );
 
   useEffect(() => {
     console.log("fetch slot data for ", choosenDate.format("dddd DD-MM-YYYY"));

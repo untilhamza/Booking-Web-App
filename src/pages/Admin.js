@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import Dashboard from "../components/Dashboard";
-import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
+import useHttp from "../hooks/useHttp";
 import moment from "moment";
 import { httpGetBookings } from "../hooks/request";
 import { Modal } from "antd";

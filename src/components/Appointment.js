@@ -7,9 +7,9 @@ const Appointment = ({ appointmentData, onBack, onCancel }) => {
   const handleCancel = () => {
     onCancel();
   };
-  const handleModify = () => {
-    console.log("Modifying...");
-  };
+  // const handleModify = () => {
+  //   console.log("Modifying...");
+  // };
 
   const { modal, handleShow } = useModal(
     "Confirmation",

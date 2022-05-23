@@ -1,6 +1,5 @@
 import BookingTable from "./BookingTable";
 import Calendar from "./Calendar";
-import moment from "moment";
 
 const Dashboard = ({ date, onSelectDate, bookings, status }) => {
   //console.log(bookings);

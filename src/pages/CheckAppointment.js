@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import CheckingForm from "../components/CheckingForm";
-import Appointment from "../components/Appointment";
 import { useHistory } from "react-router-dom";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import { httpCheckBooking } from "../hooks/request";

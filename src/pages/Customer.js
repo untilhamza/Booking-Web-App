@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import BookingMenu from "../components/BookingMenu";
 import { useHistory } from "react-router-dom";
 

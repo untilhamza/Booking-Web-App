@@ -20,7 +20,6 @@ const ViewAppointment = () => {
 
   const {
     status: cancelStatus,
-    data: cancelresponse,
     error: cancelError,
     sendRequest: cancelRequest,
   } = useHttp(httpCancelBooking, true);
@@ -32,11 +31,7 @@ const ViewAppointment = () => {
     }
 
     sendRequest(id);
-
-    return () => {
-      console.log("abort request");
-    };
-  }, []);
+  }, [id, history, sendRequest]);
 
   console.log(id);
 
@@ -50,7 +45,8 @@ const ViewAppointment = () => {
   function cancellingError() {
     Modal.error({
       title: "This is an error message",
-      content: "some messages...some messages...",
+      content: "Something went wrong",
+      onOk: () => history.push("/"),
     });
   }
   const handleCancel = () => {
@@ -63,13 +59,15 @@ const ViewAppointment = () => {
     history.push("/");
   };
 
-  if (error) {
+  if (cancelError || error) {
     cancellingError();
     // return <div>{error} didnot find the appointment</div>;
   }
   return (
     <div>
-      <SimpleBackdrop loading={status === STATUS_PENDING} />
+      <SimpleBackdrop
+        loading={status === STATUS_PENDING || cancelStatus === STATUS_PENDING}
+      />
       {status === STATUS_COMPLETED && (
         <Appointment
           onEdit={() => {}}

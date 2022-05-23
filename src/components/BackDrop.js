@@ -2,8 +2,6 @@ import * as React from "react";
 import Backdrop from "@mui/material/Backdrop";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import DotLoader from "react-spinners/DotLoader";
-
 function SimpleBackdrop({ loading }) {
   //const [open, setOpen] = React.useState(true);
 

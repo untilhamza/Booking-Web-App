@@ -1,10 +1,9 @@
 import React from "react";
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 
-import { Layout, Skeleton } from "antd";
+import { Layout } from "antd";
 
 import Navbar from "./components/Navbar";
-// import BookingForm from "./components/BookingForm";
 
 import Admin from "./pages/Admin";
 import SignIn from "./pages/SignIn";
@@ -15,7 +14,7 @@ import CheckAppointment from "./pages/CheckAppointment";
 import NotFound from "./pages/NotFound";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-const { Footer, Content } = Layout;
+const { Content } = Layout;
 
 const App = () => (
   <div className="App">
@@ -46,12 +45,8 @@ const App = () => (
           <Route path="*">
             <NotFound />
           </Route>
-          {/* <Skeleton /> */}
         </Switch>
       </Content>
-      {/* <Footer>
-        <div>Designed by hsanshine </div>
-      </Footer> */}
     </Layout>
   </div>
 );

@@ -1,4 +1,3 @@
-import { BOOKINGS } from "../data";
 import moment from "moment";
 import db from "../database/firebase-config";
 import {
@@ -33,13 +32,13 @@ function processBooking(result) {
   return bookingData;
 }
 
-async function delay(data) {
-  return new Promise(function (resolve, reject) {
-    setTimeout(() => {
-      resolve(data);
-    }, 2000);
-  });
-}
+// async function delay(data) {
+//   return new Promise(function (resolve, reject) {
+//     setTimeout(() => {
+//       resolve(data);
+//     }, 2000);
+//   });
+// }
 //load bookings for given date as json
 const httpGetBooking = async (id) => {
   const bookingRef = doc(db, "bookings", id);
@@ -104,8 +103,8 @@ const httpGetBookings = async (dateMoment) => {
   dateMoment = new moment(dateMoment);
   let queriedDate = dateMoment.format("YYYY-MM-DD").toString();
   let nextDate = dateMoment.add(1, "day").format("YYYY-MM-DD").toString();
-  let parsedqueriedDate = Date.parse(queriedDate + "T" + "00:00");
-  let parsednextDate = Date.parse(nextDate + "T" + "00:00");
+  let parsedqueriedDate = Date.parse(queriedDate + "T00:00");
+  let parsednextDate = Date.parse(nextDate + "T00:00");
   const q = query(
     bookingsCollectionRef,
     where("date", ">", Timestamp.fromMillis(parsedqueriedDate)),

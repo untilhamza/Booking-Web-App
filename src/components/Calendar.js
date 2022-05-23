@@ -1,8 +1,6 @@
-import { Calendar as Cal, Select, Radio, Col, Row } from "antd";
+import { Calendar as Cal } from "antd";
 
 import "./Calendar.css";
-
-const { Group, Button } = Radio;
 
 const Calendar = ({ onSelectDate, heading }) => {
   //   function onPanelChange(value, mode) {

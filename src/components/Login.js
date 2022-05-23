@@ -20,7 +20,6 @@ const SignupForm = () => {
       password: Yup.string().required("Password is required"),
     }),
     onSubmit: (values) => {
-      const REST_API_URL = "YOUR_REST_API_URL";
       //call method to login here
       login(values);
       alert(JSON.stringify(values, null, 2));
