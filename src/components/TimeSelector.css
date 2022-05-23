@@ -1,0 +1,21 @@
+.time-container {
+  display: grid;
+  grid-gap: 0.5rem;
+  /* grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); */
+  grid-template: "1fr 1fr 1fr";
+  /* margin: auto; */
+
+  /* padding: 10px; */
+  /* border: 2px solid #0d6efd; */
+  border-radius: 10px;
+}
+
+@media (min-width: 400px) {
+  .time-container {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
+.choosen-date {
+  font-weight: 700;
+}

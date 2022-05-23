@@ -1,0 +1,16 @@
+.login {
+  width: 350px;
+  max-width: 500px;
+  margin: 32px auto 37px;
+
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 10px rgba(0, 0, 0, 0.15);
+}
+
+@media (min-width: 500px) {
+  .login {
+    width: 40rem;
+  }
+}
