@@ -17,12 +17,8 @@ const NewBooking = () => {
     sendRequest,
   } = useHttp(httpSubmitBooking);
 
-  const {
-    status: slotStatus,
-    data: slotsArray,
-    error: slotsError,
-    sendRequest: sendRequestSlots,
-  } = useHttp(httpGetSlots);
+  const { data: slotsArray, sendRequest: sendRequestSlots } =
+    useHttp(httpGetSlots);
 
   function handleGetSlots(date) {
     sendRequestSlots(date);
