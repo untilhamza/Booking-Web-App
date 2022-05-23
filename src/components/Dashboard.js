@@ -1,7 +1,7 @@
 import BookingTable from "./BookingTable";
 import Calendar from "./Calendar";
 
-const Dashboard = ({ date, onSelectDate, bookings, status }) => {
+const Dashboard = ({ date, onSelectDate, bookings, status, onView }) => {
   //console.log(bookings);
   //console.log(date);
   const handleSelectDate = (newDate) => {
@@ -15,7 +15,12 @@ const Dashboard = ({ date, onSelectDate, bookings, status }) => {
           <Calendar onSelectDate={handleSelectDate} />
         </div>
         <div className="col">
-          <BookingTable date={date} bookings={bookings} status={status} />
+          <BookingTable
+            date={date}
+            bookings={bookings}
+            status={status}
+            onView={onView}
+          />
         </div>
       </div>
     </div>

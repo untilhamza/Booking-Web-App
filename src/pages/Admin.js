@@ -4,8 +4,10 @@ import useHttp from "../hooks/useHttp";
 import moment from "moment";
 import { httpGetBookings } from "../hooks/request";
 import { Modal } from "antd";
+import { useHistory } from "react-router-dom";
 
 const Admin = () => {
+  const history = useHistory();
   const [date, setDate] = useState(moment());
   //console.log(date);
   const {
@@ -29,9 +31,9 @@ const Admin = () => {
     setDate(newDate);
   };
 
-  useEffect(() => {
-    console.log("selected date effect", date);
-  }, [date]);
+  const handleOnView = (id) => {
+    history.push(`/appointment/${id}`);
+  };
 
   useEffect(() => {
     // sendRequest(date.format("DD-MM-YYYY"));
@@ -48,6 +50,7 @@ const Admin = () => {
         date={date}
         onSelectDate={handleSelectDate}
         bookings={bookings}
+        onView={handleOnView}
         status={status}
       />
     </div>

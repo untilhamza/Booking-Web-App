@@ -31,6 +31,17 @@ function processBooking(result) {
   };
   return bookingData;
 }
+function processSlots(result) {
+  let bookingData = {
+    time: result.date.toDate().toLocaleTimeString([], {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: false,
+    }),
+    isBooked: result.status === "confirmed",
+  };
+  return bookingData;
+}
 
 // async function delay(data) {
 //   return new Promise(function (resolve, reject) {
@@ -74,7 +85,7 @@ const httpCheckBooking = async (email) => {
   const q = query(
     bookingsCollectionRef,
     where("email", "==", email),
-    orderBy("date")
+    orderBy("date", "desc")
   );
 
   // const bookingRef = doc(db, "bookings", id);
@@ -118,22 +129,33 @@ const httpGetBookings = async (dateMoment) => {
       ...processBooking(doc.data()),
       id: doc.id,
     }));
-    console.log(result);
+    //console.log(result);
     return result;
   }
-  // //console.log(bookingSnap);
-
-  // //format this date here!!!!
-  // // setTimeout(() => console.log("got bookings"), 4000);
-  // //const response = await fetch(`${API_URL}/bookings/${date}`);
-  // //return await response.json();
-  // return delay(BOOKINGS);
 };
 
 //load already booked time slots for given date as json
-const httpGetSlots = async (date) => {
-  const response = await fetch(`${API_URL}/slots/${date}`);
-  return await response.json();
+const httpGetSlots = async (dateMoment) => {
+  dateMoment = new moment(dateMoment);
+  let queriedDate = dateMoment.format("YYYY-MM-DD").toString();
+  let nextDate = dateMoment.add(1, "day").format("YYYY-MM-DD").toString();
+  let parsedqueriedDate = Date.parse(queriedDate + "T00:00");
+  let parsednextDate = Date.parse(nextDate + "T00:00");
+  const q = query(
+    bookingsCollectionRef,
+    where("date", ">", Timestamp.fromMillis(parsedqueriedDate)),
+    where("date", "<", Timestamp.fromMillis(parsednextDate))
+  );
+  //qeury booking greater than the given date but less the date after....
+
+  const bookingSnap = await getDocs(q);
+  if (bookingSnap) {
+    let result = bookingSnap.docs.map((doc) => ({
+      ...processSlots(doc.data()),
+      id: doc.id,
+    }));
+    return result;
+  }
 };
 
 //submit a new booking to the system
@@ -223,6 +245,7 @@ const httpLogin = async (credentials) => {
       console.log(error);
     });
 };
+
 export {
   httpGetBooking,
   httpGetBookings,

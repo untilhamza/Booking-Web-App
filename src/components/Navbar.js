@@ -14,7 +14,7 @@ const Navbar = () => {
             Booking
           </NavLink>
 
-          <NavLink className="nav-link" to="/login">
+          <NavLink className="nav-link" to="/admin">
             Admin
           </NavLink>
         </Nav>

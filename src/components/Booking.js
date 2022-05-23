@@ -2,12 +2,16 @@ import React from "react";
 import Button from "react-bootstrap/esm/Button";
 import "./Booking.css";
 
-const Booking = (props) => {
-  const { name, time, status } = props.booking;
+const Booking = ({ booking, onView }) => {
+  const { name, time, status, id } = booking;
   // console.log(name, time, status);
   // const name = "customer name";
   // const status = "upcoming";
   // const time = "11:30";
+
+  function handleView() {
+    onView(id);
+  }
 
   const setStatus = (status) => {
     if (status === "confirmed") return "bg-success";
@@ -26,7 +30,11 @@ const Booking = (props) => {
         </span>
       </td>
       <td className="p-2">
-        {<Button className="btn-sm btn-secondary w-100">View</Button>}
+        {
+          <Button className="btn-sm btn-secondary w-100" onClick={handleView}>
+            View
+          </Button>
+        }
       </td>
       {}
     </tr>

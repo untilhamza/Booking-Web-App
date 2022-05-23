@@ -4,11 +4,19 @@ import "./TimeSelector.css";
 
 import Button from "react-bootstrap/Button";
 
-const TimeSelector = ({ choosenDate, onChange, time }) => {
+const TimeSelector = ({ choosenDate, onChange, time, slots }) => {
   //console.log("sent time", time);
   // const [userTime, setUserTime] = useState(time);
-  const [day, setDay] = useState(choosenDate.format("dddd DD-MM-YYYY"));
+  // const [day, setDay] = useState(choosenDate.format("dddd DD-MM-YYYY"));
+  // const day = choosenDate.format("dddd DD-MM-YYYY");
   //console.log("time is ", choosenDate);
+
+  function checkAvailability(slot) {
+    const time = slot.time;
+    //console.log(slots?.some((obj) => obj.time === time));
+    return slots?.some((obj) => obj.isBooked && obj.time === time);
+  }
+
   const handleTimeChange = useCallback(
     (time) => {
       // setUserTime(time);
@@ -18,10 +26,8 @@ const TimeSelector = ({ choosenDate, onChange, time }) => {
   );
 
   useEffect(() => {
-    console.log("fetch slot data for ", choosenDate.format("dddd DD-MM-YYYY"));
-    setDay(choosenDate.format("dddd DD-MM-YYYY"));
-    handleTimeChange("");
-  }, [choosenDate, handleTimeChange]);
+    //handleTimeChange("");
+  }, [choosenDate]);
 
   //console.log(choosenDate.toDate());
 
@@ -35,11 +41,11 @@ const TimeSelector = ({ choosenDate, onChange, time }) => {
         variant={`${
           slot.time === time
             ? "success"
-            : slot.isBooked
+            : checkAvailability(slot)
             ? "secondary"
             : "primary"
         }`}
-        disabled={slot.isBooked}
+        disabled={checkAvailability(slot)} //if teh slot is in the slots array we got!!
         key={slot.id}
         onClick={() => handleTimeChange(slot.time)}
       >
@@ -56,7 +62,6 @@ const TimeSelector = ({ choosenDate, onChange, time }) => {
           {choosenDate.format("dddd DD/MM/YYYY").toString()}
         </span>
       </p>
-      <div>{day}</div>
       <div className="time-container">{buttons}</div>
     </>
   );

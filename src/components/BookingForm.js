@@ -25,14 +25,17 @@ const schema = yup.object().shape({
   time: yup.string().required("*Booking time is required!"),
 });
 
-const BookingForm = ({ onCancel, onConfirm, oldData }) => {
+const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots }) => {
+  function handleGetSlots(date) {
+    onGetSlots(date);
+  }
   const disablePastDates = (submittedValue) => {
     if (!submittedValue) {
       return false;
     }
     return (
-      submittedValue.valueOf() < Date.now() ||
-      submittedValue.valueOf() >= moment().add(1, "month")
+      submittedValue.valueOf() < moment().add(-1, "day") ||
+      submittedValue.valueOf() >= moment().add(31, "day")
     );
   };
 
@@ -115,10 +118,14 @@ const BookingForm = ({ onCancel, onConfirm, oldData }) => {
               <DatePicker
                 value={values.date}
                 onChange={(enteredMoment) => {
+                  console.log("we enterd a new value");
+                  handleGetSlots(new moment(enteredMoment));
+                  setFieldValue("time", "");
                   setFieldValue("date", enteredMoment);
                 }}
                 defaultPickerValue={moment()}
                 disabledDate={disablePastDates}
+                allowClear={false}
                 className="w-100"
               />
             </div>
@@ -132,6 +139,7 @@ const BookingForm = ({ onCancel, onConfirm, oldData }) => {
                 onChange={(time) => {
                   setFieldValue("time", time);
                 }}
+                slots={slots}
               />
             </div>
             <div className="text-danger font-italic">

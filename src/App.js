@@ -1,10 +1,7 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom";
-
 import { Layout } from "antd";
-
 import Navbar from "./components/Navbar";
-
 import Admin from "./pages/Admin";
 import SignIn from "./pages/SignIn";
 import Customer from "./pages/Customer";

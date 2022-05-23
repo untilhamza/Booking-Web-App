@@ -18,11 +18,10 @@ const ViewAppointment = () => {
     sendRequest,
   } = useHttp(httpGetBooking, true);
 
-  const {
-    status: cancelStatus,
-    error: cancelError,
-    sendRequest: cancelRequest,
-  } = useHttp(httpCancelBooking, true);
+  const { error: cancelError, sendRequest: cancelRequest } = useHttp(
+    httpCancelBooking,
+    true
+  );
 
   useEffect(() => {
     //if no id, just go to the home page
@@ -32,8 +31,6 @@ const ViewAppointment = () => {
 
     sendRequest(id);
   }, [id, history, sendRequest]);
-
-  console.log(id);
 
   function success() {
     Modal.success({
@@ -65,9 +62,7 @@ const ViewAppointment = () => {
   }
   return (
     <div>
-      <SimpleBackdrop
-        loading={status === STATUS_PENDING || cancelStatus === STATUS_PENDING}
-      />
+      <SimpleBackdrop loading={status === STATUS_PENDING} />
       {status === STATUS_COMPLETED && (
         <Appointment
           onEdit={() => {}}

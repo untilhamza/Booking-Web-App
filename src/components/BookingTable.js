@@ -5,8 +5,7 @@ import { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import "./Booking.css";
 import { Skeleton } from "antd";
 
-const BookingTable = ({ date, bookings, status }) => {
-  console.log("testing date", date);
+const BookingTable = ({ date, bookings, status, onView }) => {
   let content = "";
   if (status === STATUS_PENDING) {
     content = (
@@ -20,7 +19,7 @@ const BookingTable = ({ date, bookings, status }) => {
   if (status === STATUS_COMPLETED) {
     if (bookings.length) {
       content = bookings?.map((booking) => (
-        <Booking key={booking.id} booking={booking} />
+        <Booking key={booking.id} booking={booking} onView={onView} />
       ));
     } else {
       content = (

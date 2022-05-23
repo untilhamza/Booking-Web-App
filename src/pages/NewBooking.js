@@ -3,10 +3,12 @@ import BookingForm from "../components/BookingForm";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
-import { httpSubmitBooking } from "../hooks/request";
+import { httpSubmitBooking, httpGetSlots } from "../hooks/request";
 import SimpleBackdrop from "../components/BackDrop";
+import moment from "moment";
 
 const NewBooking = () => {
+  //when it is loaded for the first time, we should fetch slots for the current date..
   const history = useHistory();
   const {
     status,
@@ -14,6 +16,30 @@ const NewBooking = () => {
     error,
     sendRequest,
   } = useHttp(httpSubmitBooking);
+
+  const {
+    status: slotStatus,
+    data: slotsArray,
+    error: slotsError,
+    sendRequest: sendRequestSlots,
+  } = useHttp(httpGetSlots);
+
+  function handleGetSlots(date) {
+    sendRequestSlots(date);
+  }
+
+  function handleCancel() {
+    history.goBack();
+  }
+
+  async function handleConfirm(bookingData) {
+    sendRequest(bookingData);
+  }
+
+  useEffect(() => {
+    //TODO: fetch for the date today or the provided date when modifying date
+    handleGetSlots(moment());
+  }, []);
 
   useEffect(() => {
     if (status === STATUS_COMPLETED) {
@@ -33,14 +59,6 @@ const NewBooking = () => {
     });
   }
 
-  function handleCancel() {
-    history.goBack();
-  }
-
-  async function handleConfirm(bookingData) {
-    sendRequest(bookingData);
-  }
-
   if (error) {
     modalError(error);
   }
@@ -48,7 +66,12 @@ const NewBooking = () => {
   return (
     <div>
       <SimpleBackdrop loading={status === STATUS_PENDING} />
-      <BookingForm onConfirm={handleConfirm} onCancel={handleCancel} />
+      <BookingForm
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        onGetSlots={handleGetSlots}
+        slots={slotsArray}
+      />
     </div>
   );
 };
