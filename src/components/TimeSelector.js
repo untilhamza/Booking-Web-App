@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useEffect, useCallback } from "react";
 import { SLOTS } from "../data";
 import "./TimeSelector.css";
 
