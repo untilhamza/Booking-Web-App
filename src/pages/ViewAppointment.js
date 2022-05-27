@@ -1,15 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useContext } from "react";
 import Appointment from "../components/Appointment";
 import { useHistory, useParams } from "react-router-dom";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import { httpGetBooking, httpCancelBooking } from "../hooks/request";
 import SimpleBackdrop from "../components/BackDrop";
 import { Modal } from "antd";
+import AuthContext from "../store/auth-context";
 
 const ViewAppointment = () => {
+  const authCtx = useContext(AuthContext);
   //only try to fetch if there is an id..
   const history = useHistory();
   const { id } = useParams();
+  if (!id) {
+    history.goBack();
+  }
 
   const {
     status,
@@ -52,8 +57,11 @@ const ViewAppointment = () => {
     //show that you have finished cancelling...
   };
 
-  const handleBack = () => {
+  const handleHome = () => {
     history.push("/");
+  };
+  const handleBack = () => {
+    history.goBack();
   };
 
   if (cancelError || error) {
@@ -67,8 +75,10 @@ const ViewAppointment = () => {
         <Appointment
           onEdit={() => {}}
           onCancel={handleCancel}
+          onDone={handleHome}
           onBack={handleBack}
           appointmentData={response}
+          isAdmin={authCtx.isLoggedIn}
         />
       )}
     </div>

@@ -3,7 +3,13 @@ import Button from "react-bootstrap/Button";
 import useModal from "../hooks/useModal";
 import "./Appointment.css";
 
-const Appointment = ({ appointmentData, onBack, onCancel }) => {
+const Appointment = ({
+  appointmentData,
+  onDone,
+  onCancel,
+  onBack,
+  isAdmin,
+}) => {
   const handleCancel = () => {
     onCancel();
   };
@@ -53,22 +59,26 @@ const Appointment = ({ appointmentData, onBack, onCancel }) => {
               </div>
             )}
 
-            <div className="d-flex justify-content-around mt-3 ">
-              {/* <Button
+            <div className="d-flex flex-column justify-content-around mt-3 ">
+              <Button
                 variant="success"
                 type="button"
                 className="w-100 me-1"
                 onClick={() => {
-                  handleModify();
+                  if (isAdmin) {
+                    onBack();
+                  } else {
+                    onDone();
+                  }
                 }}
               >
-                Modify
-              </Button> */}
+                Done
+              </Button>
               {appointmentData.status !== "cancelled" && (
                 <Button
                   variant="danger"
                   type="button"
-                  className="w-100 ms-1"
+                  className="w-100 mt-1"
                   onClick={() => {
                     handleShow();
                   }}

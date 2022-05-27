@@ -1,5 +1,5 @@
 import moment from "moment";
-import db from "../database/firebase-config";
+import { db } from "../database/firebase-config";
 import {
   collection,
   addDoc,
@@ -81,7 +81,7 @@ const httpGetBooking = async (id) => {
 
 const httpCheckBooking = async (email) => {
   //const id = phone;
-  console.log(email);
+  //console.log(email);
   const q = query(
     bookingsCollectionRef,
     where("email", "==", email),
@@ -91,14 +91,14 @@ const httpCheckBooking = async (email) => {
   // const bookingRef = doc(db, "bookings", id);
   //TODO: try using getDoc
   const bookingSnap = await getDocs(q);
-  console.log(bookingSnap);
+  // console.log(bookingSnap);
 
   if (bookingSnap) {
     let result = bookingSnap.docs.map((doc) => ({
       ...processBooking(doc.data()),
       id: doc.id,
     }));
-    console.log(result);
+    // console.log(result);
     return result[0];
   } else {
     return Promise.reject(Error(`No booking for: ${email}`));
@@ -212,39 +212,39 @@ const httpCancelBooking = async (id) => {
 };
 
 //login
-const httpLogin = async (credentials) => {
-  try {
-    const response = await fetch(`${API_URL}/login`, {
-      method: "post",
-      body: JSON.stringify(credentials),
-    });
-    if (response.ok) {
-      return await response.json();
-    } else {
-      throw new Error("Something went wrong");
-    }
-  } catch (err) {}
-  fetch(`${API_URL}/login`, {
-    method: "post",
-    body: JSON.stringify(credentials),
-  })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        // HANDLE ERROR
-        throw new Error("Something went wrong");
-      }
-    })
-    .then((data) => {
-      // HANDLE RESPONSE DATA
-      console.log(data);
-    })
-    .catch((error) => {
-      // HANDLE ERROR
-      console.log(error);
-    });
-};
+// const httpLogin = async (credentials) => {
+//   try {
+//     const response = await fetch(`${API_URL}/login`, {
+//       method: "post",
+//       body: JSON.stringify(credentials),
+//     });
+//     if (response.ok) {
+//       return await response.json();
+//     } else {
+//       throw new Error("Something went wrong");
+//     }
+//   } catch (err) {}
+//   fetch(`${API_URL}/login`, {
+//     method: "post",
+//     body: JSON.stringify(credentials),
+//   })
+//     .then((response) => {
+//       if (response.ok) {
+//         return response.json();
+//       } else {
+//         // HANDLE ERROR
+//         throw new Error("Something went wrong");
+//       }
+//     })
+//     .then((data) => {
+//       // HANDLE RESPONSE DATA
+//       console.log(data);
+//     })
+//     .catch((error) => {
+//       // HANDLE ERROR
+//       console.log(error);
+//     });
+// };
 
 export {
   httpGetBooking,
@@ -253,6 +253,5 @@ export {
   httpSubmitBooking,
   httpEditBooking,
   httpCancelBooking,
-  httpLogin,
   httpCheckBooking,
 };

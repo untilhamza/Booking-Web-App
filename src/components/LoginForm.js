@@ -1,13 +1,11 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import useLogin from "../hooks/useLogin";
 
-import "./Login.css";
+import "./LoginForm.css";
 
-const SignupForm = () => {
-  const { login, isLoginLoading } = useLogin();
-
+const LoginForm = ({ onLogin, status }) => {
+  const isLoginLoading = false;
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -17,12 +15,15 @@ const SignupForm = () => {
       email: Yup.string()
         .email("Email not valid")
         .required("Email is required"),
-      password: Yup.string().required("Password is required"),
+      password: Yup.string()
+        .required("Password is required")
+        .min(8, "Password is too short - should be 8 chars minimum."),
     }),
     onSubmit: (values) => {
       //call method to login here
-      login(values);
-      alert(JSON.stringify(values, null, 2));
+
+      onLogin(values);
+      //alert(JSON.stringify(values, null, 2));
     },
   });
 
@@ -81,4 +82,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default LoginForm;

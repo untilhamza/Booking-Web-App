@@ -29,7 +29,7 @@ const CheckingForm = ({ onConfirm, onCancel }) => {
       <div className="container p-4">
         <div className="card phone-card mx-auto">
           <div className="card-body">
-            <h5 className="card-title">Enter Phone Number</h5>
+            <h5 className="card-title">Enter email used to make appointment</h5>
             <form onSubmit={formik.handleSubmit}>
               <div className="form-group mb-3">
                 {/* <label htmlFor="Phone">Phone</label> */}

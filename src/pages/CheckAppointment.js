@@ -25,8 +25,9 @@ const CheckAppointment = () => {
 
   function modalError(message) {
     Modal.error({
-      title: "An Error occurred",
-      content: message ? message : "There was an error",
+      title: message?.title ? message.title : "An Error occurred",
+      content: message ? message.content : "There was an error",
+      onOk: message.onOk,
     });
   }
 
@@ -38,7 +39,16 @@ const CheckAppointment = () => {
   useEffect(() => {
     if (status === STATUS_COMPLETED) {
       //navigate away
-
+      //console.log(response);
+      if (!response) {
+        return modalError({
+          title: "No appointments found for provided email!",
+          content: "Please make an appointment first.",
+          onOk: () => {
+            history.push("/");
+          },
+        });
+      }
       return history.push(`/appointment/${response.id}`);
     }
   }, [status, response, history]);

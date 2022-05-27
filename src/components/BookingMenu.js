@@ -19,12 +19,12 @@ const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
         </div>
         <div className="mb-2">
           <Button
-            className="d-block w-75"
+            className="d-block w-75  btn-success"
             onClick={() => {
               onModifyAppointment();
             }}
           >
-            Modify set Appointment
+            View set Appointment
           </Button>
         </div>
         <div className="mb-2 mt-3">

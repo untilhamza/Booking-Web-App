@@ -1,9 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "@firebase/firestore";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
-  authDomain: "appointments-9fa9d.firebaseapp.com",
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
   projectId: "appointments-9fa9d",
   storageBucket: "appointments-9fa9d.appspot.com",
   messagingSenderId: "514032231488",
@@ -12,9 +13,9 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-//all your store data is in the db object
-const db = getFirestore();
+//get authetication service from the app and use it else where
+export const auth = getAuth(app);
 
-export default db;
+export const db = getFirestore(app);

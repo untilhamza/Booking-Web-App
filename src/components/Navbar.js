@@ -1,22 +1,35 @@
 import React from "react";
+import { useContext } from "react";
+import AuthContext from "../store/auth-context";
 import { Navbar as RbNavbar, Container, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
+import Button from "@mui/material/Button";
 
+import "./NavBar.css";
 const Navbar = () => {
+  const authCtx = useContext(AuthContext);
   return (
     <RbNavbar bg="dark" variant="dark">
       <Container>
         <RbNavbar.Brand href="/">Elkpro Cut</RbNavbar.Brand>
         <Nav className="ms-auto">
-          {/* <Nav.Link href="#home">Home</Nav.Link> */}
-
-          <NavLink className="nav-link" to="/">
+          <NavLink className="nav-link" activeClassName="active" to="/">
             Booking
           </NavLink>
 
-          <NavLink className="nav-link" to="/admin">
+          <NavLink className="nav-link" activeClassName="active" to="/admin">
             Admin
           </NavLink>
+          {authCtx.isLoggedIn && (
+            <Button
+              variant="outlined"
+              onClick={() => {
+                authCtx.onLogout();
+              }}
+            >
+              Logout
+            </Button>
+          )}
         </Nav>
       </Container>
     </RbNavbar>
