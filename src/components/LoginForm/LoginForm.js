@@ -69,10 +69,10 @@ const LoginForm = ({ onLogin, status }) => {
             <div className="mt-3">
               <button
                 type="submit"
-                className="btn btn-primary"
+                className="btn btn-success"
                 disabled={isLoginLoading}
               >
-                {`${isLoginLoading ? "Loading..." : "Login"}`}
+                Login
               </button>
             </div>
           </form>

@@ -1,5 +1,5 @@
-import BookingTable from "./BookingTable";
-import Calendar from "./Calendar";
+import BookingTable from "../BookingTable/BookingTable";
+import Calendar from "../Calendar/Calendar";
 
 const Dashboard = ({ date, onSelectDate, bookings, status, onView }) => {
   //console.log(bookings);

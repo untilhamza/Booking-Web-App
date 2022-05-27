@@ -1,8 +1,8 @@
 import React from "react";
-import Booking from "./Booking";
-import { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
+import Booking from "../Booking/Booking";
+import { STATUS_COMPLETED, STATUS_PENDING } from "../../hooks/useHttp";
 //import { BOOKINGS } from "../data";
-import "./Booking.css";
+import "../Booking/Booking.css";
 import { Skeleton } from "antd";
 
 const BookingTable = ({ date, bookings, status, onView }) => {

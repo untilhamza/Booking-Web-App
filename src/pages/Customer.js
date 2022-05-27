@@ -1,4 +1,4 @@
-import BookingMenu from "../components/BookingMenu";
+import BookingMenu from "../components/BookingMenu/BookingMenu";
 import { useHistory } from "react-router-dom";
 import About from "../components/About/About";
 import "./homepage.css";

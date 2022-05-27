@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useContext } from "react";
 import { useHistory } from "react-router-dom";
 import AuthContext from "../store/auth-context";
-import LoginForm from "../components/LoginForm";
-import SimpleBackdrop from "../components/BackDrop";
+import LoginForm from "../components/LoginForm/LoginForm";
+import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import { Modal } from "antd";
 

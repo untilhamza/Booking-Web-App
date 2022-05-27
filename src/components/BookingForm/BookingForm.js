@@ -4,7 +4,7 @@ import * as yup from "yup";
 import moment from "moment";
 import { Form, Button } from "react-bootstrap";
 import { DatePicker } from "antd";
-import TimeSelector from "./TimeSelector";
+import TimeSelector from "../TimeSelector/TimeSelector";
 
 import "./BookingForm.css";
 const phoneRegex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i;

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Dashboard from "../components/Dashboard";
+import Dashboard from "../components/Dashboard/Dashboard";
 import useHttp from "../hooks/useHttp";
 import moment from "moment";
 import { httpGetBookings } from "../hooks/request";

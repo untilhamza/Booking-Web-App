@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { Layout } from "antd";
-import Navbar from "./components/Navbar";
+import Navbar from "./components/NavBar/Navbar";
 import Admin from "./pages/Admin";
 import SignIn from "./pages/SignIn";
 import Customer from "./pages/Customer";

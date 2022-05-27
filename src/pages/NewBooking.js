@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import BookingForm from "../components/BookingForm";
+import BookingForm from "../components/BookingForm/BookingForm";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import { httpSubmitBooking, httpGetSlots } from "../hooks/request";
-import SimpleBackdrop from "../components/BackDrop";
+import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import moment from "moment";
 
 const NewBooking = () => {

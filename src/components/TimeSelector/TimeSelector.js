@@ -1,5 +1,5 @@
 import React, { useEffect, useCallback } from "react";
-import { SLOTS } from "../data";
+import { SLOTS } from "../../data";
 import "./TimeSelector.css";
 
 import Button from "react-bootstrap/Button";

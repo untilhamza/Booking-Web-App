@@ -68,11 +68,7 @@ const SignupForm = () => {
         )} */}
             </div>
             <div className="mt-3">
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={isLoginLoading}
-              >
+              <button type="submit" className="btn btn-success">
                 Login
               </button>
             </div>

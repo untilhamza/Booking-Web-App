@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import CheckingForm from "../components/CheckingForm";
+import CheckingForm from "../components/CheckingForm/CheckingForm";
 import { useHistory } from "react-router-dom";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import { httpCheckBooking } from "../hooks/request";
-import SimpleBackdrop from "../components/BackDrop";
+import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import { Modal } from "antd";
 
 const CheckAppointment = () => {

@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
-import useModal from "../hooks/useModal";
+import useModal from "../../hooks/useModal";
 import "./Appointment.css";
 
 const Appointment = ({

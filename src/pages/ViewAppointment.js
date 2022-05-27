@@ -1,9 +1,9 @@
 import React, { useEffect, useContext } from "react";
-import Appointment from "../components/Appointment";
+import Appointment from "../components/Appointment/Appointment";
 import { useHistory, useParams } from "react-router-dom";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import { httpGetBooking, httpCancelBooking } from "../hooks/request";
-import SimpleBackdrop from "../components/BackDrop";
+import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import { Modal } from "antd";
 import AuthContext from "../store/auth-context";
 

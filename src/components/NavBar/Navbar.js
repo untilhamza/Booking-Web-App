@@ -1,6 +1,6 @@
 import React from "react";
 import { useContext } from "react";
-import AuthContext from "../store/auth-context";
+import AuthContext from "../../store/auth-context";
 import { Navbar as RbNavbar, Container, Nav } from "react-bootstrap";
 import { NavLink } from "react-router-dom";
 import Button from "@mui/material/Button";
