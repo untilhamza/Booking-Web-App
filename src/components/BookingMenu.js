@@ -9,7 +9,7 @@ const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
       <div className="d-flex flex-column booking-menu">
         <div className="mb-2">
           <Button
-            variant="primary"
+            variant="success"
             className="d-block w-100"
             onClick={() => {
               onMakeAppointment();
