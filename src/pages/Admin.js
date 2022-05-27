@@ -27,7 +27,6 @@ const Admin = () => {
     });
   }
   const handleSelectDate = (newDate) => {
-    console.log("incoming date", newDate);
     setDate(newDate);
   };
 

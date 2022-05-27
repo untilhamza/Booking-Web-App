@@ -34,6 +34,7 @@ const NewBooking = () => {
 
   useEffect(() => {
     //TODO: fetch for the date today or the provided date when modifying date
+
     handleGetSlots(moment());
   }, []);
 

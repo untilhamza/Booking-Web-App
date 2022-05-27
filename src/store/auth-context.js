@@ -29,8 +29,7 @@ export const AuthContextProvider = (props) => {
 
   const handleLogin = async ({ email, password }) => {
     try {
-      const user = await signInWithEmailAndPassword(auth, email, password);
-      console.log(user);
+      await signInWithEmailAndPassword(auth, email, password);
     } catch (err) {
       throw new Error(err);
       //console.log(err);

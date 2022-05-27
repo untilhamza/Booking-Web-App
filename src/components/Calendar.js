@@ -7,7 +7,6 @@ const Calendar = ({ onSelectDate, heading }) => {
   //     console.log(value, mode);
   //   }
   function handleDateSelection(newDate) {
-    console.log("calendar data", newDate);
     onSelectDate(newDate);
   }
 
