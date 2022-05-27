@@ -1,10 +1,12 @@
 @import "~antd/dist/antd.css";
 
+@import url("https://fonts.googleapis.com/css2?family=Belleza&family=Poppins:wght@400;500;800&display=swap");
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100vh;
+
+  font-family: "Belleza", sans-serif;
 }

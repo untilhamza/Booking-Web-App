@@ -1,0 +1,19 @@
+.hompage {
+  position: relative;
+}
+.right-image {
+  display: none;
+}
+@media (min-width: 1200px) {
+  .right-image {
+    display: block;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 50%;
+    background-image: url("https://images.pexels.com/photos/10775077/pexels-photo-10775077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1");
+    clip-path: polygon(20% 0%, 100% 0, 100% 100%, 0% 100%);
+  }
+}

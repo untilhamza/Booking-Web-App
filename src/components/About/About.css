@@ -1,0 +1,18 @@
+.about {
+  display: flex;
+  flex-direction: column;
+  padding: 50px;
+  padding-bottom: 0;
+}
+@media (min-width: 800px) {
+  .about {
+    padding: 100px;
+  }
+}
+.big-text {
+  max-width: 500px;
+}
+.small-text {
+  max-width: 400px;
+  font-style: italic;
+}

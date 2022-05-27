@@ -1,3 +1,13 @@
 .booking-menu {
   max-width: 500px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 20px;
+}
+@media (min-width: 500px) {
+  .booking-menu {
+    max-width: 500px;
+    padding-left: 100px;
+    padding-top: 20px;
+  }
 }

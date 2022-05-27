@@ -1,3 +1,7 @@
+.nav-bar {
+  z-index: 5;
+}
+
 .active-class {
   color: #fff;
 }

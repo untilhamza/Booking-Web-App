@@ -9,7 +9,7 @@ import "./NavBar.css";
 const Navbar = () => {
   const authCtx = useContext(AuthContext);
   return (
-    <RbNavbar bg="dark" variant="dark">
+    <RbNavbar bg="dark" variant="dark" className="nav-bar">
       <Container>
         <RbNavbar.Brand href="/">Elkpro Cut</RbNavbar.Brand>
         <Nav className="ms-auto">

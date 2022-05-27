@@ -4,12 +4,13 @@ import Button from "react-bootstrap/Button";
 import "./BookingMenu.css";
 const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
   return (
-    <div className="container">
-      <h2>Booking Menu</h2>
+    <div className="">
+      {/* <h2>Booking Menu</h2> */}
       <div className="d-flex flex-column booking-menu">
         <div className="mb-2">
           <Button
-            className="d-block w-75"
+            variant="primary"
+            className="d-block w-100"
             onClick={() => {
               onMakeAppointment();
             }}
@@ -19,7 +20,8 @@ const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
         </div>
         <div className="mb-2">
           <Button
-            className="d-block w-75  btn-success"
+            variant="outline-success"
+            className="d-block w-100"
             onClick={() => {
               onModifyAppointment();
             }}
