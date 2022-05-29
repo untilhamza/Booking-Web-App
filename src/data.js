@@ -43,6 +43,11 @@ const SLOTS = [
     id: uuidv4(),
   },
   {
+    time: "18:00",
+    isBooked: false,
+    id: uuidv4(),
+  },
+  {
     time: "18:50",
     isBooked: false,
     id: uuidv4(),
