@@ -8,47 +8,57 @@ const SLOTS = [
     id: uuidv4(),
   },
   {
-    time: "13:10",
+    time: "13:00",
     isBooked: false,
     id: uuidv4(),
   },
   {
-    time: "13:50",
+    time: "13:30",
     isBooked: true,
+    id: uuidv4(),
+  },
+  {
+    time: "14:00",
+    isBooked: false,
     id: uuidv4(),
   },
   {
     time: "14:30",
-    isBooked: false,
-    id: uuidv4(),
-  },
-  {
-    time: "15:10",
     isBooked: true,
     id: uuidv4(),
   },
   {
-    time: "15:50",
+    time: "15:00",
+    isBooked: false,
+    id: uuidv4(),
+  },
+  {
+    time: "15:30",
+    isBooked: true,
+    id: uuidv4(),
+  },
+  {
+    time: "16:00",
     isBooked: false,
     id: uuidv4(),
   },
   {
     time: "16:30",
+    isBooked: false,
+    id: uuidv4(),
+  },
+  {
+    time: "17:00",
+    isBooked: false,
+    id: uuidv4(),
+  },
+  {
+    time: "17:30",
     isBooked: true,
     id: uuidv4(),
   },
   {
-    time: "17:10",
-    isBooked: false,
-    id: uuidv4(),
-  },
-  {
     time: "18:00",
-    isBooked: false,
-    id: uuidv4(),
-  },
-  {
-    time: "18:50",
     isBooked: false,
     id: uuidv4(),
   },
@@ -58,31 +68,41 @@ const SLOTS = [
     id: uuidv4(),
   },
   {
-    time: "19:10",
+    time: "19:00",
     isBooked: false,
     id: uuidv4(),
   },
   {
-    time: "19:50",
-    isBooked: true,
+    time: "19:30",
+    isBooked: false,
     id: uuidv4(),
   },
+  {
+    time: "20:00",
+    isBooked: false,
+    id: uuidv4(),
+  },
+
   {
     time: "20:30",
     isBooked: false,
     id: uuidv4(),
   },
   {
-    time: "21:10",
+    time: "21:00",
     isBooked: false,
     id: uuidv4(),
   },
   {
-    time: "21:50",
+    time: "21:30",
     isBooked: false,
     id: uuidv4(),
   },
-
+  {
+    time: "22:00",
+    isBooked: false,
+    id: uuidv4(),
+  },
   {
     time: "22:30",
     isBooked: false,
