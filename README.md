@@ -21,7 +21,7 @@
 
 #### View Set Appoitment Page
 
-<img src="website_images/viewSetAppointmentPage.png.png" width="900">
+<img src="website_images/viewSetAppointmentPage.png" width="900">
 
 ## Features 📋
 
