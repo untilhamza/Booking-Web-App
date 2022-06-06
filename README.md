@@ -1,6 +1,8 @@
 # Web BookingApplication 🔥
 
-> [Deployed at](https://elkpro.netlify.app/)
+> [Deployed Here](https://elkpro.netlify.app/)
+
+- Pull requests are welcome!!!
 
 :star: Follow me on GitHub
 
