@@ -1,13 +1,42 @@
-.booking-menu {
+.booking-page {
+  height: 80vh;
+}
+
+.buttons {
+  max-width: 500px;
+}
+
+/* .booking-menu {
   max-width: 500px;
   padding-left: 20px;
   padding-right: 20px;
   padding-top: 20px;
-}
-@media (min-width: 500px) {
+} */
+
+/* @media (min-width: 600px) {
   .booking-menu {
-    max-width: 500px;
     padding-left: 100px;
     padding-top: 20px;
   }
+} */
+
+/* about part */
+
+/* .about {
+  padding: 50px;
+  padding-left: 20px;
+
+  padding-bottom: 0;
 }
+@media (min-width: 800px) {
+  .about {
+    padding: 100px;
+  }
+}
+.big-text {
+  max-width: 500px;
+}
+.small-text {
+  max-width: 400px;
+  font-style: italic;
+} */

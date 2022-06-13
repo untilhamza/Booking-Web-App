@@ -1,7 +1,9 @@
-.about {
+/* .about {
   display: flex;
   flex-direction: column;
   padding: 50px;
+  padding-left: 20px;
+
   padding-bottom: 0;
 }
 @media (min-width: 800px) {
@@ -15,4 +17,4 @@
 .small-text {
   max-width: 400px;
   font-style: italic;
-}
+} */

@@ -1,33 +1,36 @@
-import BookingMenu from "../components/BookingMenu/BookingMenu";
-import { useHistory } from "react-router-dom";
-import About from "../components/About/About";
-import "./homepage.css";
+import BookingMenu from "../components/BookingMenu/BookingMenu"
+import { useHistory } from "react-router-dom"
+
+import "./homepage.css"
+import MainBackground from "../components/UI/MainBackground"
 
 const BookingPage = () => {
-  const history = useHistory();
+  const history = useHistory()
   const handleMakeAppointment = () => {
-    const path = "/new-booking";
-    history.push(path);
-  };
+    const path = "/new-booking"
+    history.push(path)
+  }
   const handleModifyAppointment = () => {
-    const path = "/check-appointment";
-    history.push(path);
-  };
+    const path = "/check-appointment"
+    history.push(path)
+  }
   const handleGoBack = () => {
-    history.goBack();
-  };
+    history.goBack()
+  }
   return (
-    <div className="container homepage">
-      <About />
-      <BookingMenu
-        onMakeAppointment={handleMakeAppointment}
-        onModifyAppointment={handleModifyAppointment}
-        onBack={handleGoBack}
-      />
+    <MainBackground>
+      <div className="container homepage">
+        {/* <About /> */}
+        <BookingMenu
+          onMakeAppointment={handleMakeAppointment}
+          onModifyAppointment={handleModifyAppointment}
+          onBack={handleGoBack}
+        />
 
-      <div className="right-image">right</div>
-    </div>
-  );
-};
+        {/* <div className="right-image">right</div> */}
+      </div>
+    </MainBackground>
+  )
+}
 
-export default BookingPage;
+export default BookingPage
