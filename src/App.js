@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
 import AuthContext from "./store/auth-context"
+
 const { Content } = Layout
 
 const App = () => {

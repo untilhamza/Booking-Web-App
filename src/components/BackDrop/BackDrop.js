@@ -1,18 +1,8 @@
-import * as React from "react";
-import Backdrop from "@mui/material/Backdrop";
-import CircularProgress from "@mui/material/CircularProgress";
+import * as React from "react"
+import Backdrop from "@mui/material/Backdrop"
+import CircularProgress from "@mui/material/CircularProgress"
 
 function SimpleBackdrop({ loading }) {
-  //const [open, setOpen] = React.useState(true);
-
-  //   const handleClose = () => {
-  //     setOpen(false);
-  //   };
-
-  //   const handleToggle = () => {
-  //     setOpen(!open);
-  //   };
-
   return (
     <div>
       {/* <Button onClick={handleToggle}>Show backdrop</Button> */}
@@ -25,7 +15,7 @@ function SimpleBackdrop({ loading }) {
         {/* <DotLoader loading={loading} size={60} /> */}
       </Backdrop>
     </div>
-  );
+  )
 }
 
-export default SimpleBackdrop;
+export default SimpleBackdrop

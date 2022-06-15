@@ -1,5 +1,6 @@
-import moment from "moment";
-import { db } from "../database/firebase-config";
+import moment from "moment"
+import { combineDateTimeMoment } from "../util/helpers"
+import { db } from "../database/firebase-config"
 import {
   collection,
   addDoc,
@@ -11,53 +12,44 @@ import {
   where,
   getDocs,
   orderBy,
-} from "firebase/firestore";
+  runTransaction,
+} from "firebase/firestore"
 
-const bookingsCollectionRef = collection(db, "bookings");
+const bookingsCollectionRef = collection(db, "bookings")
+const slotsCollectionRef = collection(db, "slots")
+//const settingsCollectionRef = collection(db, "settings")
 
-const API_URL = "";
+const API_URL = ""
 
 function processBooking(result) {
   let bookingData = {
     name: result.name,
     phone: result.phone,
     date: result.date.toDate().toDateString(),
-    time: result.date.toDate().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: true,
-    }),
+    time: moment(result.date.toDate()).format("LT"),
     status: result.status,
-  };
-  return bookingData;
+  }
+
+  return bookingData
 }
-function processSlots(result) {
-  let bookingData = {
-    time: result.date.toDate().toLocaleTimeString([], {
-      hour: "2-digit",
-      minute: "2-digit",
-      hour12: false,
-    }),
+function processSlot(result) {
+  let slotData = {
+    time: moment(result.date.toDate()).format("LT"),
     isBooked: result.status === "confirmed",
-  };
-  return bookingData;
+    isBlocked: result.isBlocked,
+  }
+  //console.log(bookingData)
+  return slotData
 }
 
-// async function delay(data) {
-//   return new Promise(function (resolve, reject) {
-//     setTimeout(() => {
-//       resolve(data);
-//     }, 2000);
-//   });
-// }
 //load bookings for given date as json
 const httpGetBooking = async (id) => {
-  const bookingRef = doc(db, "bookings", id);
-  const bookingSnap = await getDoc(bookingRef);
+  const bookingRef = doc(db, "bookings", id)
+  const bookingSnap = await getDoc(bookingRef)
 
   if (bookingSnap.exists()) {
     // console.log(bookingSnap.data());
-    let result = { ...bookingSnap.data(), id: bookingSnap.id };
+    let result = { ...bookingSnap.data(), id: bookingSnap.id }
     let bookingData = {
       name: result.name,
       phone: result.phone,
@@ -68,16 +60,16 @@ const httpGetBooking = async (id) => {
         hour12: true,
       }),
       status: result.status,
-    };
+    }
 
-    return bookingData;
+    return bookingData
   } else {
     return {
       ok: false,
       message: "The appointment was not found!",
-    };
+    }
   }
-};
+}
 
 const httpCheckBooking = async (email) => {
   //const id = phone;
@@ -86,100 +78,103 @@ const httpCheckBooking = async (email) => {
     bookingsCollectionRef,
     where("email", "==", email),
     orderBy("date", "desc")
-  );
+  )
 
   // const bookingRef = doc(db, "bookings", id);
   //TODO: try using getDoc
-  const bookingSnap = await getDocs(q);
-  // console.log(bookingSnap);
+  const bookingSnap = await getDocs(q)
 
   if (bookingSnap) {
     let result = bookingSnap.docs.map((doc) => ({
       ...processBooking(doc.data()),
       id: doc.id,
-    }));
-    // console.log(result);
-    return result[0];
+    }))
+
+    return result[0]
   } else {
-    return Promise.reject(Error(`No booking for: ${email}`));
-    // return {
-    //   ok: false,
-    //   message: "Could not find the booking for the email " + email,
-    // };
-    //throw new Error("The appointment was not found!");
+    return Promise.reject(Error(`No booking for: ${email}`))
   }
-};
+}
 //load bookings for given date as json
 const httpGetBookings = async (dateMoment) => {
-  dateMoment = new moment(dateMoment);
-  let queriedDate = dateMoment.format("YYYY-MM-DD").toString();
-  let nextDate = dateMoment.add(1, "day").format("YYYY-MM-DD").toString();
-  let parsedqueriedDate = Date.parse(queriedDate + "T00:00");
-  let parsednextDate = Date.parse(nextDate + "T00:00");
+  dateMoment = new moment(dateMoment)
+  let queriedDate = dateMoment.format("YYYY-MM-DD").toString()
+  let nextDate = dateMoment.add(1, "day").format("YYYY-MM-DD").toString()
+  let parsedqueriedDate = Date.parse(queriedDate + "T00:00")
+  let parsednextDate = Date.parse(nextDate + "T00:00")
   const q = query(
     bookingsCollectionRef,
     where("date", ">", Timestamp.fromMillis(parsedqueriedDate)),
     where("date", "<", Timestamp.fromMillis(parsednextDate))
-  );
+  )
   //qeury booking greater than the given date but less the date after....
 
-  const bookingSnap = await getDocs(q);
+  const bookingSnap = await getDocs(q)
   if (bookingSnap) {
     let result = bookingSnap.docs.map((doc) => ({
       ...processBooking(doc.data()),
       id: doc.id,
-    }));
+    }))
     //console.log(result);
-    return result;
+    return result
   }
-};
+}
 
 //load already booked time slots for given date as json
 const httpGetSlots = async (dateMoment) => {
-  dateMoment = new moment(dateMoment);
-  let queriedDate = dateMoment.format("YYYY-MM-DD").toString();
-  let nextDate = dateMoment.add(1, "day").format("YYYY-MM-DD").toString();
-  let parsedqueriedDate = Date.parse(queriedDate + "T00:00");
-  let parsednextDate = Date.parse(nextDate + "T00:00");
-  const q = query(
-    bookingsCollectionRef,
-    where("date", ">", Timestamp.fromMillis(parsedqueriedDate)),
-    where("date", "<", Timestamp.fromMillis(parsednextDate))
-  );
-  //qeury booking greater than the given date but less the date after....
+  dateMoment = new moment(dateMoment)
+  let time = new moment().set({ hour: 0, minute: 0, second: 0 })
 
-  const bookingSnap = await getDocs(q);
+  let choosenDate = combineDateTimeMoment(dateMoment, time)
+
+  let nextDate = choosenDate.add(1, "day")
+
+  const q = query(
+    slotsCollectionRef,
+    where("date", ">", Timestamp.fromDate(dateMoment.toDate())),
+    where("date", "<", Timestamp.fromDate(nextDate.toDate()))
+  )
+
+  const bookingSnap = await getDocs(q)
+
   if (bookingSnap) {
     let result = bookingSnap.docs.map((doc) => ({
-      ...processSlots(doc.data()),
+      ...processSlot(doc.data()),
       id: doc.id,
-    }));
-    return result;
+    }))
+    return result
   }
-};
+}
 
 //submit a new booking to the system
 const httpSubmitBooking = async (bookingData) => {
   try {
-    let bookingMoment = bookingData.date;
-    let timeString = bookingData.time;
-    let dateString = bookingMoment.format("YYYY-MM-DD").toString();
-    let parsedDate = Date.parse(dateString + "T" + timeString);
+    return await runTransaction(db, async (transaction) => {
+      let timeMoment = moment(bookingData.time, "h:mm a")
+      let bookingMoment = combineDateTimeMoment(bookingData.date, timeMoment)
 
-    const response = await addDoc(bookingsCollectionRef, {
-      ...bookingData,
-      date: Timestamp.fromMillis(parsedDate),
-      dateString,
-      status: "confirmed",
-    });
+      const slot = {
+        date: Timestamp.fromDate(bookingMoment.toDate()),
+        status: "confirmed",
+      }
 
-    return response.id;
-    //pull out the id that was returned here...
+      await addDoc(slotsCollectionRef, {
+        ...slot,
+      })
+
+      const response = await addDoc(bookingsCollectionRef, {
+        ...bookingData,
+        ...slot,
+      })
+
+      //pull out the id that was returned here...
+      return response.id
+    })
   } catch (err) {
-    console.log(err);
-    return { ok: false };
+    console.log(err)
+    return { ok: false }
   }
-};
+}
 
 //edit a booking
 const httpEditBooking = async (booking) => {
@@ -190,61 +185,27 @@ const httpEditBooking = async (booking) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(booking),
-    });
-    return response;
+    })
+    return response
   } catch (err) {
-    console.log(err);
-    return { ok: false };
+    console.log(err)
+    return { ok: false }
   }
-};
+}
 
 //delete bookings
 const httpCancelBooking = async (id) => {
   try {
-    const bookingDoc = doc(db, "bookings", id);
-    const newFields = { status: "cancelled" };
-    const response = await updateDoc(bookingDoc, newFields);
-    return response.data();
-  } catch (err) {
-    console.log(err);
-    return { ok: false };
-  }
-};
+    const bookingDoc = doc(db, "bookings", id)
+    const newFields = { status: "cancelled" }
+    const response = await updateDoc(bookingDoc, newFields)
 
-//login
-// const httpLogin = async (credentials) => {
-//   try {
-//     const response = await fetch(`${API_URL}/login`, {
-//       method: "post",
-//       body: JSON.stringify(credentials),
-//     });
-//     if (response.ok) {
-//       return await response.json();
-//     } else {
-//       throw new Error("Something went wrong");
-//     }
-//   } catch (err) {}
-//   fetch(`${API_URL}/login`, {
-//     method: "post",
-//     body: JSON.stringify(credentials),
-//   })
-//     .then((response) => {
-//       if (response.ok) {
-//         return response.json();
-//       } else {
-//         // HANDLE ERROR
-//         throw new Error("Something went wrong");
-//       }
-//     })
-//     .then((data) => {
-//       // HANDLE RESPONSE DATA
-//       console.log(data);
-//     })
-//     .catch((error) => {
-//       // HANDLE ERROR
-//       console.log(error);
-//     });
-// };
+    return response.data()
+  } catch (err) {
+    console.log(err)
+    return { ok: false }
+  }
+}
 
 export {
   httpGetBooking,
@@ -254,4 +215,4 @@ export {
   httpEditBooking,
   httpCancelBooking,
   httpCheckBooking,
-};
+}

@@ -1,13 +1,13 @@
-import React from "react";
-import { Formik, ErrorMessage } from "formik";
-import * as yup from "yup";
-import moment from "moment";
-import { Form, Button } from "react-bootstrap";
-import { DatePicker } from "antd";
-import TimeSelector from "../TimeSelector/TimeSelector";
+import React from "react"
+import { Formik, ErrorMessage } from "formik"
+import * as yup from "yup"
+import moment from "moment"
+import { Form, Button } from "react-bootstrap"
+import { DatePicker } from "antd"
+import TimeSelector from "../TimeSelector/TimeSelector"
 
-import "./BookingForm.css";
-const phoneRegex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i;
+import "./BookingForm.css"
+const phoneRegex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required!"),
@@ -23,29 +23,36 @@ const schema = yup.object().shape({
     .required("*Email is required!"),
   date: yup.string().required("*Booking date is required!"),
   time: yup.string().required("*Booking time is required!"),
-});
+})
 
-const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots }) => {
+const BookingForm = ({
+  onCancel,
+  onConfirm,
+  oldData,
+  slots,
+  onGetSlots,
+  slotStatus,
+}) => {
   function handleGetSlots(date) {
-    onGetSlots(date);
+    onGetSlots(date)
   }
   const disablePastDates = (submittedValue) => {
     if (!submittedValue) {
-      return false;
+      return false
     }
     return (
       submittedValue.valueOf() < moment().add(-1, "day") ||
       submittedValue.valueOf() >= moment().add(31, "day")
-    );
-  };
+    )
+  }
 
   return (
     <Formik
       validationSchema={schema}
       onSubmit={(values, { resetForm }) => {
         //submitting data!
-        onConfirm(values);
-        resetForm();
+        onConfirm(values)
+        resetForm()
       }}
       initialValues={{
         name: "",
@@ -118,10 +125,19 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots }) => {
               <DatePicker
                 value={values.date}
                 onChange={(enteredMoment) => {
-                  console.log("we enterd a new value");
-                  handleGetSlots(new moment(enteredMoment));
-                  setFieldValue("time", "");
-                  setFieldValue("date", enteredMoment);
+                  console.log("we enterd a new value")
+                  handleGetSlots(
+                    new moment(enteredMoment).set({
+                      hour: 0,
+                      minute: 0,
+                      second: 0,
+                    })
+                  )
+                  setFieldValue("time", "")
+                  setFieldValue(
+                    "date",
+                    enteredMoment.set({ hour: 0, minute: 0, second: 0 })
+                  )
                 }}
                 defaultPickerValue={moment()}
                 disabledDate={disablePastDates}
@@ -137,9 +153,10 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots }) => {
                 choosenDate={values.date}
                 time={values.time}
                 onChange={(time) => {
-                  setFieldValue("time", time);
+                  setFieldValue("time", time)
                 }}
                 slots={slots}
+                loading={slotStatus}
               />
             </div>
             <div className="text-danger font-italic">
@@ -168,7 +185,7 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots }) => {
         </Form>
       )}
     </Formik>
-  );
-};
+  )
+}
 
-export default BookingForm;
+export default BookingForm

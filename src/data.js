@@ -1,83 +1,33 @@
 import { v4 as uuidv4 } from "uuid"
+import moment from "moment"
 
 //the slots data is also for a given data => today!!!
-const SLOTS = [
-  {
-    time: "10:30",
-    id: uuidv4(),
-  },
-  {
-    time: "11:00",
-    id: uuidv4(),
-  },
-  {
-    time: "11:30",
-    id: uuidv4(),
-  },
-  {
-    time: "12:00",
-    id: uuidv4(),
-  },
-  {
-    time: "12:30",
-    id: uuidv4(),
-  },
-  {
-    time: "13:00",
-    id: uuidv4(),
-  },
-  {
-    time: "13:30",
-    id: uuidv4(),
-  },
-  {
-    time: "14:00",
-    id: uuidv4(),
-  },
-  {
-    time: "14:30",
-    id: uuidv4(),
-  },
-  {
-    time: "15:00",
-    id: uuidv4(),
-  },
-  {
-    time: "15:30",
-    id: uuidv4(),
-  },
-  {
-    time: "16:00",
-    id: uuidv4(),
-  },
-  {
-    time: "16:30",
-    id: uuidv4(),
-  },
-  {
-    time: "17:00",
-    id: uuidv4(),
-  },
-  {
-    time: "17:30",
-    id: uuidv4(),
-  },
-  {
-    time: "18:00",
-    id: uuidv4(),
-  },
-  {
-    time: "18:30",
-    id: uuidv4(),
-  },
-  {
-    time: "19:00",
-    id: uuidv4(),
-  },
-  {
-    time: "19:30",
-    id: uuidv4(),
-  },
-]
 
-export { SLOTS }
+const timeSlots = []
+
+var startHour = 10
+var startMinute = 30
+var duration = 30
+
+var endHour = 19
+var endMinute = 30
+
+var startTime = moment().hour(startHour).minute(startMinute).second(0)
+var endTime = moment().hour(endHour).minute(endMinute).second(0)
+
+// console.log("Start time", startTime.format("LT"))
+// console.log("End time", endTime.format("LT"))
+
+// let slot = {
+//   time: "10:30",
+//   id: uuidv4(),
+// }
+
+while (startTime <= endTime) {
+  timeSlots.push({ time: startTime.clone().format("LT"), id: uuidv4() }) // clone to add new object
+  startTime.add(duration, "minutes")
+}
+
+//console.log("time slots ", timeSlots)
+
+export { timeSlots as SLOTS }

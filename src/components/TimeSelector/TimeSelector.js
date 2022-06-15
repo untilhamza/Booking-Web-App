@@ -1,70 +1,88 @@
-import React, { useEffect, useCallback } from "react";
-import { SLOTS } from "../../data";
-import "./TimeSelector.css";
+import React, { useCallback } from "react"
+import { SLOTS as UISLOTS } from "../../data"
+import "./TimeSelector.css"
+import LinearProgress from "@mui/material/LinearProgress"
+import Box from "@mui/material/Box"
+import { combineDateTimeMoment } from "../../util/helpers"
+import { STATUS_COMPLETED, STATUS_PENDING } from "../../hooks/useHttp"
+import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
 
-import Button from "react-bootstrap/Button";
+import moment from "moment"
 
-const TimeSelector = ({ choosenDate, onChange, time, slots }) => {
-  //console.log("sent time", time);
-  // const [userTime, setUserTime] = useState(time);
-  // const [day, setDay] = useState(choosenDate.format("dddd DD-MM-YYYY"));
-  // const day = choosenDate.format("dddd DD-MM-YYYY");
-  //console.log("time is ", choosenDate);
+import Button from "react-bootstrap/Button"
 
+const TimeSelector = ({
+  choosenDate,
+  onChange,
+  time: selectedTime,
+  slots,
+  loading,
+}) => {
   function checkAvailability(slot) {
-    const time = slot.time;
-    //console.log(slots?.some((obj) => obj.time === time));
-    return slots?.some((obj) => obj.isBooked && obj.time === time);
+    const time = slot.time
+    const slotMoment = combineDateTimeMoment(
+      choosenDate,
+      moment(slot.time, "h:mm a")
+    )
+
+    return slots?.some((obj) => obj.time === time) || slotMoment < moment()
   }
+
+  let buttons = UISLOTS.map((uiSlot) => (
+    <Button
+      variant={`${
+        uiSlot.time === selectedTime
+          ? "success"
+          : checkAvailability(uiSlot)
+          ? "secondary"
+          : "primary"
+      }`}
+      disabled={checkAvailability(uiSlot)} //if teh slot is in the slots array we got!!
+      key={uiSlot.id}
+      onClick={() => handleTimeChange(uiSlot.time)}
+    >
+      {uiSlot.time}
+    </Button>
+  ))
 
   const handleTimeChange = useCallback(
     (time) => {
-      // setUserTime(time);
-      onChange(time);
+      if (loading === STATUS_PENDING) return
+      onChange(time)
     },
     [onChange]
-  );
-
-  useEffect(() => {
-    //handleTimeChange("");
-  }, [choosenDate]);
-
-  //console.log(choosenDate.toDate());
-
-  //can put this in useEffect for choose time to pull slots for choosen date from the db
-  //const timeSlots = useTime(props.choosenDate);
-
-  const buttons = [];
-  SLOTS.forEach((slot) =>
-    buttons.push(
-      <Button
-        variant={`${
-          slot.time === time
-            ? "success"
-            : checkAvailability(slot)
-            ? "secondary"
-            : "primary"
-        }`}
-        disabled={checkAvailability(slot)} //if teh slot is in the slots array we got!!
-        key={slot.id}
-        onClick={() => handleTimeChange(slot.time)}
-      >
-        {slot.time} hrs
-      </Button>
-    )
-  );
+  )
 
   return (
     <>
-      <p className="">
-        Select time slot for : {"  "}
-        <span className="text-primary font-weight-bold choosen-date">
+      <p className="fw-bolder">
+        Showing slots for : {"  "}
+        <span className="text-primary  choosen-date">
           {choosenDate.format("dddd DD/MM/YYYY").toString()}
+          {/* {console.log(choosenDate.calendar())} */}
         </span>
       </p>
-      <div className="time-container">{buttons}</div>
+      <div className="d-flex mt-2 text-capitalize text-bold gap-4">
+        {" "}
+        <span className="text-primary fw-bold">
+          {" "}
+          <FiberManualRecordIcon color="primary" /> Available{" "}
+        </span>{" "}
+        <span className="text-success fw-bold">
+          {" "}
+          <FiberManualRecordIcon color="success" /> Selected
+        </span>
+        <span className="text-secondary fw-bold">
+          {" "}
+          <FiberManualRecordIcon color="action" /> Unavailable
+        </span>
+      </div>
+      <div className="mb-3 mt-2 h-25">
+        {loading === STATUS_PENDING && <LinearProgress />}
+      </div>
+      <div className="time-container"> {buttons}</div>
     </>
-  );
-};
+  )
+}
 
-export default TimeSelector;
+export default TimeSelector
