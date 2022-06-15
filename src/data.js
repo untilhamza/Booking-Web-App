@@ -3,6 +3,22 @@ import { v4 as uuidv4 } from "uuid"
 //the slots data is also for a given data => today!!!
 const SLOTS = [
   {
+    time: "10:30",
+    id: uuidv4(),
+  },
+  {
+    time: "11:00",
+    id: uuidv4(),
+  },
+  {
+    time: "11:30",
+    id: uuidv4(),
+  },
+  {
+    time: "12:00",
+    id: uuidv4(),
+  },
+  {
     time: "12:30",
     id: uuidv4(),
   },
