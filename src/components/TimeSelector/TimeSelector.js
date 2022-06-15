@@ -2,9 +2,9 @@ import React, { useCallback } from "react"
 import { SLOTS as UISLOTS } from "../../data"
 import "./TimeSelector.css"
 import LinearProgress from "@mui/material/LinearProgress"
-import Box from "@mui/material/Box"
+
 import { combineDateTimeMoment } from "../../util/helpers"
-import { STATUS_COMPLETED, STATUS_PENDING } from "../../hooks/useHttp"
+import { STATUS_PENDING } from "../../hooks/useHttp"
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
 
 import moment from "moment"
