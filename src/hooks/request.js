@@ -13,6 +13,7 @@ import {
   getDocs,
   orderBy,
   runTransaction,
+  deleteDoc,
 } from "firebase/firestore"
 
 const bookingsCollectionRef = collection(db, "bookings")
@@ -27,6 +28,7 @@ function processBooking(result) {
     phone: result.phone,
     date: result.date.toDate().toDateString(),
     time: moment(result.date.toDate()).format("LT"),
+    fb_timeStamp: result.date,
     status: result.status,
   }
 
@@ -135,10 +137,10 @@ const httpGetSlots = async (dateMoment) => {
     where("date", "<", Timestamp.fromDate(nextDate.toDate()))
   )
 
-  const bookingSnap = await getDocs(q)
+  const slotSnap = await getDocs(q)
 
-  if (bookingSnap) {
-    let result = bookingSnap.docs.map((doc) => ({
+  if (slotSnap) {
+    let result = slotSnap.docs.map((doc) => ({
       ...processSlot(doc.data()),
       id: doc.id,
     }))
@@ -196,11 +198,34 @@ const httpEditBooking = async (booking) => {
 //delete bookings
 const httpCancelBooking = async (id) => {
   try {
-    const bookingDoc = doc(db, "bookings", id)
-    const newFields = { status: "cancelled" }
-    const response = await updateDoc(bookingDoc, newFields)
+    return await runTransaction(db, async (transaction) => {
+      const bookingDocRef = doc(db, "bookings", id)
 
-    return response.data()
+      const newFields = { status: "cancelled" }
+
+      await updateDoc(bookingDocRef, newFields)
+
+      let bookingSnap = await getDoc(bookingDocRef)
+
+      if (bookingSnap.exists()) {
+        let firebaseTimeStamp = bookingSnap.data().date
+
+        const q = query(
+          slotsCollectionRef,
+          where("date", "==", Timestamp.fromDate(firebaseTimeStamp.toDate())),
+          where("status", "==", "confirmed")
+        )
+
+        const slotSnap = await getDocs(q)
+
+        let slotId = slotSnap.docs[0].id
+
+        let slotRef = doc(slotsCollectionRef, slotId)
+        await deleteDoc(slotRef)
+      }
+
+      return bookingSnap.data()
+    })
   } catch (err) {
     console.log(err)
     return { ok: false }
