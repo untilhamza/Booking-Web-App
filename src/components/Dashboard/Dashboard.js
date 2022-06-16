@@ -1,13 +1,13 @@
-import BookingTable from "../BookingTable/BookingTable";
-import Calendar from "../Calendar/Calendar";
+import BookingTable from "../BookingTable/BookingTable"
+import Calendar from "../Calendar/Calendar"
 
 const Dashboard = ({ date, onSelectDate, bookings, status, onView }) => {
   //console.log(bookings);
   //console.log(date);
   const handleSelectDate = (newDate) => {
     //console.log("new set date is", newDate);
-    onSelectDate(newDate);
-  };
+    onSelectDate(newDate)
+  }
   return (
     <div className="container p-3">
       <div className="row">
@@ -24,7 +24,7 @@ const Dashboard = ({ date, onSelectDate, bookings, status, onView }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard
