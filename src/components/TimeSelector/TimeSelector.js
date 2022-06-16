@@ -25,7 +25,11 @@ const TimeSelector = ({
       moment(slot.time, "h:mm a")
     )
 
-    return slots?.some((obj) => obj.time === time) || slotMoment < moment()
+    //TODO: checked if it was not blocked too
+    return (
+      slots?.some((obj) => obj.time === time && obj.isBooked) ||
+      slotMoment < moment()
+    )
   }
 
   let buttons = UISLOTS.map((uiSlot) => (
