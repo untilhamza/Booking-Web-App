@@ -12,7 +12,6 @@ function SimpleBackdrop({ loading }) {
         onClick={() => {}}
       >
         <CircularProgress color="inherit" />
-        {/* <DotLoader loading={loading} size={60} /> */}
       </Backdrop>
     </div>
   )

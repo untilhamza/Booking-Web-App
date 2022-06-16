@@ -15,14 +15,6 @@ var endMinute = 30
 var startTime = moment().hour(startHour).minute(startMinute).second(0)
 var endTime = moment().hour(endHour).minute(endMinute).second(0)
 
-// console.log("Start time", startTime.format("LT"))
-// console.log("End time", endTime.format("LT"))
-
-// let slot = {
-//   time: "10:30",
-//   id: uuidv4(),
-// }
-
 while (startTime <= endTime) {
   timeSlots.push({ time: startTime.clone().format("LT"), id: uuidv4() }) // clone to add new object
   startTime.add(duration, "minutes")

@@ -45,13 +45,10 @@ const TimeSelector = ({
     </Button>
   ))
 
-  const handleTimeChange = useCallback(
-    (time) => {
-      if (loading === STATUS_PENDING) return
-      onChange(time)
-    },
-    [onChange]
-  )
+  const handleTimeChange = useCallback((time) => {
+    if (loading === STATUS_PENDING) return
+    onChange(time)
+  }, [])
 
   return (
     <>

@@ -46,105 +46,117 @@ function processSlot(result) {
 
 //load bookings for given date as json
 const httpGetBooking = async (id) => {
-  const bookingRef = doc(db, "bookings", id)
-  const bookingSnap = await getDoc(bookingRef)
+  try {
+    const bookingRef = doc(db, "bookings", id)
+    const bookingSnap = await getDoc(bookingRef)
 
-  if (bookingSnap.exists()) {
-    // console.log(bookingSnap.data());
-    let result = { ...bookingSnap.data(), id: bookingSnap.id }
-    let bookingData = {
-      name: result.name,
-      phone: result.phone,
-      date: result.date.toDate().toDateString(),
-      time: result.date.toDate().toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      }),
-      status: result.status,
-    }
+    if (bookingSnap.exists()) {
+      let result = { ...bookingSnap.data(), id: bookingSnap.id }
+      let bookingData = {
+        name: result.name,
+        phone: result.phone,
+        date: result.date.toDate().toDateString(),
+        time: result.date.toDate().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: true,
+        }),
+        status: result.status,
+      }
 
-    return bookingData
-  } else {
-    return {
-      ok: false,
-      message: "The appointment was not found!",
+      return bookingData
+    } else {
+      throw new Error("No booking found!")
     }
+  } catch (err) {
+    throw err
   }
 }
 
 const httpCheckBooking = async (email) => {
-  //const id = phone;
-  //console.log(email);
-  const q = query(
-    bookingsCollectionRef,
-    where("email", "==", email),
-    orderBy("date", "desc")
-  )
+  try {
+    //const id = phone;
+    //console.log(email);
+    const q = query(
+      bookingsCollectionRef,
+      where("email", "==", email),
+      orderBy("date", "desc")
+    )
 
-  // const bookingRef = doc(db, "bookings", id);
-  //TODO: try using getDoc
-  const bookingSnap = await getDocs(q)
+    // const bookingRef = doc(db, "bookings", id);
+    //TODO: try using getDoc
+    const bookingQuerySnap = await getDocs(q)
 
-  if (bookingSnap) {
-    let result = bookingSnap.docs.map((doc) => ({
-      ...processBooking(doc.data()),
-      id: doc.id,
-    }))
+    if (!bookingQuerySnap.empty) {
+      let result = bookingQuerySnap.docs.map((doc) => ({
+        ...processBooking(doc.data()),
+        id: doc.id,
+      }))
 
-    return result[0]
-  } else {
-    return Promise.reject(Error(`No booking for: ${email}`))
+      return result[0]
+    } else {
+      throw new Error(`No booking for: ${email}`)
+    }
+  } catch (err) {
+    throw err
   }
 }
 //load bookings for given date as json
 const httpGetBookings = async (dateMoment) => {
-  dateMoment = new moment(dateMoment)
-  let queriedDate = dateMoment.format("YYYY-MM-DD").toString()
-  let nextDate = dateMoment.add(1, "day").format("YYYY-MM-DD").toString()
-  let parsedqueriedDate = Date.parse(queriedDate + "T00:00")
-  let parsednextDate = Date.parse(nextDate + "T00:00")
-  const q = query(
-    bookingsCollectionRef,
-    where("date", ">", Timestamp.fromMillis(parsedqueriedDate)),
-    where("date", "<", Timestamp.fromMillis(parsednextDate))
-  )
-  //qeury booking greater than the given date but less the date after....
+  try {
+    dateMoment = new moment(dateMoment)
+    let queriedDate = dateMoment.format("YYYY-MM-DD").toString()
+    let nextDate = dateMoment.add(1, "day").format("YYYY-MM-DD").toString()
+    let parsedqueriedDate = Date.parse(queriedDate + "T00:00")
+    let parsednextDate = Date.parse(nextDate + "T00:00")
+    const q = query(
+      bookingsCollectionRef,
+      where("date", ">", Timestamp.fromMillis(parsedqueriedDate)),
+      where("date", "<", Timestamp.fromMillis(parsednextDate))
+    )
+    //qeury booking greater than the given date but less the date after....
 
-  const bookingSnap = await getDocs(q)
-  if (bookingSnap) {
-    let result = bookingSnap.docs.map((doc) => ({
-      ...processBooking(doc.data()),
-      id: doc.id,
-    }))
-    //console.log(result);
-    return result
+    const bookingSnap = await getDocs(q)
+    if (bookingSnap) {
+      let result = bookingSnap.docs.map((doc) => ({
+        ...processBooking(doc.data()),
+        id: doc.id,
+      }))
+      //console.log(result);
+      return result
+    }
+  } catch (err) {
+    throw err
   }
 }
 
 //load already booked time slots for given date as json
 const httpGetSlots = async (dateMoment) => {
-  dateMoment = new moment(dateMoment)
-  let time = new moment().set({ hour: 0, minute: 0, second: 0 })
+  try {
+    dateMoment = new moment(dateMoment)
+    let time = new moment().set({ hour: 0, minute: 0, second: 0 })
 
-  let choosenDate = combineDateTimeMoment(dateMoment, time)
+    let choosenDate = combineDateTimeMoment(dateMoment, time)
 
-  let nextDate = choosenDate.add(1, "day")
+    let nextDate = choosenDate.add(1, "day")
 
-  const q = query(
-    slotsCollectionRef,
-    where("date", ">", Timestamp.fromDate(dateMoment.toDate())),
-    where("date", "<", Timestamp.fromDate(nextDate.toDate()))
-  )
+    const q = query(
+      slotsCollectionRef,
+      where("date", ">", Timestamp.fromDate(dateMoment.toDate())),
+      where("date", "<", Timestamp.fromDate(nextDate.toDate()))
+    )
 
-  const slotSnap = await getDocs(q)
+    const slotSnap = await getDocs(q)
 
-  if (slotSnap) {
-    let result = slotSnap.docs.map((doc) => ({
-      ...processSlot(doc.data()),
-      id: doc.id,
-    }))
-    return result
+    if (slotSnap) {
+      let result = slotSnap.docs.map((doc) => ({
+        ...processSlot(doc.data()),
+        id: doc.id,
+      }))
+      return result
+    }
+  } catch (err) {
+    throw err
   }
 }
 
@@ -154,6 +166,30 @@ const httpSubmitBooking = async (bookingData) => {
     return await runTransaction(db, async (transaction) => {
       let timeMoment = moment(bookingData.time, "h:mm a")
       let bookingMoment = combineDateTimeMoment(bookingData.date, timeMoment)
+
+      //TODO: make sure slot is not already taken...
+      const snapQuery = query(
+        slotsCollectionRef,
+        where(
+          "date",
+          ">",
+          Timestamp.fromMillis(
+            bookingMoment.clone().subtract(1, "minute").valueOf()
+          )
+        ),
+        where(
+          "date",
+          "<",
+          Timestamp.fromMillis(bookingMoment.clone().add(1, "minute").valueOf())
+        ),
+        where("status", "==", "confirmed")
+      )
+
+      const slotQuerySnap = await getDocs(snapQuery)
+
+      if (!slotQuerySnap.empty) {
+        throw new Error("Slot is not available. Please choose another slot.")
+      }
 
       const slot = {
         date: Timestamp.fromDate(bookingMoment.toDate()),
@@ -173,8 +209,7 @@ const httpSubmitBooking = async (bookingData) => {
       return response.id
     })
   } catch (err) {
-    console.log(err)
-    return { ok: false }
+    throw err
   }
 }
 
@@ -190,8 +225,7 @@ const httpEditBooking = async (booking) => {
     })
     return response
   } catch (err) {
-    console.log(err)
-    return { ok: false }
+    throw err
   }
 }
 
@@ -210,25 +244,28 @@ const httpCancelBooking = async (id) => {
       if (bookingSnap.exists()) {
         let firebaseTimeStamp = bookingSnap.data().date
 
-        const q = query(
+        const snapQuery = query(
           slotsCollectionRef,
           where("date", "==", Timestamp.fromDate(firebaseTimeStamp.toDate())),
           where("status", "==", "confirmed")
         )
 
-        const slotSnap = await getDocs(q)
+        const slotQuerySnap = await getDocs(snapQuery)
 
-        let slotId = slotSnap.docs[0].id
+        let slotId = slotQuerySnap.docs[0].id
 
         let slotRef = doc(slotsCollectionRef, slotId)
         await deleteDoc(slotRef)
+      } else {
+        throw new Error(
+          "The booking you are attempting to cancel was not found!"
+        )
       }
 
       return bookingSnap.data()
     })
   } catch (err) {
-    console.log(err)
-    return { ok: false }
+    throw err
   }
 }
 

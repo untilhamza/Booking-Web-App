@@ -1,64 +1,58 @@
-import React, { useEffect } from "react";
-import CheckingForm from "../components/CheckingForm/CheckingForm";
-import { useHistory } from "react-router-dom";
-import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
-import { httpCheckBooking } from "../hooks/request";
-import SimpleBackdrop from "../components/BackDrop/BackDrop";
-import { Modal } from "antd";
+import React, { useEffect } from "react"
+import CheckingForm from "../components/CheckingForm/CheckingForm"
+import { useHistory } from "react-router-dom"
+import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp"
+import { httpCheckBooking } from "../hooks/request"
+import SimpleBackdrop from "../components/BackDrop/BackDrop"
+import ErrorModal from "../components/ErrorModal/ErrorModal"
 
 const CheckAppointment = () => {
-  const history = useHistory();
+  const history = useHistory()
   const {
-    status,
+    status: checkBookingStatus,
     data: response,
-    error,
+    error: errorMessage,
     sendRequest,
-  } = useHttp(httpCheckBooking);
+  } = useHttp(httpCheckBooking)
 
   function handleChecking(userEmail) {
-    sendRequest(userEmail.email);
+    sendRequest(userEmail.email)
   }
 
   function handleCancel() {
-    history.goBack();
-  }
-
-  function modalError(message) {
-    Modal.error({
-      title: message?.title ? message.title : "An Error occurred",
-      content: message ? message.content : "There was an error",
-      onOk: message.onOk,
-    });
-  }
-
-  if (error) {
-    console.log(error);
-    modalError(error);
+    history.goBack()
   }
 
   useEffect(() => {
-    if (status === STATUS_COMPLETED) {
-      //navigate away
-      //console.log(response);
-      if (!response) {
-        return modalError({
-          title: "No appointments found for provided email!",
-          content: "Please make an appointment first.",
+    if (checkBookingStatus === STATUS_COMPLETED) {
+      if (errorMessage) {
+        ErrorModal({
+          message: errorMessage,
           onOk: () => {
-            history.push("/");
+            history.push("/")
           },
-        });
+        })
+      } else if (!response) {
+        ErrorModal({
+          title: "No appointments found for provided email!",
+          message: "Please make an appointment first.",
+          onOk: () => {
+            history.push("/")
+          },
+        })
+        return
+      } else {
+        return history.push(`/appointment/${response.id}`)
       }
-      return history.push(`/appointment/${response.id}`);
     }
-  }, [status, response, history]);
+  }, [checkBookingStatus, response, history, errorMessage])
 
   return (
     <div>
-      <SimpleBackdrop loading={status === STATUS_PENDING} />
+      <SimpleBackdrop loading={checkBookingStatus === STATUS_PENDING} />
       <CheckingForm onConfirm={handleChecking} onCancel={handleCancel} />
     </div>
-  );
-};
+  )
+}
 
-export default CheckAppointment;
+export default CheckAppointment

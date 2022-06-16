@@ -125,7 +125,6 @@ const BookingForm = ({
               <DatePicker
                 value={values.date}
                 onChange={(enteredMoment) => {
-                  console.log("we enterd a new value")
                   handleGetSlots(
                     new moment(enteredMoment).set({
                       hour: 0,
