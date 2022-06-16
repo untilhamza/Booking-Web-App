@@ -1,17 +1,19 @@
-import React from "react";
-import { useContext } from "react";
-import AuthContext from "../../store/auth-context";
-import { Navbar as RbNavbar, Container, Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
-import Button from "@mui/material/Button";
+import React from "react"
+import { useContext } from "react"
+import AuthContext from "../../store/auth-context"
+import { Navbar as RbNavbar, Container, Nav } from "react-bootstrap"
+import { NavLink } from "react-router-dom"
+import Button from "@mui/material/Button"
 
-import "./NavBar.css";
+import "./NavBar.css"
 const Navbar = () => {
-  const authCtx = useContext(AuthContext);
+  const authCtx = useContext(AuthContext)
   return (
     <RbNavbar bg="dark" variant="dark" className="nav-bar">
       <Container>
-        <RbNavbar.Brand href="/">Elkpro Cut</RbNavbar.Brand>
+        <RbNavbar.Brand>
+          <NavLink to="/"> Elkpro Cut</NavLink>
+        </RbNavbar.Brand>
         <Nav className="ms-auto">
           <NavLink className="nav-link" activeClassName="active" to="/">
             Booking
@@ -24,7 +26,7 @@ const Navbar = () => {
             <Button
               variant="outlined"
               onClick={() => {
-                authCtx.onLogout();
+                authCtx.onLogout()
               }}
             >
               Logout
@@ -33,7 +35,7 @@ const Navbar = () => {
         </Nav>
       </Container>
     </RbNavbar>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar
