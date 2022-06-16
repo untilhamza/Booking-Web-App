@@ -1,21 +1,21 @@
-import { useState, useEffect } from "react";
-import Dashboard from "../components/Dashboard/Dashboard";
-import useHttp from "../hooks/useHttp";
-import moment from "moment";
-import { httpGetBookings } from "../hooks/request";
-import { Modal } from "antd";
-import { useHistory } from "react-router-dom";
+import { useState, useEffect } from "react"
+import Dashboard from "../components/Dashboard/Dashboard"
+import useHttp from "../hooks/useHttp"
+import moment from "moment"
+import { httpGetBookings } from "../hooks/request"
+import { Modal } from "antd"
+import { useHistory } from "react-router-dom"
 
 const Admin = () => {
-  const history = useHistory();
-  const [date, setDate] = useState(moment());
+  const history = useHistory()
+  const [date, setDate] = useState(moment())
   //console.log(date);
   const {
     status,
     data: bookings,
     error,
     sendRequest,
-  } = useHttp(httpGetBookings, true);
+  } = useHttp(httpGetBookings, true)
 
   function modalError(message) {
     Modal.error({
@@ -24,23 +24,23 @@ const Admin = () => {
       // onOk: () => {
       //   history.push("/");
       // },
-    });
+    })
   }
   const handleSelectDate = (newDate) => {
-    setDate(newDate);
-  };
+    setDate(newDate)
+  }
 
   const handleOnView = (id) => {
-    history.push(`/appointment/${id}`);
-  };
+    history.push(`/appointment/${id}`)
+  }
 
   useEffect(() => {
     // sendRequest(date.format("DD-MM-YYYY"));
-    sendRequest(date);
-  }, [date, sendRequest]);
+    sendRequest(date)
+  }, [date, sendRequest])
 
   if (error) {
-    modalError(error);
+    modalError(error)
   }
 
   return (
@@ -53,7 +53,7 @@ const Admin = () => {
         status={status}
       />
     </div>
-  );
-};
+  )
+}
 
-export default Admin;
+export default Admin

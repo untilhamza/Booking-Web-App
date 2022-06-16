@@ -1,44 +1,42 @@
-import React from "react";
-import Button from "react-bootstrap/esm/Button";
-import "./Booking.css";
+import React from "react"
+import Button from "react-bootstrap/esm/Button"
+import { Chip } from "@mui/material"
+import "./Booking.css"
 
 const Booking = ({ booking, onView }) => {
-  const { name, time, status, id } = booking;
+  const { name, time, status, id } = booking
   // console.log(name, time, status);
   // const name = "customer name";
   // const status = "upcoming";
   // const time = "11:30";
 
   function handleView() {
-    onView(id);
+    onView(id)
   }
 
   const setStatus = (status) => {
-    if (status === "confirmed") return "bg-success";
-    if (status === "completed") return "bg-primary";
-    if (status === "cancelled") return "bg-danger";
-  };
+    if (status === "confirmed") return "success" // return "bg-success"
+    if (status === "completed") return "" //return "bg-primary"
+    if (status === "cancelled") return "error" //return "bg-danger"
+  }
 
   return (
-    <tr className="table-row">
-      <td className="text-center">{time}</td>
-      <td>{name}</td>
-      <td className="text-center p-2">
-        <span className={`badge rounded-pill px-2 ${setStatus(status)} w-100`}>
-          {" "}
-          {status}
-        </span>
+    <tr>
+      <td className="text-center py-2 booking-time table-body-text">{time}</td>
+      <td className="text-start py-2 customer-name table-body-text">{name}</td>
+      <td className="text-center py-2 table-body-text">
+        <Chip label={status} color={`${setStatus(status)}`} size="small" />
       </td>
-      <td className="p-2">
+      <td className="text-center py-2 table-body-text">
         {
-          <Button className="btn-sm btn-secondary w-100" onClick={handleView}>
+          <Button className="btn-sm btn-secondary w-100 " onClick={handleView}>
             View
           </Button>
         }
       </td>
       {}
     </tr>
-  );
-};
+  )
+}
 
-export default Booking;
+export default Booking

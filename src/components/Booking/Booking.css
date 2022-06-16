@@ -1,4 +1,17 @@
 .table-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  min-width: 100%;
+}
+
+.booking-time {
+  min-width: 70px;
+}
+
+.customer-name {
+  max-width: 150px;
+}
+
+.table-body-text {
+  vertical-align: middle;
 }
