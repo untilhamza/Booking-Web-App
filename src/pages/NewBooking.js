@@ -51,8 +51,8 @@ const NewBooking = () => {
 
   function modalError(message) {
     Modal.error({
-      title: "An Error occurred",
-      content: message ? message : "There was an error",
+      title: "Oops...!!",
+      content: message ? message : "An error occurred. Please try again later",
       onOk: () => {
         history.push("/")
       },
