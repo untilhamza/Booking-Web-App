@@ -4,3 +4,7 @@
 .booking-data {
   text-align: justify;
 }
+.card-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}

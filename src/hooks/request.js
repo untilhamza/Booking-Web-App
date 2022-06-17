@@ -23,13 +23,15 @@ const slotsCollectionRef = collection(db, "slots")
 const API_URL = ""
 
 function processBooking(result) {
+  const isDone = moment(result.date.toDate()) < moment()
   let bookingData = {
     name: result.name,
     phone: result.phone,
     date: result.date.toDate().toDateString(),
     time: moment(result.date.toDate()).format("LT"),
     fb_timeStamp: result.date,
-    status: result.status,
+    status:
+      isDone && result.status === "confirmed" ? "completed" : result.status,
   }
 
   return bookingData
@@ -40,7 +42,7 @@ function processSlot(result) {
     isBooked: result.status === "confirmed",
     isBlocked: result.isBlocked,
   }
-  //console.log(bookingData)
+  //console.log(slotData)
   return slotData
 }
 
@@ -52,17 +54,7 @@ const httpGetBooking = async (id) => {
 
     if (bookingSnap.exists()) {
       let result = { ...bookingSnap.data(), id: bookingSnap.id }
-      let bookingData = {
-        name: result.name,
-        phone: result.phone,
-        date: result.date.toDate().toDateString(),
-        time: result.date.toDate().toLocaleTimeString([], {
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: true,
-        }),
-        status: result.status,
-      }
+      let bookingData = processBooking(result)
 
       return bookingData
     } else {
