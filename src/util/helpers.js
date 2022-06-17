@@ -7,5 +7,9 @@ const combineDateTimeMoment = (dateMoment, timeMoment) => {
     })
     .clone()
 }
-
-export { combineDateTimeMoment }
+const setStatus = (status) => {
+  if (status === "confirmed") return "success" // return "bg-success"
+  if (status === "completed") return "primary" //return "bg-primary"
+  if (status === "cancelled") return "danger" //return "bg-danger"
+}
+export { combineDateTimeMoment, setStatus }

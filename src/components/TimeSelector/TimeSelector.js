@@ -24,12 +24,10 @@ const TimeSelector = ({
       choosenDate,
       moment(slot.time, "h:mm a")
     )
+    const isPast = slotMoment < moment()
 
     //TODO: checked if it was not blocked too
-    return (
-      slots?.some((obj) => obj.time === time && obj.isBooked) ||
-      slotMoment < moment()
-    )
+    return slots?.some((obj) => obj.time === time && obj.isBooked) || isPast
   }
 
   let buttons = UISLOTS.map((uiSlot) => (

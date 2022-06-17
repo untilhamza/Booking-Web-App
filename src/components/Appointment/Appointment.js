@@ -1,7 +1,10 @@
-import React from "react";
-import Button from "react-bootstrap/Button";
-import useModal from "../../hooks/useModal";
-import "./Appointment.css";
+import React from "react"
+import Button from "react-bootstrap/Button"
+import Badge from "react-bootstrap/Badge"
+import useModal from "../../hooks/useModal"
+import { Chip } from "@mui/material"
+import { setStatus } from "../../util/helpers"
+import "./Appointment.css"
 
 const Appointment = ({
   appointmentData,
@@ -11,8 +14,8 @@ const Appointment = ({
   isAdmin,
 }) => {
   const handleCancel = () => {
-    onCancel();
-  };
+    onCancel()
+  }
   // const handleModify = () => {
   //   console.log("Modifying...");
   // };
@@ -21,7 +24,7 @@ const Appointment = ({
     "Confirmation",
     "Are you sure you want to delete this appointment?",
     handleCancel
-  );
+  )
   return (
     <>
       {modal}
@@ -29,33 +32,33 @@ const Appointment = ({
         <div className="appointment-card card mx-auto">
           <div className="card-body d-flex flex-column">
             <h5>Appointment details</h5>
-            <div className="card-text">
-              For : <span className="fw-bolder"> {appointmentData.name}</span>
+            <div className="card-text card-row">
+              <span> For :</span>{" "}
+              <span className="fw-bolder"> {appointmentData.name}</span>
             </div>
-            <div className="card-text">
+            <div className="card-text card-row">
               Phone number :{" "}
               <span className="fw-bolder booking-data">
                 {" "}
                 {appointmentData.phone}
               </span>
             </div>
-            <div className="card-text">
+            <div className="card-text card-row">
               Date : <span className="fw-bolder"> {appointmentData.date}</span>
             </div>
-            <div className="card-text">
+            <div className="card-text card-row">
               Time : <span className="fw-bolder"> {appointmentData.time}</span>
             </div>
             {appointmentData.status && (
-              <div className="card-text">
+              <div className="card-text card-row">
                 Status :{" "}
-                <span
-                  className={`fw-bolder text-capitalize ${
-                    appointmentData.status === "cancelled" ? "text-danger" : ""
-                  }`}
+                <Badge
+                  pill
+                  bg={`${setStatus(appointmentData.status)}`}
+                  className="py-2"
                 >
-                  {" "}
                   {appointmentData.status}
-                </span>
+                </Badge>
               </div>
             )}
 
@@ -66,21 +69,21 @@ const Appointment = ({
                 className="w-100 me-1"
                 onClick={() => {
                   if (isAdmin) {
-                    onBack();
+                    onBack()
                   } else {
-                    onDone();
+                    onDone()
                   }
                 }}
               >
                 Done
               </Button>
-              {appointmentData.status !== "cancelled" && (
+              {appointmentData.status === "confirmed" && (
                 <Button
-                  variant="danger"
+                  variant="outline-danger"
                   type="button"
                   className="w-100 mt-1"
                   onClick={() => {
-                    handleShow();
+                    handleShow()
                   }}
                 >
                   Cancel Appointment
@@ -97,7 +100,7 @@ const Appointment = ({
         </div>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Appointment;
+export default Appointment
