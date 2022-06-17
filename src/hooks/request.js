@@ -14,6 +14,7 @@ import {
   orderBy,
   runTransaction,
   deleteDoc,
+  limit,
 } from "firebase/firestore"
 
 const bookingsCollectionRef = collection(db, "bookings")
@@ -32,6 +33,7 @@ function processBooking(result) {
     fb_timeStamp: result.date,
     status:
       isDone && result.status === "confirmed" ? "completed" : result.status,
+    isPast: moment(result.date.toDate()) < moment().subtract("1", "days"),
   }
 
   return bookingData
@@ -72,7 +74,8 @@ const httpCheckBooking = async (email) => {
     const q = query(
       bookingsCollectionRef,
       where("email", "==", email),
-      orderBy("date", "desc")
+      orderBy("date", "desc"),
+      limit(3)
     )
 
     // const bookingRef = doc(db, "bookings", id);
