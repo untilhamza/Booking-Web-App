@@ -34,7 +34,7 @@ const BookingTable = ({ date, bookings, status, onView }) => {
   return (
     <Table striped bordered hover size="sm" className="mt-3 mt-md-0">
       <thead>
-        <tr className="table-secondary text-center text-capitalize text-primary fs-3 ">
+        <tr className="table-success text-center text-capitalize text-danger fs-3 ">
           <th scope="row" colSpan={4}>
             Bookings for : {date.format("dddd DD/MM/YYYY")}
           </th>
