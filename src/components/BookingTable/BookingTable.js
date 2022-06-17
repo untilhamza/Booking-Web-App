@@ -24,7 +24,9 @@ const BookingTable = ({ date, bookings, status, onView }) => {
     } else {
       content = (
         <tr>
-          <td className="text-center">No bookings found!</td>
+          <td className="text-center " colSpan={4}>
+            <h5 className="text-primary">No bookings found!</h5>
+          </td>
         </tr>
       )
     }
@@ -32,7 +34,7 @@ const BookingTable = ({ date, bookings, status, onView }) => {
   return (
     <Table striped bordered hover size="sm" className="mt-3 mt-md-0">
       <thead>
-        <tr className="table-success text-center text-capitalize text-danger fs-4">
+        <tr className="table-success text-center text-capitalize text-danger fs-3 ">
           <th scope="row" colSpan={4}>
             Bookings for : {date.format("dddd DD/MM/YYYY")}
           </th>
