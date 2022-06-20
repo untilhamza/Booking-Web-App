@@ -8,6 +8,7 @@ import Customer from "./pages/Customer"
 import NewBooking from "./pages/NewBooking"
 import ViewAppointment from "./pages/ViewAppointment"
 import CheckAppointment from "./pages/CheckAppointment"
+import Logout from "./components/Logout/Logout"
 import NotFound from "./pages/NotFound"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
@@ -41,6 +42,9 @@ const App = () => {
             </Route>
             <Route path="/appointment/:id">
               <ViewAppointment />
+            </Route>
+            <Route path="/logout">
+              <Logout />
             </Route>
             <Route path="/">
               <Customer />

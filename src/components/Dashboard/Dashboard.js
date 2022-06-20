@@ -10,7 +10,7 @@ const Dashboard = ({ date, onSelectDate, bookings, status, onView }) => {
   }
   return (
     <div className="container p-3">
-      <div className="row">
+      <div className="d-flex gap-3 flex-column flex-md-row">
         <div className="col">
           <Calendar onSelectDate={handleSelectDate} />
         </div>

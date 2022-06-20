@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { auth } from "../database/firebase-config";
+import React, { useState } from "react"
+import { auth } from "../database/firebase-config"
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
-} from "firebase/auth";
+} from "firebase/auth"
 //describes how the context looks like
 const AuthContext = React.createContext({
   name: "",
@@ -14,42 +14,42 @@ const AuthContext = React.createContext({
   onLogin: ({ email, password }) => {},
   onLogout: ({ email, password }) => {},
   onRegister: ({ email, password }) => {},
-});
+})
 
 export const AuthContextProvider = (props) => {
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState({})
 
   const handleLogout = async () => {
     try {
-      await signOut(auth);
+      await signOut(auth)
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err)
     }
-  };
+  }
 
   const handleLogin = async ({ email, password }) => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      await signInWithEmailAndPassword(auth, email, password)
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err)
       //console.log(err);
     }
-  };
+  }
 
   const handleRegister = async ({ email, password }) => {
     try {
-      const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(user);
+      const user = await createUserWithEmailAndPassword(auth, email, password)
+      console.log(user)
     } catch (err) {
-      throw new Error(err);
+      throw new Error(err)
     }
-  };
+  }
 
   onAuthStateChanged(auth, (currentUser) => {
     //console.log("checking auth state");
-    setUser(currentUser);
+    setUser(currentUser)
     //console.log(currentUser);
-  });
+  })
   const contextValue = {
     name: user?.displayname,
     email: user?.email,
@@ -57,13 +57,13 @@ export const AuthContextProvider = (props) => {
     onLogin: handleLogin,
     onLogout: handleLogout,
     onRegister: handleRegister,
-  };
+  }
 
   return (
     <AuthContext.Provider value={contextValue}>
       {props.children}
     </AuthContext.Provider>
-  );
-};
+  )
+}
 
-export default AuthContext;
+export default AuthContext

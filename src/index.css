@@ -1,7 +1,9 @@
 @import "~antd/dist/antd.css";
 
 @import url("https://fonts.googleapis.com/css2?family=Belleza&family=Poppins:wght@400;500;800&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;900&display=swap");
 
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@200;300;400;600;700&display=swap"); */
 body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
@@ -9,4 +11,7 @@ body {
   height: 100vh;
 
   font-family: "Belleza", sans-serif;
+  /* font-family: "Lato", sans-serif; */
+
+  /* font-family: "Outfit", sans-serif; */
 }
