@@ -5,3 +5,29 @@
 .active-class {
   color: #fff;
 }
+.nav-brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+.nav-brand:hover {
+  transform: scale(1.1);
+}
+.nav-item:hover {
+  transform: scale(1.1);
+}
+
+.nav-bars {
+  margin-left: 1rem;
+}
+.nav-bars:hover {
+  /* padding-top: 0.3125rem;
+  padding-bottom: 0.3125rem; */
+  transform: scale(1.2);
+}
+.bars {
+  background: none;
+  color: #fff;
+  font-size: 1.5rem;
+}

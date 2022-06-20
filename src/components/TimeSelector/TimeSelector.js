@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { SLOTS as UISLOTS } from "../../data"
+import { SLOTS as UISLOTS } from "../../util/data"
 import "./TimeSelector.css"
 import LinearProgress from "@mui/material/LinearProgress"
 

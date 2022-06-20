@@ -1,11 +1,11 @@
-import React from "react";
-import { useFormik } from "formik";
-import * as Yup from "yup";
+import React from "react"
+import { useFormik } from "formik"
+import * as Yup from "yup"
 
-import "./LoginForm.css";
+import "./LoginForm.css"
 
 const LoginForm = ({ onLogin, status }) => {
-  const isLoginLoading = false;
+  const isLoginLoading = false
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -22,10 +22,10 @@ const LoginForm = ({ onLogin, status }) => {
     onSubmit: (values) => {
       //call method to login here
 
-      onLogin(values);
+      onLogin(values)
       //alert(JSON.stringify(values, null, 2));
     },
-  });
+  })
 
   return (
     <React.Fragment>
@@ -40,6 +40,7 @@ const LoginForm = ({ onLogin, status }) => {
                 name="email"
                 className={"form-control"}
                 placeholder="Email"
+                autoComplete="username"
                 onChange={formik.handleChange}
                 value={formik.values.email}
               />
@@ -57,6 +58,7 @@ const LoginForm = ({ onLogin, status }) => {
                 name="password"
                 className={"form-control"}
                 placeholder="Password"
+                autoComplete="current-password"
                 onChange={formik.handleChange}
                 value={formik.values.password}
               />
@@ -79,7 +81,7 @@ const LoginForm = ({ onLogin, status }) => {
         </div>
       </div>
     </React.Fragment>
-  );
-};
+  )
+}
 
-export default LoginForm;
+export default LoginForm
