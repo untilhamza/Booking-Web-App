@@ -7,6 +7,7 @@ import { DatePicker } from "antd"
 import TimeSelector from "../TimeSelector/TimeSelector"
 
 import "./BookingForm.css"
+
 const phoneRegex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i
 
 const schema = yup.object().shape({
@@ -78,7 +79,7 @@ const BookingForm = ({
           className="appointmentForm mx-auto p-3 "
         >
           <Form.Group className="mb-3">
-            <Form.Label>Name</Form.Label>
+            <Form.Label className="fw-bold">Name</Form.Label>
             <Form.Control
               type="text"
               name="name"
@@ -91,8 +92,9 @@ const BookingForm = ({
               <ErrorMessage name="name" />
             </div>
           </Form.Group>
-          <Form.Group>
-            <Form.Label>Phone Number</Form.Label>
+
+          <Form.Group className="mb-3">
+            <Form.Label className="fw-bold">Phone Number</Form.Label>
             <Form.Control
               type="tel"
               name="phone"
@@ -105,8 +107,9 @@ const BookingForm = ({
               <ErrorMessage name="phone" />
             </div>
           </Form.Group>
-          <Form.Group>
-            <Form.Label>Email</Form.Label>
+
+          <Form.Group className="mb-3">
+            <Form.Label className="fw-bold">Email</Form.Label>
             <Form.Control
               type="email"
               name="email"
@@ -119,8 +122,9 @@ const BookingForm = ({
               <ErrorMessage name="email" />
             </div>
           </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>Date</Form.Label>
+
+          <Form.Group>
+            <Form.Label className="fw-bold">Date</Form.Label>
             <div>
               <DatePicker
                 value={values.date}
@@ -145,6 +149,7 @@ const BookingForm = ({
               />
             </div>
           </Form.Group>
+
           <Form.Group className="mb-3">
             <Form.Label></Form.Label>
             <div>
@@ -162,6 +167,7 @@ const BookingForm = ({
               <ErrorMessage name="time" />
             </div>
           </Form.Group>
+
           <div className="d-flex justify-content-around p-2">
             <Button
               variant="success"

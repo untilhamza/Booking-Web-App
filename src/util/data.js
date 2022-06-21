@@ -12,10 +12,11 @@ const timeSlots = []
 
 var startHour = 10
 var startMinute = 30
-var duration = 30
 
 var endHour = 19
 var endMinute = 30
+
+var duration = 30
 
 var startTime = moment().hour(startHour).minute(startMinute).second(0)
 var endTime = moment().hour(endHour).minute(endMinute).second(0)
@@ -44,7 +45,7 @@ const sideItems = [
   {
     icon: <FiIcons.FiSettings />,
     title: "Settings",
-    path: "/admin",
+    path: "/settings",
     protected: true,
   },
   {

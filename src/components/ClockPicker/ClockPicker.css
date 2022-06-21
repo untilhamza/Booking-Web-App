@@ -1,0 +1,7 @@
+.timer {
+  max-width: 250px;
+  position: absolute;
+  right: 50%;
+  top: 50%;
+  transform: translate(50%, -50%);
+}

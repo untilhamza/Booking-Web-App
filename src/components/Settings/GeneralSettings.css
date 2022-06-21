@@ -1,0 +1,7 @@
+.input-address {
+  resize: none;
+}
+.change-text {
+  cursor: pointer;
+  color: red;
+}

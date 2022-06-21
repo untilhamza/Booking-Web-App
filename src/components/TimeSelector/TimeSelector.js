@@ -54,7 +54,7 @@ const TimeSelector = ({
 
   return (
     <>
-      <p className="fw-bolder">
+      <p className="fw-bold">
         Showing slots for : {"  "}
         <span className="text-primary  choosen-date">
           {choosenDate.format("dddd DD/MM/YYYY").toString()}

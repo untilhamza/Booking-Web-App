@@ -1,4 +1,3 @@
-import * as FaIcons from "react-icons/fa"
 import * as AiIcons from "react-icons/ai"
 import "./SideBar.css"
 import { IconContext } from "react-icons"
