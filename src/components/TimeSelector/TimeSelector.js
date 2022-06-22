@@ -1,10 +1,12 @@
-import React, { useCallback } from "react"
-import { SLOTS as UISLOTS } from "../../util/data"
+import React, { useCallback, useContext, useEffect } from "react"
+// import { SLOTS as UISLOTS } from "../../util/data"
+
+import { v4 as uuidv4 } from "uuid"
 import "./TimeSelector.css"
 import LinearProgress from "@mui/material/LinearProgress"
 
 import { combineDateTimeMoment } from "../../util/helpers"
-import { STATUS_PENDING } from "../../hooks/useHttp"
+import { STATUS_COMPLETED, STATUS_PENDING } from "../../hooks/useHttp"
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
 
 import moment from "moment"
@@ -17,7 +19,10 @@ const TimeSelector = ({
   time: selectedTime,
   slots,
   loading,
+  settings,
 }) => {
+  const { startTime, endTime, slotSize } = settings
+
   function checkAvailability(slot) {
     const time = slot.time
     const slotMoment = combineDateTimeMoment(
@@ -30,22 +35,62 @@ const TimeSelector = ({
     return slots?.some((obj) => obj.time === time && obj.isBooked) || isPast
   }
 
-  let buttons = UISLOTS.map((uiSlot) => (
-    <Button
-      variant={`${
-        uiSlot.time === selectedTime
-          ? "success"
-          : checkAvailability(uiSlot)
-          ? "secondary"
-          : "primary"
-      }`}
-      disabled={checkAvailability(uiSlot)} //if teh slot is in the slots array we got!!
-      key={uiSlot.id}
-      onClick={() => handleTimeChange(uiSlot.time)}
-    >
-      {uiSlot.time}
-    </Button>
-  ))
+  const makeButton = (buttonData) => {
+    return (
+      <Button
+        variant={`${
+          buttonData.time === selectedTime
+            ? "success"
+            : checkAvailability(buttonData)
+            ? "secondary"
+            : "primary"
+        }`}
+        disabled={checkAvailability(buttonData)} //if teh slot is in the slots array we got!!
+        key={buttonData.id}
+        onClick={() => handleTimeChange(buttonData.time)}
+      >
+        {buttonData.time}
+      </Button>
+    )
+  }
+
+  const makeSlots = (timeSlots, start, end, slotSize) => {
+    // const timeSlots = []
+
+    var startTime = moment(start, "h:mma")
+    var endTime = moment(end, "h:mma")
+
+    while (startTime <= endTime) {
+      const buttonData = { time: startTime.clone().format("LT"), id: uuidv4() }
+      timeSlots.push(makeButton(buttonData)) // clone to add new object
+      startTime.add(slotSize, "minutes")
+    }
+
+    return timeSlots
+  }
+
+  // let buttons = UISLOTS.map((uiSlot) => (
+  //   <Button
+  //     variant={`${
+  //       uiSlot.time === selectedTime
+  //         ? "success"
+  //         : checkAvailability(uiSlot)
+  //         ? "secondary"
+  //         : "primary"
+  //     }`}
+  //     disabled={checkAvailability(uiSlot)} //if teh slot is in the slots array we got!!
+  //     key={uiSlot.id}
+  //     onClick={() => handleTimeChange(uiSlot.time)}
+  //   >
+  //     {uiSlot.time}
+  //   </Button>
+  // ))
+  let buttons = []
+  buttons = makeSlots(buttons, startTime, endTime, slotSize)
+
+  // useEffect(() => {
+  //   buttons = makeSlots(buttons, startTime, endTime, slotSize)
+  // }, [])
 
   const handleTimeChange = useCallback((time) => {
     if (loading === STATUS_PENDING) return
@@ -79,6 +124,7 @@ const TimeSelector = ({
       <div className="mb-3 mt-2 h-25">
         {loading === STATUS_PENDING && <LinearProgress />}
       </div>
+      {/* {dont show this time thing until you have loaded the} */}
       <div className="time-container"> {buttons}</div>
     </>
   )

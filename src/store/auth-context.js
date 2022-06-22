@@ -1,5 +1,7 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { auth } from "../database/firebase-config"
+// import { httpGetSettings } from "../hooks/request"
+// import useHttp from "../hooks/useHttp"
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -18,6 +20,17 @@ const AuthContext = React.createContext({
 
 export const AuthContextProvider = (props) => {
   const [user, setUser] = useState({})
+  // const {
+  //   status: getSettingsStatus,
+  //   data: settings,
+  //   error: getSettingsErrorMessage,
+  //   sendRequest: getSettings,
+  // } = useHttp(httpGetSettings)
+
+  // useEffect(() => {
+  //   //fetch the settings
+  //   getSettings()
+  // }, [])
 
   const handleLogout = async () => {
     try {

@@ -33,6 +33,7 @@ const BookingForm = ({
   slots,
   onGetSlots,
   slotStatus,
+  settings,
 }) => {
   function handleGetSlots(date) {
     onGetSlots(date)
@@ -161,6 +162,7 @@ const BookingForm = ({
                 }}
                 slots={slots}
                 loading={slotStatus}
+                settings={settings}
               />
             </div>
             <div className="text-danger font-italic">

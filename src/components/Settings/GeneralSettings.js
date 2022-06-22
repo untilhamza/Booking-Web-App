@@ -6,8 +6,9 @@ import * as yup from "yup"
 import { compareTimes } from "../../util/helpers"
 import "./GeneralSettings.css"
 
-const GeneralSettings = ({ onConfirm, onCancel }) => {
-  const [pickerTime, setPickerTime] = useState("16:55")
+const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
+  console.log({ ...defaults })
+  const [pickerTime, setPickerTime] = useState(null)
   const [showPicker, setShowPicker] = useState(false)
   const [pickerFunction, setPickerFunction] = useState(() => () => {})
   const [editMode, setEditMode] = useState(false)
@@ -16,11 +17,9 @@ const GeneralSettings = ({ onConfirm, onCancel }) => {
 
   const formik = useFormik({
     initialValues: {
-      startTime: "12:45 pm",
-      endTime: "07:30 pm",
-      slotSize: 45,
-      address: "an interesting place on earth",
+      ...defaults,
     },
+
     validationSchema: yup.object().shape({
       startTime: yup.string().required("Starting time is required!"),
       endTime: yup.string().required("Ending time is required!"),
@@ -37,9 +36,10 @@ const GeneralSettings = ({ onConfirm, onCancel }) => {
     }),
     onSubmit: (values) => {
       if (validateTime()) {
-        // onConfirm(values)
-        console.log("time is valid")
-        alert(JSON.stringify(values, null, 2))
+        // console.log("time is valid")
+        // alert(JSON.stringify(values, null, 2))
+        setEditMode(false)
+        onConfirm(values)
       }
     },
   })
@@ -193,7 +193,7 @@ const GeneralSettings = ({ onConfirm, onCancel }) => {
                 value={formik.values.slotSize}
               />
             ) : (
-              <span>45</span>
+              <span>{formik.values.slotSize}</span>
             )}
             <span className="ms-3">Minutes</span>
           </div>

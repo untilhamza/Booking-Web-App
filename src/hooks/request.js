@@ -19,7 +19,7 @@ import {
 
 const bookingsCollectionRef = collection(db, "bookings")
 const slotsCollectionRef = collection(db, "slots")
-//const settingsCollectionRef = collection(db, "settings")
+const settingsCollectionRef = collection(db, "settings")
 
 const API_URL = ""
 
@@ -67,6 +67,36 @@ const httpGetBooking = async (id) => {
   }
 }
 
+//get the settings from the db
+const httpGetSettings = async () => {
+  try {
+    const settingsSnap = await getDocs(settingsCollectionRef)
+
+    if (settingsSnap) {
+      let result = settingsSnap.docs[0]
+      result = { ...result.data(), id: result.id }
+      return result
+    } else {
+      throw new Error(`No default settings found`)
+    }
+  } catch (err) {
+    throw err
+  }
+}
+
+//post new settings to the db
+const httpSubmitSettings = async (newSettings) => {
+  try {
+    // const settingsSnap = await getDocs(settingsCollectionRef)
+    const settingsDoc = doc(db, "settings", newSettings.id)
+    delete newSettings.id
+    await updateDoc(settingsDoc, newSettings)
+    return
+  } catch (err) {
+    throw err
+  }
+}
+
 const httpCheckBooking = async (email) => {
   try {
     //const id = phone;
@@ -90,7 +120,7 @@ const httpCheckBooking = async (email) => {
 
       return result[0]
     } else {
-      throw new Error(`No booking for: ${email}`)
+      throw new Error(`Found no bookings under  ${email}`)
     }
   } catch (err) {
     throw err
@@ -272,4 +302,6 @@ export {
   httpEditBooking,
   httpCancelBooking,
   httpCheckBooking,
+  httpGetSettings,
+  httpSubmitSettings,
 }
