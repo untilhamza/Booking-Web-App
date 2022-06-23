@@ -9,14 +9,15 @@ const SettingsMenu = () => {
       title: "General Shop Settings",
       path: "/general-settings",
     },
-    {
-      title: "Slot Settings",
-      path: "/slot-settings",
-    },
-    {
-      title: "Special Day Settings",
-      path: "/general-settings",
-    },
+    //TODO:  will be done later!
+    // {
+    //   title: "Slot Settings",
+    //   path: "/slot-settings",
+    // },
+    // {
+    //   title: "Special Day Settings",
+    //   path: "/general-settings",
+    // },
   ]
   return (
     <div className="container p-3  min-vh-100">

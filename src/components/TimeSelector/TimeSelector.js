@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect } from "react"
+import React, { useCallback } from "react"
 // import { SLOTS as UISLOTS } from "../../util/data"
 
 import { v4 as uuidv4 } from "uuid"
@@ -6,7 +6,7 @@ import "./TimeSelector.css"
 import LinearProgress from "@mui/material/LinearProgress"
 
 import { combineDateTimeMoment } from "../../util/helpers"
-import { STATUS_COMPLETED, STATUS_PENDING } from "../../hooks/useHttp"
+import { STATUS_PENDING } from "../../hooks/useHttp"
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord"
 
 import moment from "moment"
@@ -18,7 +18,7 @@ const TimeSelector = ({
   onChange,
   time: selectedTime,
   slots,
-  loading,
+  loading: loadingBookedSlots,
   settings,
 }) => {
   const { startTime, endTime, slotSize } = settings
@@ -69,31 +69,13 @@ const TimeSelector = ({
     return timeSlots
   }
 
-  // let buttons = UISLOTS.map((uiSlot) => (
-  //   <Button
-  //     variant={`${
-  //       uiSlot.time === selectedTime
-  //         ? "success"
-  //         : checkAvailability(uiSlot)
-  //         ? "secondary"
-  //         : "primary"
-  //     }`}
-  //     disabled={checkAvailability(uiSlot)} //if teh slot is in the slots array we got!!
-  //     key={uiSlot.id}
-  //     onClick={() => handleTimeChange(uiSlot.time)}
-  //   >
-  //     {uiSlot.time}
-  //   </Button>
-  // ))
   let buttons = []
+  // these are props, so the component re-renders if they change
   buttons = makeSlots(buttons, startTime, endTime, slotSize)
 
-  // useEffect(() => {
-  //   buttons = makeSlots(buttons, startTime, endTime, slotSize)
-  // }, [])
-
   const handleTimeChange = useCallback((time) => {
-    if (loading === STATUS_PENDING) return
+    //prevent any
+    if (loadingBookedSlots === STATUS_PENDING) return
     onChange(time)
   }, [])
 
@@ -103,7 +85,6 @@ const TimeSelector = ({
         Showing slots for : {"  "}
         <span className="text-primary  choosen-date">
           {choosenDate.format("dddd DD/MM/YYYY").toString()}
-          {/* {console.log(choosenDate.calendar())} */}
         </span>
       </p>
       <div className="d-flex mt-2 text-capitalize text-bold gap-4">
@@ -122,7 +103,7 @@ const TimeSelector = ({
         </span>
       </div>
       <div className="mb-3 mt-2 h-25">
-        {loading === STATUS_PENDING && <LinearProgress />}
+        {loadingBookedSlots === STATUS_PENDING && <LinearProgress />}
       </div>
       {/* {dont show this time thing until you have loaded the} */}
       <div className="time-container"> {buttons}</div>

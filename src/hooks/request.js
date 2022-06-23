@@ -90,9 +90,9 @@ const httpSubmitSettings = async (newSettings) => {
     // const settingsSnap = await getDocs(settingsCollectionRef)
     const settingsDoc = doc(db, "settings", newSettings.id)
     delete newSettings.id
-    await updateDoc(settingsDoc, newSettings)
-    return
+    await updateDoc(settingsDoc, newSettings) //returns nothing actually
   } catch (err) {
+    console.log(err)
     throw err
   }
 }

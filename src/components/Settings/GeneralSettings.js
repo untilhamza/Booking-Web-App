@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { Button } from "react-bootstrap"
 import ClockPicker from "../ClockPicker/ClockPicker"
 import { useFormik } from "formik"
+
 import * as yup from "yup"
 import { compareTimes } from "../../util/helpers"
 import "./GeneralSettings.css"
 
 const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
-  console.log({ ...defaults })
   const [pickerTime, setPickerTime] = useState(null)
   const [showPicker, setShowPicker] = useState(false)
   const [pickerFunction, setPickerFunction] = useState(() => () => {})
   const [editMode, setEditMode] = useState(false)
-  // const [startTime, setStartTime] = useState(null)
-  // const [endTime, setEndTime] = useState(null)
 
   const formik = useFormik({
     initialValues: {
@@ -39,7 +37,7 @@ const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
         // console.log("time is valid")
         // alert(JSON.stringify(values, null, 2))
         setEditMode(false)
-        onConfirm(values)
+        onConfirm({ ...values })
       }
     },
   })
@@ -76,6 +74,12 @@ const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
     setPickerFunction(() => () => {})
     setPickerTime(null)
     setShowPicker(false)
+  }
+
+  const handleGoBack = () => {
+    //TODO: findout why this needs to be called twice
+    // onBack()
+    onBack()
   }
 
   return (
@@ -117,7 +121,7 @@ const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
                 >
                   Edit
                 </Button>
-                <Button variant="outline-secondary" size="sm">
+                <Button variant="secondary" size="sm" onClick={handleGoBack}>
                   Back
                 </Button>
               </>

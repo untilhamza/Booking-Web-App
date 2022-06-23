@@ -49,8 +49,7 @@ const NewBooking = () => {
   useEffect(() => {
     //TODO: fetch for the date today or the provided date when modifying date
     //make sure these fire at the same time...
-    getSettings()
-    handleGetSlots(moment())
+    Promise.all([getSettings(), handleGetSlots(moment())])
   }, [])
 
   useEffect(() => {
@@ -73,6 +72,9 @@ const NewBooking = () => {
 
   if (error) {
     modalError(error)
+  }
+  if (getSettingsErrorMessage) {
+    modalError(getSettingsErrorMessage)
   }
 
   return (

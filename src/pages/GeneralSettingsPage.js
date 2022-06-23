@@ -17,7 +17,6 @@ const GeneralSettingsPage = () => {
 
   const {
     status: submitSettingsStatus,
-    data: response,
     error: submitSettingsErrorMessage,
     sendRequest: submitSettings,
   } = useHttp(httpSubmitSettings)
@@ -40,23 +39,20 @@ const GeneralSettingsPage = () => {
             history.push("/")
           },
         })
-      } else {
-        //reload the page
-        history.push("/general-settings")
       }
     }
   }, [getSettingsStatus, history, getSettingsErrorMessage])
 
   useEffect(() => {
     if (submitSettingsStatus === STATUS_COMPLETED) {
-      if (submitSettingsErrorMessage) {
-        ErrorModal({
-          message: submitSettingsErrorMessage,
-          onOk: () => {
-            history.push("/")
-          },
-        })
-      }
+      // if (submitSettingsErrorMessage) {
+      //   ErrorModal({
+      //     message: submitSettingsErrorMessage,
+      //     onOk: () => {
+      //       history.push("/")
+      //     },
+      //   })
+      // }
     }
   }, [submitSettingsStatus, history, submitSettingsErrorMessage])
 
@@ -82,6 +78,7 @@ const GeneralSettingsPage = () => {
           initialValues={settings}
           onConfirm={handleOnConfirm}
           onCancel={handleOnBack}
+          onBack={handleOnBack}
         />
       )}
     </>

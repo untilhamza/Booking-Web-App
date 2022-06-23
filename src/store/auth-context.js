@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import { auth } from "../database/firebase-config"
 // import { httpGetSettings } from "../hooks/request"
 // import useHttp from "../hooks/useHttp"
