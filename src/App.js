@@ -9,6 +9,10 @@ import NewBooking from "./pages/NewBooking"
 import ViewAppointment from "./pages/ViewAppointment"
 import CheckAppointment from "./pages/CheckAppointment"
 import Logout from "./components/Logout/Logout"
+import SettingsPage from "./pages/SettingsPage"
+import GeneralSettingsPage from "./pages/GeneralSettingsPage"
+import SlotSettingsPage from "./pages/SlotSettingsPage"
+import SpecialDaySettingsPage from "./pages/SpecialDaySettingsPage"
 import NotFound from "./pages/NotFound"
 import "bootstrap/dist/css/bootstrap.min.css"
 import "./App.css"
@@ -45,6 +49,18 @@ const App = () => {
             </Route>
             <Route path="/logout">
               <Logout />
+            </Route>
+            <Route path="/settings">
+              <SettingsPage />
+            </Route>
+            <Route path="/general-settings">
+              <GeneralSettingsPage />
+            </Route>
+            <Route path="/slot-settings">
+              <SlotSettingsPage />
+            </Route>
+            <Route path="/special-settings">
+              <SpecialDaySettingsPage />
             </Route>
             <Route path="/">
               <Customer />

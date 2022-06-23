@@ -3,7 +3,11 @@ import BookingForm from "../components/BookingForm/BookingForm"
 import { useHistory } from "react-router-dom"
 import { Modal } from "antd"
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp"
-import { httpSubmitBooking, httpGetSlots } from "../hooks/request"
+import {
+  httpSubmitBooking,
+  httpGetSlots,
+  httpGetSettings,
+} from "../hooks/request"
 import SimpleBackdrop from "../components/BackDrop/BackDrop"
 import moment from "moment"
 
@@ -11,7 +15,14 @@ const NewBooking = () => {
   //when it is loaded for the first time, we should fetch slots for the current date..
   const history = useHistory()
   const {
-    status,
+    status: getSettingsStatus,
+    data: settings,
+    error: getSettingsErrorMessage,
+    sendRequest: getSettings,
+  } = useHttp(httpGetSettings)
+
+  const {
+    status: submitBookingStatus,
     data: response,
     error,
     sendRequest,
@@ -37,17 +48,17 @@ const NewBooking = () => {
 
   useEffect(() => {
     //TODO: fetch for the date today or the provided date when modifying date
-
-    handleGetSlots(moment())
+    //make sure these fire at the same time...
+    Promise.all([getSettings(), handleGetSlots(moment())])
   }, [])
 
   useEffect(() => {
-    if (status === STATUS_COMPLETED) {
+    if (submitBookingStatus === STATUS_COMPLETED) {
       //navigate to the see appointment page with the made appointment..
       //may be show some status of the appointment..
       history.push(`/appointment/${response}`)
     }
-  }, [status, response, history])
+  }, [submitBookingStatus, response, history])
 
   function modalError(message) {
     Modal.error({
@@ -62,17 +73,24 @@ const NewBooking = () => {
   if (error) {
     modalError(error)
   }
+  if (getSettingsErrorMessage) {
+    modalError(getSettingsErrorMessage)
+  }
 
   return (
     <div>
-      <SimpleBackdrop loading={status === STATUS_PENDING} />
-      <BookingForm
-        onConfirm={handleConfirm}
-        onCancel={handleCancel}
-        onGetSlots={handleGetSlots}
-        slots={slotsArray}
-        slotStatus={slotStatus}
-      />
+      <SimpleBackdrop loading={submitBookingStatus === STATUS_PENDING} />
+      <SimpleBackdrop loading={getSettingsStatus === STATUS_PENDING} />
+      {getSettingsStatus === STATUS_COMPLETED && (
+        <BookingForm
+          onConfirm={handleConfirm}
+          onCancel={handleCancel}
+          onGetSlots={handleGetSlots}
+          slots={slotsArray}
+          slotStatus={slotStatus}
+          settings={settings}
+        />
+      )}
     </div>
   )
 }

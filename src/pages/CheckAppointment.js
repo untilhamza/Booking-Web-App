@@ -32,15 +32,6 @@ const CheckAppointment = () => {
             history.push("/")
           },
         })
-      } else if (!response) {
-        ErrorModal({
-          title: "No appointments found for provided email!",
-          message: "Please make an appointment first.",
-          onOk: () => {
-            history.push("/")
-          },
-        })
-        return
       } else {
         return history.push(`/appointment/${response.id}`)
       }
