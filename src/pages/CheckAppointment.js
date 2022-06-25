@@ -42,6 +42,7 @@ const CheckAppointment = () => {
     <div>
       <SimpleBackdrop loading={checkBookingStatus === STATUS_PENDING} />
       <CheckingForm onConfirm={handleChecking} onCancel={handleCancel} />
+      <div>Show a list of appointments here for the user to choose from</div>
     </div>
   )
 }

@@ -24,6 +24,7 @@ const settingsCollectionRef = collection(db, "settings")
 const API_URL = ""
 
 function processBooking(result) {
+  console.log(result)
   const isDone = moment(result.date.toDate()) < moment()
   let bookingData = {
     name: result.name,
@@ -99,13 +100,12 @@ const httpSubmitSettings = async (newSettings) => {
 
 const httpCheckBooking = async (email) => {
   try {
-    //const id = phone;
-    //console.log(email);
+    const yesterdayMoment = new moment().clone().subtract(1, "days")
     const q = query(
       bookingsCollectionRef,
       where("email", "==", email),
-      orderBy("date", "desc"),
-      limit(3)
+      where("date", ">", Timestamp.fromMillis(yesterdayMoment.valueOf())),
+      orderBy("date", "desc")
     )
 
     // const bookingRef = doc(db, "bookings", id);
@@ -117,7 +117,7 @@ const httpCheckBooking = async (email) => {
         ...processBooking(doc.data()),
         id: doc.id,
       }))
-
+      console.log(result)
       return result[0]
     } else {
       throw new Error(`Found no bookings under  ${email}`)
