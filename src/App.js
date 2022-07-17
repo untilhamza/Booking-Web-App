@@ -1,28 +1,27 @@
-import { useContext } from "react"
-import { Switch, Route, Redirect } from "react-router-dom"
-import { Layout } from "antd"
-import Navbar from "./components/NavBar/Navbar"
-import Admin from "./pages/Admin"
-import SignIn from "./pages/SignIn"
-import Customer from "./pages/Customer"
-import NewBooking from "./pages/NewBooking"
-import ViewAppointment from "./pages/ViewAppointment"
-import CheckAppointment from "./pages/CheckAppointment"
-import Logout from "./components/Logout/Logout"
-import SettingsPage from "./pages/SettingsPage"
-import GeneralSettingsPage from "./pages/GeneralSettingsPage"
-import SlotSettingsPage from "./pages/SlotSettingsPage"
-import SpecialDaySettingsPage from "./pages/SpecialDaySettingsPage"
-import NotFound from "./pages/NotFound"
-import "bootstrap/dist/css/bootstrap.min.css"
-import "./App.css"
-import AuthContext from "./store/auth-context"
+import { useContext } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
+import { Layout } from "antd";
+import Navbar from "./components/NavBar/Navbar";
+import Admin from "./pages/Admin";
+import SignIn from "./pages/SignIn";
+import Customer from "./pages/Customer";
+import NewBooking from "./pages/NewBooking";
+import ViewAppointment from "./pages/ViewAppointment";
+import CheckAppointment from "./pages/CheckAppointment";
+import Logout from "./components/Logout/Logout";
+import SettingsPage from "./pages/SettingsPage";
+import GeneralSettingsPage from "./pages/GeneralSettingsPage";
+import SlotSettingsPage from "./pages/SlotSettingsPage";
+import SpecialDaySettingsPage from "./pages/SpecialDaySettingsPage";
+import NotFound from "./pages/NotFound";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import AuthContext from "./store/auth-context";
 
-const { Content } = Layout
+const { Content } = Layout;
 
 const App = () => {
-  const authCtx = useContext(AuthContext)
-  //console.log(authCtx);
+  const authCtx = useContext(AuthContext);
   return (
     <div className="App">
       <Layout className="min-vh-100">
@@ -72,7 +71,7 @@ const App = () => {
         </Content>
       </Layout>
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
