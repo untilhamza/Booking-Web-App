@@ -34,11 +34,11 @@ const CheckingForm = ({ onConfirm, onCancel, initialEmail }) => {
               </div>
               <div className="d-flex justify-content-around ">
                 <Button variant="success" type="submit" className="w-100 me-1" disabled={false}>
-                  Confirm
+                  Search
                 </Button>
 
                 <Button variant="danger" type="button" className="w-100 ms-1" onClick={onCancel}>
-                  Back
+                  Cancel
                 </Button>
               </div>
             </form>

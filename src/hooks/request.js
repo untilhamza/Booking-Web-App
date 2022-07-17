@@ -88,7 +88,10 @@ const httpCheckBooking = async (email) => {
     //const id = phone;
     //console.log(email);
     //TODO: get all appoinments done after yesterday only
-    const q = query(bookingsCollectionRef, where("email", "==", email), orderBy("date", "desc"), limit(3));
+    const dateMoment = new moment();
+    const yesterday = dateMoment.subtract(1, "day").format("YYYY-MM-DD").toString();
+    const parsedqueriedDate = Date.parse(yesterday + "T00:00");
+    const q = query(bookingsCollectionRef, where("email", "==", email), where("date", ">", Timestamp.fromMillis(parsedqueriedDate)), orderBy("date", "desc"));
 
     // const bookingRef = doc(db, "bookings", id);
     //TODO: try using getDoc
