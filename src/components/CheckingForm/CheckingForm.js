@@ -4,22 +4,18 @@ import { useFormik } from "formik";
 import * as yup from "yup";
 import "./CheckingForm.css";
 
-const CheckingForm = ({ onConfirm, onCancel }) => {
+const CheckingForm = ({ onConfirm, onCancel, initialEmail }) => {
   const formik = useFormik({
     initialValues: {
-      email: "",
+      email: initialEmail || "",
     },
     validationSchema: yup.object().shape({
-      email: yup
-        .string()
-        .email("Must be a valid email")
-        .max(255)
-        .required("*Email is required!"),
+      email: yup.string().min(0).email("Must be a valid email").max(255).required("*Email is required!"),
     }),
     onSubmit: (values) => {
       //const REST_API_URL = "YOUR_REST_API_URL";
       //call method to login here
-      onConfirm(values);
+      onConfirm(values.email);
 
       //alert(JSON.stringify(values, null, 2));
     },
@@ -33,36 +29,15 @@ const CheckingForm = ({ onConfirm, onCancel }) => {
             <form onSubmit={formik.handleSubmit}>
               <div className="form-group mb-3">
                 {/* <label htmlFor="Phone">Phone</label> */}
-                <input
-                  type="email"
-                  name="email"
-                  className={"form-control"}
-                  placeholder="Email"
-                  onChange={formik.handleChange}
-                  value={formik.values.email}
-                />
-                {formik.touched.phone && formik.errors.phone && (
-                  <span className="help-block text-danger">
-                    {formik.errors.email}
-                  </span>
-                )}
+                <input type="email" name="email" className={"form-control"} placeholder="Email" onChange={formik.handleChange} value={formik.values.email} />
+                {formik.touched.phone && formik.errors.phone && <span className="help-block text-danger">{formik.errors.email}</span>}
               </div>
               <div className="d-flex justify-content-around ">
-                <Button
-                  variant="success"
-                  type="submit"
-                  className="w-100 me-1"
-                  disabled={false}
-                >
+                <Button variant="success" type="submit" className="w-100 me-1" disabled={false}>
                   Confirm
                 </Button>
 
-                <Button
-                  variant="danger"
-                  type="button"
-                  className="w-100 ms-1"
-                  onClick={onCancel}
-                >
+                <Button variant="danger" type="button" className="w-100 ms-1" onClick={onCancel}>
                   Back
                 </Button>
               </div>
