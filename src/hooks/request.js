@@ -316,4 +316,5 @@ export {
   httpCheckBooking,
   httpGetSettings,
   httpSubmitSettings,
+  httpSubmitBlockedSlots,
 };
