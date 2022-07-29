@@ -85,8 +85,13 @@ const httpSubmitSettings = async (newSettings) => {
 const httpCheckBooking = async (email) => {
   console.log("called with ", email);
   try {
-    const yesterdayMoment = new moment().clone().subtract(1, "days");
-    const q = query(bookingsCollectionRef, where("email", "==", email), where("date", ">", Timestamp.fromMillis(yesterdayMoment.valueOf())), orderBy("date", "desc"));
+    //const id = phone;
+    //console.log(email);
+    //TODO: get all appoinments done after yesterday only
+    const dateMoment = new moment();
+    const yesterday = dateMoment.subtract(1, "day").format("YYYY-MM-DD").toString();
+    const parsedqueriedDate = Date.parse(yesterday + "T00:00");
+    const q = query(bookingsCollectionRef, where("email", "==", email), where("date", ">", Timestamp.fromMillis(parsedqueriedDate)), orderBy("date", "desc"));
 
     // const bookingRef = doc(db, "bookings", id);
     //TODO: try using getDoc
@@ -97,7 +102,10 @@ const httpCheckBooking = async (email) => {
         ...processBooking(doc.data()),
         id: doc.id,
       }));
-      return result[0];
+
+      //TODO: make sure the user can see all appointments made after yesterday!!
+      //console.log(result)
+      return result;
     } else {
       throw new Error(`Found no bookings under  ${email}`);
     }
