@@ -1,45 +1,30 @@
-import React from "react"
-import Button from "react-bootstrap/Button"
-import Badge from "react-bootstrap/Badge"
-import useModal from "../../hooks/useModal"
-import { setStatus } from "../../util/helpers"
-import { Card } from "antd"
-import "./Appointment.css"
+import React from "react";
+import Button from "react-bootstrap/Button";
+import Badge from "react-bootstrap/Badge";
+import useModal from "../../hooks/useModal";
+import { setStatus } from "../../util/helpers";
+import { Card } from "antd";
+import "./Appointment.css";
 
-const Appointment = ({
-  appointmentData,
-  onDone,
-  onCancel,
-  onBack,
-  isAdmin,
-}) => {
+const Appointment = ({ appointmentData, onDone, onCancel, onBack, isAdmin, hideDone }) => {
   const handleCancel = () => {
-    onCancel()
-  }
+    onCancel(appointmentData.id);
+  };
   // const handleModify = () => {
   //   console.log("Modifying...");
   // };
 
-  const { modal, handleShow } = useModal(
-    "Confirmation",
-    "Are you sure you want to delete this appointment?",
-    handleCancel
-  )
+  const { modal, handleShow } = useModal("Confirmation", "Are you sure you want to delete this appointment?", handleCancel);
 
   const content =
     !appointmentData.isPast || isAdmin ? (
       <>
         <h5 className="text-primary">Appointment Details</h5>
         <div className="card-row">
-          <span> For :</span>{" "}
-          <span className="fw-bolder"> {appointmentData.name}</span>
+          <span> For :</span> <span className="fw-bolder"> {appointmentData.name}</span>
         </div>
         <div className="card-row">
-          Phone number :{" "}
-          <span className="fw-bolder booking-data">
-            {" "}
-            {appointmentData.phone}
-          </span>
+          Phone number : <span className="fw-bolder booking-data"> {appointmentData.phone}</span>
         </div>
         <div className="card-row">
           Date : <span className="fw-bolder"> {appointmentData.date}</span>
@@ -50,11 +35,7 @@ const Appointment = ({
         {appointmentData.status && (
           <div className="card-row">
             Status :{" "}
-            <Badge
-              pill
-              bg={`${setStatus(appointmentData.status)}`}
-              className="py-2"
-            >
+            <Badge pill bg={`${setStatus(appointmentData.status)}`} className="py-2">
               {appointmentData.status}
             </Badge>
           </div>
@@ -63,11 +44,9 @@ const Appointment = ({
     ) : (
       <>
         <h4>Oops...!</h4>
-        <h5 className="text-primary">
-          No recent appointments found. Please make an appointment first{" "}
-        </h5>
+        <h5 className="text-primary">No recent appointments found. Please make an appointment first </h5>
       </>
-    )
+    );
 
   return (
     <>
@@ -83,28 +62,30 @@ const Appointment = ({
         {content}
         {/* buttons */}
         <div className="d-flex flex-column justify-content-around mt-3 ">
-          <Button
-            variant="success"
-            type="button"
-            className="w-100 me-1"
-            onClick={() => {
-              if (isAdmin) {
-                onBack()
-              } else {
-                onDone()
-              }
-            }}
-          >
-            Done
-          </Button>
-          {(appointmentData.status === "confirmed" ||
-            (appointmentData.status === "completed" && isAdmin)) && (
+          {!hideDone && (
+            <Button
+              variant="success"
+              type="button"
+              className="w-100 me-1"
+              onClick={() => {
+                if (isAdmin) {
+                  onBack();
+                } else {
+                  onDone();
+                }
+              }}
+            >
+              Done
+            </Button>
+          )}
+
+          {(appointmentData.status === "confirmed" || (appointmentData.status === "completed" && isAdmin)) && (
             <Button
               variant="outline-danger"
               type="button"
               className="w-100 mt-1"
               onClick={() => {
-                handleShow()
+                handleShow();
               }}
             >
               Cancel Appointment
@@ -113,7 +94,7 @@ const Appointment = ({
         </div>
       </Card>
     </>
-  )
-}
+  );
+};
 
-export default Appointment
+export default Appointment;
