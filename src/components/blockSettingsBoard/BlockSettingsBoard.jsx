@@ -1,38 +1,34 @@
 //import Calendar from "../Calendar/Calendar";
 import React, { useState, useEffect } from "react";
 import moment from "moment";
-import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
+import { getLocalTimeZone, today } from "@internationalized/date";
 import { v4 as uuidv4 } from "uuid";
 import { CheckboxGroup, Checkbox, Calendar, useDateFormatter, Button, Grid, View, Heading, Flex, Content, ProgressCircle } from "@adobe/react-spectrum";
 import { STATUS_PENDING } from "../../hooks/useHttp";
 import styled from "styled-components";
+import { combineDateTimeMoment } from "../../util/helpers";
 
-/*
- slots={slots}
-
-*/
-const BlockSettingsBoard = ({
-  //   date,
-  onConfirm,
-  onCancel,
-  onGetSlots,
-  status,
-  slots,
-  slotStatus,
-  settings,
-}) => {
+const BlockSettingsBoard = ({ onConfirm, onCancel, onGetSlots, status, slots, slotStatus, settings }) => {
   const { startTime, endTime, slotSize } = settings;
-  const [selected, setSelected] = useState(getDisabledSlots());
+  const [selected, setSelected] = useState([]);
   const [dateValue, setDateValue] = useState(today(getLocalTimeZone()));
   const [isLoadingSlots, setIsLoadingSlots] = useState(true);
+  const [timeOptions, setTimeOptions] = useState([]);
 
-  //TODO: find the best way to pass these disabled slots-0
-  function getDisabledSlots() {
+  useEffect(() => {
+    if (slotStatus === STATUS_PENDING) setIsLoadingSlots(true);
+    else setIsLoadingSlots(false);
+  }, [slotStatus]);
+
+  function markBookedSlots(slots) {
     if (slots) return slots.map((item) => item.time);
     else return [];
   }
 
-  console.log("slots", slots);
+  useEffect(() => {
+    setSelected(markBookedSlots(slots));
+  }, [slots]);
+
   const handleGetSlots = () => {
     let choosenDate = moment(formatter.format(dateValue.toDate(getLocalTimeZone())));
     onGetSlots(choosenDate);
@@ -42,69 +38,56 @@ const BlockSettingsBoard = ({
     onConfirm(dateValue, selected);
   };
 
-  //TODO: bring these back
-  // useEffect(() => {
-  //   if (slotStatus === STATUS_PENDING) setIsLoadingSlots(true);
-  //   else setIsLoadingSlots(false);
-  // }, [slotStatus]);
-
   useEffect(() => {
-    //TODO: fetch new slots
     handleGetSlots();
   }, [dateValue]);
 
   function checkAvailability(slot) {
-    return slots.some((obj) => obj.time === slot.time);
+    if (!slots || slots.length === 0) {
+      return false;
+    }
+    //return slots.some((obj) => obj.time === slot.time);
 
     //TODO: disable slots for days of the past.
     // const time = slot.time;
-    // const slotMoment = combineDateTimeMoment(
-    //   choosenDate,
-    //   moment(slot.time, "h:mm a")
-    // );
+    // const slotMoment = combineDateTimeMoment(dateValue, moment(slot.time, "h:mm a"));
     // const isPast = slotMoment < moment();
 
     // //TODO: checked if it was not blocked too
-    // return slots?.some((obj) => obj.time === time && obj.isBooked) || isPast;
+    return slots.some((obj) => obj.time === slot.time); //|| isPast;
   }
   const makeBox = (boxData) => {
     const isTaken = checkAvailability(boxData);
+    //TODO: The disabled should be added to the selected here...
     return (
-      <Checkbox
-        height="size-400"
-        value={boxData.time}
-        isDisabled={isTaken} //if teh slot is in the slots array we got!!
-        key={boxData.id}
-      >
+      <Checkbox height="size-400" value={boxData.time} isDisabled={isTaken} key={boxData.id}>
         <TimeText isDisabled={isTaken}>{boxData.time}</TimeText>
       </Checkbox>
     );
   };
+
   const makeSlots = (start, end, slotSize) => {
     const timeSlots = [];
-
     const startTime = moment(start, "h:mma");
     const endTime = moment(end, "h:mma");
 
     while (startTime <= endTime) {
       const boxData = { time: startTime.clone().format("LT"), id: uuidv4() };
-      timeSlots.push(makeBox(boxData)); // clone to add new object
+      timeSlots.push(makeBox(boxData));
       startTime.add(slotSize, "minutes");
     }
     return timeSlots;
   };
 
-  let boxes = [];
+  useEffect(() => {
+    setTimeOptions(makeSlots(startTime, endTime, slotSize));
+  }, [slots]);
 
-  // useEffect(() => {
-  //   boxes = makeSlots(boxes, startTime, endTime, slotSize);
-  // }, [slots]);
-
-  let formatter = useDateFormatter({ dateStyle: "full" });
   const handleSelectDate = (newDate) => {
-    console.log("new set date is", newDate);
+    handleGetSlots();
     setDateValue(newDate);
   };
+  let formatter = useDateFormatter({ dateStyle: "full" });
 
   return (
     <Flex justifyContent={"center"}>
@@ -125,20 +108,15 @@ const BlockSettingsBoard = ({
           <View padding="size-300" borderWidth="thin" borderColor="dark" borderRadius="medium">
             <Heading level={4}>
               <Content>
-                <span style={{ fontSize: "32px" }}>Block Slots for:</span>{" "}
+                <span>Block Slots for:</span>{" "}
               </Content>
-              {dateValue && formatter.format(dateValue.toDate(getLocalTimeZone()))}
+              <DateText> {dateValue && formatter.format(dateValue.toDate(getLocalTimeZone()))}</DateText>
             </Heading>
             <Flex direction="row" justifyContent="space-between">
               <Button variant="cta" onPress={handleSave}>
                 Save
               </Button>
-              <Button
-                variant="negative"
-                onPress={() => {
-                  console.log("cancelled");
-                }}
-              >
+              <Button variant="negative" onPress={onCancel}>
                 Cancel
               </Button>
             </Flex>
@@ -168,7 +146,7 @@ const BlockSettingsBoard = ({
                   L: ["1fr", "1fr", "1fr"],
                 }}
               >
-                {makeSlots(startTime, endTime, slotSize)}
+                {timeOptions}
               </Grid>
             </CheckboxGroup>
           )}
@@ -182,4 +160,7 @@ export default BlockSettingsBoard;
 
 const TimeText = styled.span`
   color: ${(props) => props.isDisabled || "#267feb"};
+`;
+const DateText = styled.span`
+  color: #267feb;
 `;

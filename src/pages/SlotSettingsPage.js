@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
+import Swal from "sweetalert2";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
 import { httpSubmitBooking, httpGetSlots, httpGetSettings } from "../hooks/request";
@@ -16,7 +17,22 @@ const SlotSettingsPage = () => {
 
   // const { status: submitBookingStatus, data: response, error, sendRequest } = useHttp(httpSubmitBooking);
 
-  const { status: getSlotsStatus, data: slotsArray, sendRequest: sendRequestSlots } = useHttp(httpGetSlots);
+  const { status: getSlotsStatus, data: slotsArray, sendRequest: sendRequestSlots, error: getSlotsError } = useHttp(httpGetSlots);
+
+  useEffect(() => {
+    const message = getSettingsErrorMessage || getSlotsError;
+    if (message) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: message || "Something went wrong!",
+        confirmButtonText: "Go Home",
+        allowOutsideClick: false,
+      }).then(() => {
+        history.push("/");
+      });
+    }
+  }, [getSettingsErrorMessage, getSlotsError]);
 
   function handleGetSlots(date) {
     return sendRequestSlots(date);
