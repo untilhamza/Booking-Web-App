@@ -135,6 +135,7 @@ const httpGetBookings = async (dateMoment) => {
 
 //load already booked time slots for given date as json
 const httpGetSlots = async (dateMoment) => {
+  console.log("getting slots ");
   try {
     dateMoment = new moment(dateMoment);
     let time = new moment().set({ hour: 0, minute: 0, second: 0 });

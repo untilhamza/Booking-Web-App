@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 import moment from "moment";
 import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
 import { v4 as uuidv4 } from "uuid";
-import { CheckboxGroup, Checkbox, Calendar, useDateFormatter, Button, Grid, View, Heading, Flex, Content } from "@adobe/react-spectrum";
+import { CheckboxGroup, Checkbox, Calendar, useDateFormatter, Button, Grid, View, Heading, Flex, Content, ProgressCircle } from "@adobe/react-spectrum";
+import { STATUS_PENDING } from "../../hooks/useHttp";
 import styled from "styled-components";
+
 /*
  slots={slots}
 
@@ -20,18 +22,31 @@ const BlockSettingsBoard = ({
   settings,
 }) => {
   const { startTime, endTime, slotSize } = settings;
-  const disabledSlots = slots?.map((item) => item.time);
-  let [selected, setSelected] = useState(disabledSlots);
-  let [dateValue, setDateValue] = useState(today(getLocalTimeZone()));
+  const [selected, setSelected] = useState(getDisabledSlots());
+  const [dateValue, setDateValue] = useState(today(getLocalTimeZone()));
+  const [isLoadingSlots, setIsLoadingSlots] = useState(true);
 
+  //TODO: find the best way to pass these disabled slots-0
+  function getDisabledSlots() {
+    if (slots) return slots.map((item) => item.time);
+    else return [];
+  }
+
+  console.log("slots", slots);
   const handleGetSlots = () => {
-    let choosenDate = dateValue;
+    let choosenDate = moment(formatter.format(dateValue.toDate(getLocalTimeZone())));
     onGetSlots(choosenDate);
   };
 
   const handleSave = () => {
     onConfirm(dateValue, selected);
   };
+
+  //TODO: bring these back
+  // useEffect(() => {
+  //   if (slotStatus === STATUS_PENDING) setIsLoadingSlots(true);
+  //   else setIsLoadingSlots(false);
+  // }, [slotStatus]);
 
   useEffect(() => {
     //TODO: fetch new slots
@@ -65,11 +80,11 @@ const BlockSettingsBoard = ({
       </Checkbox>
     );
   };
-  const makeSlots = (timeSlots, start, end, slotSize) => {
-    // const timeSlots = []
+  const makeSlots = (start, end, slotSize) => {
+    const timeSlots = [];
 
-    var startTime = moment(start, "h:mma");
-    var endTime = moment(end, "h:mma");
+    const startTime = moment(start, "h:mma");
+    const endTime = moment(end, "h:mma");
 
     while (startTime <= endTime) {
       const boxData = { time: startTime.clone().format("LT"), id: uuidv4() };
@@ -80,13 +95,17 @@ const BlockSettingsBoard = ({
   };
 
   let boxes = [];
-  boxes = makeSlots(boxes, startTime, endTime, slotSize);
+
+  // useEffect(() => {
+  //   boxes = makeSlots(boxes, startTime, endTime, slotSize);
+  // }, [slots]);
 
   let formatter = useDateFormatter({ dateStyle: "full" });
   const handleSelectDate = (newDate) => {
     console.log("new set date is", newDate);
     setDateValue(newDate);
   };
+
   return (
     <Flex justifyContent={"center"}>
       <Grid
@@ -136,17 +155,23 @@ const BlockSettingsBoard = ({
           </View>
         </Flex>
         <View gridArea="slots" padding="size-300" color={"green-400"} borderWidth="thin" borderColor="dark" borderRadius="medium">
-          <CheckboxGroup aria-label="time-slots" value={selected} onChange={setSelected}>
-            <Grid
-              gap="size-100"
-              columns={{
-                base: ["1fr", "1fr"],
-                L: ["1fr", "1fr", "1fr"],
-              }}
-            >
-              {boxes}
-            </Grid>
-          </CheckboxGroup>
+          {isLoadingSlots ? (
+            <Flex justifyContent={"center"}>
+              <ProgressCircle aria-label="Loading…" isIndeterminate />
+            </Flex>
+          ) : (
+            <CheckboxGroup aria-label="time-slots" value={selected} onChange={setSelected}>
+              <Grid
+                gap="size-100"
+                columns={{
+                  base: ["1fr", "1fr"],
+                  L: ["1fr", "1fr", "1fr"],
+                }}
+              >
+                {makeSlots(startTime, endTime, slotSize)}
+              </Grid>
+            </CheckboxGroup>
+          )}
         </View>
       </Grid>
     </Flex>
