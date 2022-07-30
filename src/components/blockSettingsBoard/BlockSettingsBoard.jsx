@@ -30,13 +30,19 @@ const BlockSettingsBoard = ({ onConfirm, onCancel, onGetSlots, status, slots, sl
   }, [slots]);
 
   //TODO: use callback on this and add it to useEfffect deps array
+
+  function convertInternationalDateToMoment(date) {
+    return moment(formatter.format(date.toDate(getLocalTimeZone())));
+  }
+
   const handleGetSlots = () => {
-    let choosenDate = moment(formatter.format(dateValue.toDate(getLocalTimeZone())));
+    const choosenDate = convertInternationalDateToMoment(dateValue);
     onGetSlots(choosenDate);
   };
 
   const handleSave = () => {
-    onConfirm(dateValue, selected);
+    const choosenDate = convertInternationalDateToMoment(dateValue);
+    onConfirm(choosenDate, selected);
   };
 
   useEffect(() => {
