@@ -1,21 +1,7 @@
 import moment from "moment";
 import { combineDateTimeMoment } from "../util/helpers";
 import { db } from "../database/firebase-config";
-import {
-  collection,
-  addDoc,
-  Timestamp,
-  getDoc,
-  updateDoc,
-  doc,
-  query,
-  where,
-  getDocs,
-  orderBy,
-  runTransaction,
-  deleteDoc,
-  limit,
-} from "firebase/firestore";
+import { collection, addDoc, Timestamp, getDoc, updateDoc, doc, query, where, getDocs, orderBy, runTransaction, deleteDoc, limit } from "firebase/firestore";
 
 const bookingsCollectionRef = collection(db, "bookings");
 const slotsCollectionRef = collection(db, "slots");
@@ -24,7 +10,6 @@ const settingsCollectionRef = collection(db, "settings");
 const API_URL = "";
 
 function processBooking(result) {
-  console.log(result);
   const isDone = moment(result.date.toDate()) < moment();
   let bookingData = {
     name: result.name,
@@ -32,8 +17,7 @@ function processBooking(result) {
     date: result.date.toDate().toDateString(),
     time: moment(result.date.toDate()).format("LT"),
     fb_timeStamp: result.date,
-    status:
-      isDone && result.status === "confirmed" ? "completed" : result.status,
+    status: isDone && result.status === "confirmed" ? "completed" : result.status,
     isPast: moment(result.date.toDate()) < moment().subtract("1", "days"),
   };
 
@@ -99,14 +83,10 @@ const httpSubmitSettings = async (newSettings) => {
 };
 
 const httpCheckBooking = async (email) => {
+  console.log("called with ", email);
   try {
     const yesterdayMoment = new moment().clone().subtract(1, "days");
-    const q = query(
-      bookingsCollectionRef,
-      where("email", "==", email),
-      where("date", ">", Timestamp.fromMillis(yesterdayMoment.valueOf())),
-      orderBy("date", "desc")
-    );
+    const q = query(bookingsCollectionRef, where("email", "==", email), where("date", ">", Timestamp.fromMillis(yesterdayMoment.valueOf())), orderBy("date", "desc"));
 
     // const bookingRef = doc(db, "bookings", id);
     //TODO: try using getDoc
@@ -117,8 +97,10 @@ const httpCheckBooking = async (email) => {
         ...processBooking(doc.data()),
         id: doc.id,
       }));
-      console.log(result);
-      return result[0];
+
+      //TODO: make sure the user can see all appointments made after yesterday!!
+      //console.log(result)
+      return result;
     } else {
       throw new Error(`Found no bookings under  ${email}`);
     }
@@ -134,11 +116,7 @@ const httpGetBookings = async (dateMoment) => {
     let nextDate = dateMoment.add(1, "day").format("YYYY-MM-DD").toString();
     let parsedqueriedDate = Date.parse(queriedDate + "T00:00");
     let parsednextDate = Date.parse(nextDate + "T00:00");
-    const q = query(
-      bookingsCollectionRef,
-      where("date", ">", Timestamp.fromMillis(parsedqueriedDate)),
-      where("date", "<", Timestamp.fromMillis(parsednextDate))
-    );
+    const q = query(bookingsCollectionRef, where("date", ">", Timestamp.fromMillis(parsedqueriedDate)), where("date", "<", Timestamp.fromMillis(parsednextDate)));
     //qeury booking greater than the given date but less the date after....
 
     const bookingSnap = await getDocs(q);
@@ -165,11 +143,7 @@ const httpGetSlots = async (dateMoment) => {
 
     let nextDate = choosenDate.add(1, "day");
 
-    const q = query(
-      slotsCollectionRef,
-      where("date", ">", Timestamp.fromDate(dateMoment.toDate())),
-      where("date", "<", Timestamp.fromDate(nextDate.toDate()))
-    );
+    const q = query(slotsCollectionRef, where("date", ">", Timestamp.fromDate(dateMoment.toDate())), where("date", "<", Timestamp.fromDate(nextDate.toDate())));
 
     const slotSnap = await getDocs(q);
 
@@ -207,18 +181,8 @@ const httpSubmitBooking = async (bookingData) => {
       //TODO: make sure slot is not already taken...
       const snapQuery = query(
         slotsCollectionRef,
-        where(
-          "date",
-          ">",
-          Timestamp.fromMillis(
-            bookingMoment.clone().subtract(1, "minute").valueOf()
-          )
-        ),
-        where(
-          "date",
-          "<",
-          Timestamp.fromMillis(bookingMoment.clone().add(1, "minute").valueOf())
-        ),
+        where("date", ">", Timestamp.fromMillis(bookingMoment.clone().subtract(1, "minute").valueOf())),
+        where("date", "<", Timestamp.fromMillis(bookingMoment.clone().add(1, "minute").valueOf())),
         where("status", "==", "confirmed")
       );
 
@@ -281,11 +245,7 @@ const httpCancelBooking = async (id) => {
       if (bookingSnap.exists()) {
         let firebaseTimeStamp = bookingSnap.data().date;
 
-        const snapQuery = query(
-          slotsCollectionRef,
-          where("date", "==", Timestamp.fromDate(firebaseTimeStamp.toDate())),
-          where("status", "==", "confirmed")
-        );
+        const snapQuery = query(slotsCollectionRef, where("date", "==", Timestamp.fromDate(firebaseTimeStamp.toDate())), where("status", "==", "confirmed"));
 
         const slotQuerySnap = await getDocs(snapQuery);
 
@@ -294,9 +254,7 @@ const httpCancelBooking = async (id) => {
         let slotRef = doc(slotsCollectionRef, slotId);
         await deleteDoc(slotRef);
       } else {
-        throw new Error(
-          "The booking you are attempting to cancel was not found!"
-        );
+        throw new Error("The booking you are attempting to cancel was not found!");
       }
 
       return bookingSnap.data();
@@ -306,15 +264,4 @@ const httpCancelBooking = async (id) => {
   }
 };
 
-export {
-  httpGetBooking,
-  httpGetBookings,
-  httpGetSlots,
-  httpSubmitBooking,
-  httpEditBooking,
-  httpCancelBooking,
-  httpCheckBooking,
-  httpGetSettings,
-  httpSubmitSettings,
-  httpSubmitBlockedSlots,
-};
+export { httpGetBooking, httpGetBookings, httpGetSlots, httpSubmitBooking, httpEditBooking, httpCancelBooking, httpCheckBooking, httpGetSettings, httpSubmitSettings, httpSubmitBlockedSlots };
