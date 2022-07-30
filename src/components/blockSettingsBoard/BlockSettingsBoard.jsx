@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 import { CheckboxGroup, Checkbox, Calendar, useDateFormatter, Button, Grid, View, Heading, Flex, Content, ProgressCircle } from "@adobe/react-spectrum";
 import { STATUS_PENDING } from "../../hooks/useHttp";
 import styled from "styled-components";
-import { combineDateTimeMoment } from "../../util/helpers";
+//import { combineDateTimeMoment } from "../../util/helpers";
 
 const BlockSettingsBoard = ({ onConfirm, onCancel, onGetSlots, status, slots, slotStatus, settings }) => {
   const { startTime, endTime, slotSize } = settings;
@@ -29,6 +29,7 @@ const BlockSettingsBoard = ({ onConfirm, onCancel, onGetSlots, status, slots, sl
     setSelected(markBookedSlots(slots));
   }, [slots]);
 
+  //TODO: use callback on this and add it to useEfffect deps array
   const handleGetSlots = () => {
     let choosenDate = moment(formatter.format(dateValue.toDate(getLocalTimeZone())));
     onGetSlots(choosenDate);

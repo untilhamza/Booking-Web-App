@@ -15,12 +15,12 @@ const SlotSettingsPage = () => {
   //TODO: get submit blocked slots instead
   //TODO: it takes an array of slots to block and the date for which they belong
 
-  // const { status: submitBookingStatus, data: response, error, sendRequest } = useHttp(httpSubmitBooking);
+  const { status: submitBlockedSlots, data: responseOnSubmitSlots, error: submitSlotsErrorMessage, sendRequestSubmitSlots } = useHttp(httpSubmitBlockedSlots);
 
   const { status: getSlotsStatus, data: slotsArray, sendRequest: sendRequestSlots, error: getSlotsError } = useHttp(httpGetSlots);
 
   useEffect(() => {
-    const message = getSettingsErrorMessage || getSlotsError;
+    const message = getSettingsErrorMessage || getSlotsError || submitSlotsErrorMessage;
     if (message) {
       Swal.fire({
         icon: "error",
@@ -32,7 +32,7 @@ const SlotSettingsPage = () => {
         history.push("/");
       });
     }
-  }, [getSettingsErrorMessage, getSlotsError]);
+  }, [getSettingsErrorMessage, getSlotsError, submitSlotsErrorMessage]);
 
   function handleGetSlots(date) {
     return sendRequestSlots(date);
