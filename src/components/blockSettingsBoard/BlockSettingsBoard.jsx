@@ -24,13 +24,18 @@ const BlockSettingsBoard = ({
   let [selected, setSelected] = useState(disabledSlots);
   let [dateValue, setDateValue] = useState(today(getLocalTimeZone()));
 
+  const handleGetSlots = () => {
+    let choosenDate = dateValue;
+    onGetSlots(choosenDate);
+  };
+
   const handleSave = () => {
     onConfirm(dateValue, selected);
   };
 
   useEffect(() => {
     //TODO: fetch new slots
-    //onGetSlots
+    handleGetSlots();
   }, [dateValue]);
 
   function checkAvailability(slot) {

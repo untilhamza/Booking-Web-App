@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
@@ -6,6 +6,7 @@ import { httpSubmitBooking, httpGetSlots, httpGetSettings } from "../hooks/reque
 import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import BlockSettingsBoard from "../components/blockSettingsBoard/BlockSettingsBoard";
 const SlotSettingsPage = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const history = useHistory();
   const { status: getSettingsStatus, data: settings, error: getSettingsErrorMessage, sendRequest: getSettings } = useHttp(httpGetSettings);
 
@@ -19,6 +20,7 @@ const SlotSettingsPage = () => {
   function handleGetSlots(date) {
     return sendRequestSlots(date);
   }
+
   function handleConfirm(date, timesArray) {
     console.log("date", date);
     console.log("slots", timesArray);
@@ -35,13 +37,18 @@ const SlotSettingsPage = () => {
   }, []);
 
   useEffect(() => {
+    if (submitBookingStatus === STATUS_PENDING) setIsLoading(true);
+    else if (getSettingsStatus === STATUS_PENDING) setIsLoading(true);
+    else setIsLoading(false);
+  }, [submitBookingStatus, getSettingsStatus]);
+
+  useEffect(() => {
     console.log(settings);
   }, [settings]);
 
   return (
     <>
-      <SimpleBackdrop loading={submitBookingStatus === STATUS_PENDING} />
-      <SimpleBackdrop loading={getSettingsStatus === STATUS_PENDING} />
+      <SimpleBackdrop loading={isLoading} />
       {getSettingsStatus === STATUS_COMPLETED && (
         <BlockSettingsBoard onConfirm={handleConfirm} onCancel={handleCancel} onGetSlots={handleGetSlots} slots={slotsArray} slotStatus={slotStatus} settings={settings} />
       )}
