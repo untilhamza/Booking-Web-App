@@ -162,10 +162,23 @@ const httpGetSlots = async (dateMoment) => {
 
 //TODO:
 //submit an array of slot for  a given day to block and if some slots are not in that day then make sure to unblock them!!!
-const httpSubmitBlockedSlots = async () => {
+const httpSubmitBlockedSlots = async (momentDate, timesArray) => {
+  //get remote array, edit db to match local array of slots.. to be blocked...
+
   //TODO: sync the array you have with teh slots in the db
+
   // - remove those taht have been freed... just delete them.. (you already have a function to delete slots...)
   // add those that have been blocked
+
+  //TODO: using a transaction....
+  /**
+   * fetch slots for given data from db
+   *  find slots that are in db but are not in local array
+   *  delete slots from db if not in local array
+   * add slots to db if not already there and just in local array...
+   *
+   * copy of remote list of slots and local list of slots must be the same
+   */
   try {
   } catch (err) {
     throw err;
