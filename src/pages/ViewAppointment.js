@@ -65,7 +65,8 @@ const ViewAppointment = () => {
   };
 
   if (cancelBookingError) {
-    errorModal("Failed to cancel the booking, please try again later.");
+    console.log(cancelBookingError);
+    // errorModal("Failed to cancel the booking, please try again later.");
     return;
     // return <div>{error} didnot find the appointment</div>;
   }
@@ -78,7 +79,7 @@ const ViewAppointment = () => {
   return (
     <div>
       <SimpleBackdrop loading={status === STATUS_PENDING} />
-      {status === STATUS_COMPLETED && <Appointment onEdit={() => {}} onCancel={handleCancel} onDone={handleHome} onBack={handleBack} appointmentData={response} isAdmin={authCtx.isLoggedIn} />}
+      {status === STATUS_COMPLETED && <Appointment onEdit={() => {}} onCancel={handleCancel} onDone={handleHome} onBack={handleBack} appointmentData={response} isAdmin={authCtx.isLoggedIn} id={id} />}
     </div>
   );
 };
