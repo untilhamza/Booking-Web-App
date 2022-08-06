@@ -15,7 +15,7 @@ const SlotSettingsPage = () => {
   //TODO: get submit blocked slots instead
   //TODO: it takes an array of slots to block and the date for which they belong
 
-  const { status: submitBlockedSlots, data: responseOnSubmitSlots, error: submitSlotsErrorMessage, sendRequestSubmitSlots } = useHttp(httpSubmitBlockedSlots);
+  const { status: submitBlockedSlotsStatus, data: responseOnSubmitSlots, error: submitSlotsErrorMessage, sendRequest: sendRequestSubmitSlots } = useHttp(httpSubmitBlockedSlots);
 
   const { status: getSlotsStatus, data: slotsArray, sendRequest: sendRequestSlots, error: getSlotsError } = useHttp(httpGetSlots);
 
@@ -32,16 +32,17 @@ const SlotSettingsPage = () => {
         history.push("/");
       });
     }
-  }, [getSettingsErrorMessage, getSlotsError, submitSlotsErrorMessage]);
+  }, [getSettingsErrorMessage, getSlotsError, submitSlotsErrorMessage, history]);
 
   function handleGetSlots(date) {
     return sendRequestSlots(date);
   }
 
   function handleConfirm(date, timesArray) {
-    console.log("date", date);
-    console.log("slots", timesArray);
+    if (timesArray) sendRequestSubmitSlots(date, timesArray);
   }
+
+  //TODO: notify user with sweet alert if the slots have been successfully blocked
 
   function handleCancel() {
     history.goBack();
@@ -55,6 +56,7 @@ const SlotSettingsPage = () => {
 
   useEffect(() => {
     if (getSettingsStatus === STATUS_PENDING) setIsLoading(true);
+    else if (submitBlockedSlotsStatus === STATUS_PENDING) setIsLoading(true);
     else setIsLoading(false);
   }, [getSettingsStatus]);
 
