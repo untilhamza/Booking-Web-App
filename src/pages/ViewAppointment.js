@@ -79,7 +79,7 @@ const ViewAppointment = () => {
   return (
     <div>
       <SimpleBackdrop loading={status === STATUS_PENDING} />
-      {status === STATUS_COMPLETED && <Appointment onEdit={() => {}} onCancel={handleCancel} onDone={handleHome} onBack={handleBack} appointmentData={response} isAdmin={authCtx.isLoggedIn} id={id} />}
+      {status === STATUS_COMPLETED && <Appointment onEdit={() => {}} onCancel={handleCancel} onDone={handleHome} onBack={handleBack} appointmentData={response} isAdmin={authCtx.isLoggedIn} />}
     </div>
   );
 };
