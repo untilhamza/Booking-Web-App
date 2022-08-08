@@ -1,79 +1,63 @@
-//import Calendar from "../Calendar/Calendar";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import moment from "moment";
-import { getLocalTimeZone, today } from "@internationalized/date";
+import { getLocalTimeZone, parseDate, today } from "@internationalized/date";
 import { v4 as uuidv4 } from "uuid";
-import { CheckboxGroup, Checkbox, Calendar, useDateFormatter, Button, Grid, View, Heading, Flex, Content, ProgressCircle } from "@adobe/react-spectrum";
-import { STATUS_PENDING } from "../../hooks/useHttp";
+import { CheckboxGroup, Checkbox, Calendar, useDateFormatter, Button, Grid, View, Heading, Flex, Content } from "@adobe/react-spectrum";
 import styled from "styled-components";
-//import { combineDateTimeMoment } from "../../util/helpers";
+// import { combineDateTimeMoment } from "../../util/helpers";
 
-const BlockSettingsBoard = ({ onConfirm, onCancel, onGetSlots, status, slots, slotStatus, settings }) => {
+const BlockSettingsBoard = ({ onConfirm, onCancel, selectedDate, onSelectDate, slots, settings }) => {
   const { startTime, endTime, slotSize } = settings;
   const [selected, setSelected] = useState([]);
-  const [dateValue, setDateValue] = useState(today(getLocalTimeZone()));
-  const [isLoadingSlots, setIsLoadingSlots] = useState(true);
   const [timeOptions, setTimeOptions] = useState([]);
 
-  useEffect(() => {
-    if (slotStatus === STATUS_PENDING) setIsLoadingSlots(true);
-    else setIsLoadingSlots(false);
-  }, [slotStatus]);
-
   function markBookedSlots(slots) {
-    if (slots) return slots.map((item) => item.time);
-    else return [];
+    const alreadyBlocked = [];
+    if (slots) {
+      for (let remoteSlot of slots) {
+        if (remoteSlot.isBlocked) alreadyBlocked.push(remoteSlot.time);
+      }
+    }
+    return alreadyBlocked;
   }
 
   useEffect(() => {
     setSelected(markBookedSlots(slots));
   }, [slots]);
 
-  //TODO: use callback on this and add it to useEfffect deps array
-
   function convertInternationalDateToMoment(date) {
-    return moment(formatter.format(date.toDate(getLocalTimeZone())));
+    return moment(date.toDate(getLocalTimeZone()).toISOString());
   }
 
-  const handleGetSlots = () => {
-    const choosenDate = convertInternationalDateToMoment(dateValue);
-    onGetSlots(choosenDate);
-  };
+  function convertMomentDateToInternationDate(date) {
+    return parseDate(date.format("YYYY-MM-DD"));
+  }
+
+  function handleSelectDate(intDate) {
+    onSelectDate(convertInternationalDateToMoment(intDate));
+  }
 
   const handleSave = () => {
-    const choosenDate = convertInternationalDateToMoment(dateValue);
-    onConfirm(choosenDate, selected);
+    onConfirm(selected);
   };
 
-  useEffect(() => {
-    handleGetSlots();
-  }, [dateValue]);
+  const checkAvailability = useCallback(function (slot) {
+    if (!slots || slots.length === 0) return false; //not taken
 
-  function checkAvailability(slot) {
-    if (!slots || slots.length === 0) {
-      return false;
-    }
-    //return slots.some((obj) => obj.time === slot.time);
+    return slots.some((remoteSlot) => remoteSlot.isBooked && remoteSlot.time === slot.time); //|| isPast;
+  }, []);
 
-    //TODO: disable slots for days of the past.
-    // const time = slot.time;
-    // const slotMoment = combineDateTimeMoment(dateValue, moment(slot.time, "h:mm a"));
-    // const isPast = slotMoment < moment();
-
-    // //TODO: checked if it was not blocked too
-    return slots.some((obj) => obj.time === slot.time); //|| isPast;
-  }
-  const makeBox = (boxData) => {
+  const makeBox = useCallback((boxData) => {
     const isTaken = checkAvailability(boxData);
-    //TODO: The disabled should be added to the selected here...
+
     return (
       <Checkbox height="size-400" value={boxData.time} isDisabled={isTaken} key={boxData.id}>
         <TimeText isDisabled={isTaken}>{boxData.time}</TimeText>
       </Checkbox>
     );
-  };
+  }, []);
 
-  const makeSlots = (start, end, slotSize) => {
+  const makeSlots = useCallback((start, end, slotSize) => {
     const timeSlots = [];
     const startTime = moment(start, "h:mma");
     const endTime = moment(end, "h:mma");
@@ -84,16 +68,12 @@ const BlockSettingsBoard = ({ onConfirm, onCancel, onGetSlots, status, slots, sl
       startTime.add(slotSize, "minutes");
     }
     return timeSlots;
-  };
+  }, []);
 
   useEffect(() => {
     setTimeOptions(makeSlots(startTime, endTime, slotSize));
-  }, [slots]);
+  }, [slots, makeSlots, startTime, endTime, slotSize]);
 
-  const handleSelectDate = (newDate) => {
-    handleGetSlots();
-    setDateValue(newDate);
-  };
   let formatter = useDateFormatter({ dateStyle: "full" });
 
   return (
@@ -117,46 +97,35 @@ const BlockSettingsBoard = ({ onConfirm, onCancel, onGetSlots, status, slots, sl
               <Content>
                 <span>Block Slots for:</span>{" "}
               </Content>
-              <DateText> {dateValue && formatter.format(dateValue.toDate(getLocalTimeZone()))}</DateText>
+              <DateText> {selectedDate && formatter.format(convertMomentDateToInternationDate(selectedDate).toDate(getLocalTimeZone()))}</DateText>
             </Heading>
             <Flex direction="row" justifyContent="space-between">
               <Button variant="cta" onPress={handleSave}>
                 Save
               </Button>
               <Button variant="negative" onPress={onCancel}>
-                Cancel
+                Back
               </Button>
             </Flex>
           </View>
           <View padding="size-300" borderWidth="thin" borderColor="dark" borderRadius="medium">
             <Flex justifyContent={"center"}>
-              <Calendar
-                minValue={today(getLocalTimeZone())}
-                // onChange={handleSelectDate}
-                value={dateValue}
-                onChange={handleSelectDate}
-              />
+              <Calendar onChange={handleSelectDate} minValue={today(getLocalTimeZone())} value={convertMomentDateToInternationDate(selectedDate)} />
             </Flex>
           </View>
         </Flex>
         <View gridArea="slots" padding="size-300" color={"green-400"} borderWidth="thin" borderColor="dark" borderRadius="medium">
-          {isLoadingSlots ? (
-            <Flex justifyContent={"center"}>
-              <ProgressCircle aria-label="Loading…" isIndeterminate />
-            </Flex>
-          ) : (
-            <CheckboxGroup aria-label="time-slots" value={selected} onChange={setSelected}>
-              <Grid
-                gap="size-100"
-                columns={{
-                  base: ["1fr", "1fr"],
-                  L: ["1fr", "1fr", "1fr"],
-                }}
-              >
-                {timeOptions}
-              </Grid>
-            </CheckboxGroup>
-          )}
+          <CheckboxGroup aria-label="time-slots" value={selected} onChange={setSelected}>
+            <Grid
+              gap="size-100"
+              columns={{
+                base: ["1fr", "1fr"],
+                L: ["1fr", "1fr", "1fr"],
+              }}
+            >
+              {timeOptions}
+            </Grid>
+          </CheckboxGroup>
         </View>
       </Grid>
     </Flex>
