@@ -6,6 +6,7 @@ const ERROR = "ERROR";
 export const STATUS_PENDING = "PENDING";
 export const STATUS_COMPLETED = "COMPLETED";
 
+//TODO: dispatch loading status to redux using the reducer...
 function httpReducer(state, action) {
   if (action.type === SEND) {
     return {
