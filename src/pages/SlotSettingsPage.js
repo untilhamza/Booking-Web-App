@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import Swal from "sweetalert2";
 import moment from "moment";
@@ -6,8 +6,10 @@ import { useHistory } from "react-router-dom";
 import { httpSubmitBlockedSlots, httpGetSlots, httpGetSettings } from "../hooks/request";
 import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import BlockSettingsBoard from "../components/blockSettingsBoard/BlockSettingsBoard";
+
 const SlotSettingsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const [chosenDate, setChosenDate] = useState(moment());
   const history = useHistory();
 
   const { status: getSettingsStatus, data: settings, error: getSettingsErrorMessage, sendRequest: getSettings } = useHttp(httpGetSettings);
@@ -17,54 +19,112 @@ const SlotSettingsPage = () => {
 
   const { status: submitBlockedSlotsStatus, data: responseOnSubmitSlots, error: submitSlotsErrorMessage, sendRequest: sendRequestSubmitSlots } = useHttp(httpSubmitBlockedSlots);
 
-  const { status: getSlotsStatus, data: slotsArray, sendRequest: sendRequestSlots, error: getSlotsError } = useHttp(httpGetSlots);
+  const { status: getSlotsStatus, data: remoteSlotsArray, sendRequest: sendRequestSlots, error: getSlotsErrorMessage } = useHttp(httpGetSlots);
 
-  useEffect(() => {
-    const message = getSettingsErrorMessage || getSlotsError || submitSlotsErrorMessage;
-    if (message) {
-      Swal.fire({
-        icon: "error",
-        title: "Oops...",
-        text: message || "Something went wrong!",
-        confirmButtonText: "Go Home",
-        allowOutsideClick: false,
-      }).then(() => {
-        history.push("/");
-      });
+  const handleGetSlots = useCallback(function (date) {
+    sendRequestSlots(date);
+  }, []);
+
+  function handleSetCalendarDate(momentDate) {
+    handleGetSlots(momentDate);
+    setChosenDate(momentDate);
+  }
+
+  function handleSubmitBlockedSlots(timesArray) {
+    if (timesArray) {
+      sendRequestSubmitSlots(chosenDate, timesArray);
     }
-  }, [getSettingsErrorMessage, getSlotsError, submitSlotsErrorMessage, history]);
-
-  function handleGetSlots(date) {
-    return sendRequestSlots(date);
   }
-
-  function handleConfirm(date, timesArray) {
-    if (timesArray) sendRequestSubmitSlots(date, timesArray);
-  }
-
-  //TODO: notify user with sweet alert if the slots have been successfully blocked
 
   function handleCancel() {
     history.goBack();
   }
 
   useEffect(() => {
-    //TODO: fetch for the date today or the provided date when modifying date
-    //make sure these fire at the same time...
-    Promise.all([getSettings(), handleGetSlots(moment())]);
+    Promise.all([getSettings(), handleGetSlots(chosenDate)]);
   }, []);
 
   useEffect(() => {
+    if (getSlotsErrorMessage)
+      Swal.fire({
+        icon: "error",
+        title: "Error 😔",
+        text: getSlotsErrorMessage || "There was an error",
+        confirmButtonText: "Go Home",
+        allowOutsideClick: false,
+      }).then(() => {
+        //TODO: record this error with sentry
+        history.push("/");
+      });
+  }, [getSlotsErrorMessage, history]);
+
+  useEffect(() => {
     if (getSettingsStatus === STATUS_PENDING) setIsLoading(true);
-    else if (submitBlockedSlotsStatus === STATUS_PENDING) setIsLoading(true);
+    if (getSettingsStatus === STATUS_COMPLETED) {
+      setIsLoading(false);
+      if (getSettingsErrorMessage) {
+        Swal.fire({
+          icon: "error",
+          title: "Error 😔",
+          text: getSettingsErrorMessage || "There was an error",
+          confirmButtonText: "Go Home",
+          allowOutsideClick: false,
+        }).then(() => {
+          //TODO: record this error with sentry
+          history.push("/");
+        });
+      }
+    }
+  }, [getSettingsStatus, getSettingsErrorMessage, history]);
+
+  useEffect(() => {
+    if (getSlotsStatus === STATUS_PENDING) setIsLoading(true);
     else setIsLoading(false);
-  }, [getSettingsStatus]);
+  }, [getSlotsStatus]);
+
+  useEffect(() => {
+    if (submitBlockedSlotsStatus === STATUS_PENDING) setIsLoading(true);
+    if (submitBlockedSlotsStatus === STATUS_COMPLETED) {
+      setIsLoading(false);
+      if (submitSlotsErrorMessage) {
+        Swal.fire({
+          icon: "error",
+          title: "Error 😔",
+          text: submitSlotsErrorMessage || "There was an error",
+          confirmButtonText: "Go Home",
+          allowOutsideClick: false,
+        }).then(() => {
+          //TODO: record this error with sentry
+          history.push("/");
+        });
+      } else {
+        Swal.fire({
+          icon: "success",
+          title: "Success 😅",
+          text: "Your changes have been saved",
+          confirmButtonText: "Okay",
+          allowOutsideClick: false,
+        }).then(() => {
+          handleGetSlots(chosenDate);
+          //setDaySlots(responseOnSubmitSlots);
+        });
+      }
+    }
+  }, [submitBlockedSlotsStatus, responseOnSubmitSlots, submitSlotsErrorMessage, handleGetSlots, chosenDate, history]);
 
   return (
     <>
       <SimpleBackdrop loading={isLoading} />
-      {getSettingsStatus === STATUS_COMPLETED && (
-        <BlockSettingsBoard onConfirm={handleConfirm} onCancel={handleCancel} onGetSlots={handleGetSlots} slots={slotsArray} slotStatus={getSlotsStatus} settings={settings} />
+      {getSettingsStatus === STATUS_COMPLETED && getSlotsStatus === STATUS_COMPLETED && (
+        <BlockSettingsBoard
+          onConfirm={handleSubmitBlockedSlots}
+          selectedDate={chosenDate}
+          onSelectDate={handleSetCalendarDate}
+          onCancel={handleCancel}
+          slots={remoteSlotsArray}
+          slotStatus={getSlotsStatus}
+          settings={settings}
+        />
       )}
     </>
   );
