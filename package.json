@@ -2,9 +2,15 @@
   "name": "appointments",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hsanshine/Booking-Web-App"
+  },
   "dependencies": {
+    "@adobe/react-spectrum": "^3.19.0",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@internationalized/date": "^3.0.0",
     "@mui/icons-material": "^5.8.4",
     "@mui/material": "^5.8.0",
     "@testing-library/jest-dom": "^5.16.4",
@@ -30,6 +36,7 @@
     "react-timekeeper": "^2.2.1",
     "save-dev": "^0.0.1-security",
     "styled-components": "^5.3.5",
+    "sweetalert2": "^11.4.24",
     "typescript": "^4.6.4",
     "uuid": "^8.3.2",
     "web-vitals": "^2.1.4",
