@@ -6,6 +6,7 @@ const ERROR = "ERROR";
 export const STATUS_PENDING = "PENDING";
 export const STATUS_COMPLETED = "COMPLETED";
 
+//TODO: dispatch loading status to redux using the reducer...
 function httpReducer(state, action) {
   if (action.type === SEND) {
     return {
@@ -37,10 +38,12 @@ function useHttp(requestFunction, startWithPending = false) {
     error: null,
   });
   const sendRequest = useCallback(
-    async (requestData) => {
+    //combine all passed args into an array
+    async function (...args) {
       dispatch({ type: SEND });
       try {
-        const response = await requestFunction(requestData);
+        //provide all passed args when calling request function
+        const response = await requestFunction(...args);
         dispatch({ type: SUCCESS, responseData: response });
       } catch (err) {
         dispatch({

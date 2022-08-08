@@ -10,10 +10,10 @@ const SettingsMenu = () => {
       path: "/general-settings",
     },
     //TODO:  will be done later!
-    // {
-    //   title: "Slot Settings",
-    //   path: "/slot-settings",
-    // },
+    {
+      title: "Slot Settings",
+      path: "/slot-settings",
+    },
     // {
     //   title: "Special Day Settings",
     //   path: "/general-settings",
