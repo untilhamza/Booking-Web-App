@@ -65,7 +65,6 @@ const ViewAppointment = () => {
   };
 
   if (cancelBookingError) {
-    console.log(cancelBookingError);
     // errorModal("Failed to cancel the booking, please try again later.");
     return;
     // return <div>{error} didnot find the appointment</div>;
