@@ -2,6 +2,8 @@
 
 > [Deployed Here](https://elkpro.netlify.app)
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ea1d6aab-f4e1-403c-b63d-2b4a075d33fd/deploy-status)](https://app.netlify.com/sites/elkpro/deploys)
+
 - Pull requests are welcome!!!
 
 :star: Follow me on GitHub
