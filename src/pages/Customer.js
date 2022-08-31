@@ -1,6 +1,6 @@
 import BookingMenu from "../components/BookingMenu/BookingMenu";
 import { useHistory } from "react-router-dom";
-
+import TrackingCode from "../components/TrackingCode";
 import "./homepage.css";
 import MainBackground from "../components/UI/MainBackground";
 
@@ -19,6 +19,7 @@ const BookingPage = () => {
   };
   return (
     <MainBackground>
+      <TrackingCode />
       <div className="container homepage">
         <BookingMenu onMakeAppointment={handleMakeAppointment} onModifyAppointment={handleModifyAppointment} onBack={handleGoBack} />
       </div>
