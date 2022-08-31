@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import TrackingCode from "../components/TrackingCode";
 import "./homepage.css";
 import MainBackground from "../components/UI/MainBackground";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const BookingPage = () => {
   const history = useHistory();
@@ -20,6 +21,7 @@ const BookingPage = () => {
   return (
     <MainBackground>
       <TrackingCode />
+      <GoogleAnalytics />
       <div className="container homepage">
         <BookingMenu onMakeAppointment={handleMakeAppointment} onModifyAppointment={handleModifyAppointment} onBack={handleGoBack} />
       </div>

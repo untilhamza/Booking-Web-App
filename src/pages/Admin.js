@@ -6,6 +6,7 @@ import { httpGetBookings } from "../hooks/request";
 import { Modal } from "antd";
 import { useHistory } from "react-router-dom";
 import TrackingCode from "../components/TrackingCode";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const Admin = () => {
   const history = useHistory();
@@ -42,6 +43,7 @@ const Admin = () => {
   return (
     <div>
       <TrackingCode />
+      <GoogleAnalytics />
       <Dashboard date={date} onSelectDate={handleSelectDate} bookings={bookings} onView={handleOnView} status={status} />
     </div>
   );

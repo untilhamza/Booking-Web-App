@@ -6,6 +6,7 @@ import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import { useHistory } from "react-router-dom";
 import ErrorModal from "../components/ErrorModal/ErrorModal";
 import TrackingCode from "../components/TrackingCode";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const GeneralSettingsPage = () => {
   const history = useHistory();
@@ -60,6 +61,7 @@ const GeneralSettingsPage = () => {
   return (
     <>
       <TrackingCode />
+      <GoogleAnalytics />
       <SimpleBackdrop loading={getSettingsStatus === STATUS_PENDING || submitSettingsStatus === STATUS_PENDING} />
       {getSettingsStatus === STATUS_COMPLETED && <GeneralSettings initialValues={settings} onConfirm={handleOnConfirm} onCancel={handleOnBack} onBack={handleOnBack} />}
     </>

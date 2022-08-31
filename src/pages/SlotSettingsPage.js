@@ -7,6 +7,7 @@ import { httpSubmitBlockedSlots, httpGetSlots, httpGetSettings } from "../hooks/
 import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import BlockSettingsBoard from "../components/blockSettingsBoard/BlockSettingsBoard";
 import TrackingCode from "../components/TrackingCode";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const SlotSettingsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -116,6 +117,7 @@ const SlotSettingsPage = () => {
   return (
     <>
       <TrackingCode />
+      <GoogleAnalytics />
       <SimpleBackdrop loading={isLoading} />
       {getSettingsStatus === STATUS_COMPLETED && getSlotsStatus === STATUS_COMPLETED && (
         <BlockSettingsBoard

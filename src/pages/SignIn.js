@@ -7,6 +7,7 @@ import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import { Modal } from "antd";
 import TrackingCode from "../components/TrackingCode";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const SignIn = () => {
   const history = useHistory();
@@ -41,6 +42,7 @@ const SignIn = () => {
   return (
     <div>
       <TrackingCode />
+      <GoogleAnalytics />
       <SimpleBackdrop loading={status === STATUS_PENDING} />
       <LoginForm onLogin={handleLogin} />
     </div>
