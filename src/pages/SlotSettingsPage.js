@@ -6,6 +6,7 @@ import { useHistory } from "react-router-dom";
 import { httpSubmitBlockedSlots, httpGetSlots, httpGetSettings } from "../hooks/request";
 import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import BlockSettingsBoard from "../components/blockSettingsBoard/BlockSettingsBoard";
+import TrackingCode from "../components/TrackingCode";
 
 const SlotSettingsPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -114,6 +115,7 @@ const SlotSettingsPage = () => {
 
   return (
     <>
+      <TrackingCode />
       <SimpleBackdrop loading={isLoading} />
       {getSettingsStatus === STATUS_COMPLETED && getSlotsStatus === STATUS_COMPLETED && (
         <BlockSettingsBoard

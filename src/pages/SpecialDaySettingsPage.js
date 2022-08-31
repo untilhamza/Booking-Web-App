@@ -1,7 +1,13 @@
-import React from "react"
+import React from "react";
+import TrackingCode from "../components/TrackingCode";
 
 const SpecialDaySettingsPage = () => {
-  return <div>SpecialDaySettingsPage</div>
-}
+  return (
+    <>
+      <TrackingCode />
+      <div>SpecialDaySettingsPage</div>
+    </>
+  );
+};
 
-export default SpecialDaySettingsPage
+export default SpecialDaySettingsPage;

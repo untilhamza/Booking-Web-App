@@ -1,7 +1,13 @@
 import React from "react";
+import TrackingCode from "../components/TrackingCode";
 
 const NotFound = () => {
-  return <div className="text-center">Page Not Found</div>;
+  return (
+    <>
+      <TrackingCode />
+      <div className="text-center">Page Not Found</div>
+    </>
+  );
 };
 
 export default NotFound;

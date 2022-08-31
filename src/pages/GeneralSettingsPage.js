@@ -1,25 +1,17 @@
-import { useEffect } from "react"
-import GeneralSettings from "../components/Settings/GeneralSettings"
-import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp"
-import { httpGetSettings, httpSubmitSettings } from "../hooks/request"
-import SimpleBackdrop from "../components/BackDrop/BackDrop"
-import { useHistory } from "react-router-dom"
-import ErrorModal from "../components/ErrorModal/ErrorModal"
+import { useEffect } from "react";
+import GeneralSettings from "../components/Settings/GeneralSettings";
+import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
+import { httpGetSettings, httpSubmitSettings } from "../hooks/request";
+import SimpleBackdrop from "../components/BackDrop/BackDrop";
+import { useHistory } from "react-router-dom";
+import ErrorModal from "../components/ErrorModal/ErrorModal";
+import TrackingCode from "../components/TrackingCode";
 
 const GeneralSettingsPage = () => {
-  const history = useHistory()
-  const {
-    status: getSettingsStatus,
-    data: settings,
-    error: getSettingsErrorMessage,
-    sendRequest: getSettings,
-  } = useHttp(httpGetSettings)
+  const history = useHistory();
+  const { status: getSettingsStatus, data: settings, error: getSettingsErrorMessage, sendRequest: getSettings } = useHttp(httpGetSettings);
 
-  const {
-    status: submitSettingsStatus,
-    error: submitSettingsErrorMessage,
-    sendRequest: submitSettings,
-  } = useHttp(httpSubmitSettings)
+  const { status: submitSettingsStatus, error: submitSettingsErrorMessage, sendRequest: submitSettings } = useHttp(httpSubmitSettings);
 
   //need method to fetch the initial values
   //need method to submit edited values
@@ -27,8 +19,8 @@ const GeneralSettingsPage = () => {
   //fetch the intial values on page loading
   useEffect(() => {
     //fetch the intial values
-    getSettings()
-  }, [])
+    getSettings();
+  }, []);
 
   useEffect(() => {
     if (getSettingsStatus === STATUS_COMPLETED) {
@@ -36,12 +28,12 @@ const GeneralSettingsPage = () => {
         ErrorModal({
           message: getSettingsErrorMessage,
           onOk: () => {
-            history.push("/")
+            history.push("/");
           },
-        })
+        });
       }
     }
-  }, [getSettingsStatus, history, getSettingsErrorMessage])
+  }, [getSettingsStatus, history, getSettingsErrorMessage]);
 
   useEffect(() => {
     if (submitSettingsStatus === STATUS_COMPLETED) {
@@ -54,35 +46,24 @@ const GeneralSettingsPage = () => {
       //   })
       // }
     }
-  }, [submitSettingsStatus, history, submitSettingsErrorMessage])
+  }, [submitSettingsStatus, history, submitSettingsErrorMessage]);
 
   const handleOnBack = () => {
-    history.goBack()
-  }
+    history.goBack();
+  };
 
   const handleOnConfirm = (values) => {
     //send the values to the back end
-    submitSettings(values)
-  }
+    submitSettings(values);
+  };
 
   return (
     <>
-      <SimpleBackdrop
-        loading={
-          getSettingsStatus === STATUS_PENDING ||
-          submitSettingsStatus === STATUS_PENDING
-        }
-      />
-      {getSettingsStatus === STATUS_COMPLETED && (
-        <GeneralSettings
-          initialValues={settings}
-          onConfirm={handleOnConfirm}
-          onCancel={handleOnBack}
-          onBack={handleOnBack}
-        />
-      )}
+      <TrackingCode />
+      <SimpleBackdrop loading={getSettingsStatus === STATUS_PENDING || submitSettingsStatus === STATUS_PENDING} />
+      {getSettingsStatus === STATUS_COMPLETED && <GeneralSettings initialValues={settings} onConfirm={handleOnConfirm} onCancel={handleOnBack} onBack={handleOnBack} />}
     </>
-  )
-}
+  );
+};
 
-export default GeneralSettingsPage
+export default GeneralSettingsPage;

@@ -9,6 +9,7 @@ import { Modal } from "antd";
 import AppointmentsList from "../components/AppointmentsList";
 import useQuery from "../hooks/useQuery";
 import * as yup from "yup";
+import TrackingCode from "../components/TrackingCode";
 
 let schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -101,6 +102,7 @@ const CheckAppointment = () => {
 
   return (
     <div>
+      <TrackingCode />
       <SimpleBackdrop loading={checkBookingStatus === STATUS_PENDING} />
       <CheckingForm onConfirm={handleChecking} onCancel={handleBack} initialEmail={queryEmail} />
       {<AppointmentsList appointments={appoinments} onCancel={handleCancel} />}
