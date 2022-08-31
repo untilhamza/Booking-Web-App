@@ -7,6 +7,7 @@ import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import { Modal } from "antd";
 import AuthContext from "../store/auth-context";
 import TrackingCode from "../components/TrackingCode";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const ViewAppointment = () => {
   const authCtx = useContext(AuthContext);
@@ -79,6 +80,7 @@ const ViewAppointment = () => {
   return (
     <div>
       <TrackingCode />
+      <GoogleAnalytics />
       <SimpleBackdrop loading={status === STATUS_PENDING} />
       {status === STATUS_COMPLETED && <Appointment onEdit={() => {}} onCancel={handleCancel} onDone={handleHome} onBack={handleBack} appointmentData={response} isAdmin={authCtx.isLoggedIn} />}
     </div>

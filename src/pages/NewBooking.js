@@ -7,6 +7,7 @@ import { httpSubmitBooking, httpGetSlots, httpGetSettings } from "../hooks/reque
 import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import moment from "moment";
 import TrackingCode from "../components/TrackingCode";
+import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const NewBooking = () => {
   //when it is loaded for the first time, we should fetch slots for the current date..
@@ -63,6 +64,7 @@ const NewBooking = () => {
   return (
     <div>
       <TrackingCode />
+      <GoogleAnalytics />
       <SimpleBackdrop loading={submitBookingStatus === STATUS_PENDING} />
       <SimpleBackdrop loading={getSettingsStatus === STATUS_PENDING} />
       {getSettingsStatus === STATUS_COMPLETED && (
