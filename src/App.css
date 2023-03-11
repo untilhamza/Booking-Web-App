@@ -1,7 +1,9 @@
 App {
   height: 100vh;
 }
-
+.no-border {
+  border: 0 !important;
+}
 /* .
 
   /* padding-bottom: 20px; */
