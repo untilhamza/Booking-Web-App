@@ -6,7 +6,7 @@ import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import { httpSubmitBooking, httpGetSlots, httpGetSettings } from "../hooks/request";
 import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import moment from "moment";
-import TrackingCode from "../components/TrackingCode";
+import Swal from "sweetalert2";
 import GoogleAnalytics from "../components/GoogleAnalytics";
 
 const NewBooking = () => {
@@ -29,6 +29,22 @@ const NewBooking = () => {
   async function handleConfirm(bookingData) {
     sendRequest(bookingData);
   }
+
+  useEffect(() => {
+    Swal.fire({
+      title: `Welcome! Incase there are no 
+      slots`,
+      html: `<p>Please contact the owner on WhatsApp (+82 10-9539-9012) and he will help you make an appointment.</p>  <a aria-label="Chat on WhatsApp" href="https://wa.me/821098999793">
+        <img alt="Chat on WhatsApp" src="assets/images/whatsapp/WhatsAppButtonGreenLarge.svg" />
+      </a>`,
+      icon: `info`,
+      iconHtml: `<span>&#128522;</span>`,
+      confirmButtonText: "Okay",
+      customClass: {
+        icon: "no-border",
+      },
+    });
+  }, []);
 
   useEffect(() => {
     //TODO: fetch for the date today or the provided date when modifying date
@@ -63,7 +79,6 @@ const NewBooking = () => {
 
   return (
     <div>
-      <TrackingCode />
       <GoogleAnalytics />
       <SimpleBackdrop loading={submitBookingStatus === STATUS_PENDING} />
       <SimpleBackdrop loading={getSettingsStatus === STATUS_PENDING} />
