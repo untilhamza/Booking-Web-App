@@ -34,7 +34,7 @@ const NewBooking = () => {
     Swal.fire({
       title: `Welcome! Incase there are no 
       slots`,
-      html: `<p>Please contact the owner on WhatsApp (+82 10-9539-9012) and he will help you make an appointment.</p>  <a aria-label="Chat on WhatsApp" href="https://wa.me/821098999793">
+      html: `<p>Please contact the owner on WhatsApp (+82 10-9539-9012) and he will help you make an appointment.</p>  <a aria-label="Chat on WhatsApp" href="https://wa.me/821095399012">
         <img alt="Chat on WhatsApp" src="assets/images/whatsapp/WhatsAppButtonGreenLarge.svg" />
       </a>`,
       icon: `info`,
