@@ -2,6 +2,7 @@ import React from "react";
 import { Helmet } from "react-helmet";
 
 const TrackingCode = () => {
+  return null;
   return (
     <Helmet>
       <script>{`var _paq = (window._paq = window._paq || []); /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
