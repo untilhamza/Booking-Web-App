@@ -17,7 +17,7 @@ let schema = yup.object().shape({
 });
 
 const CheckAppointment = () => {
-  const [appoinments, setAppointments] = useState([]);
+  const [appointments, setAppointments] = useState([]);
 
   const history = useHistory();
 
@@ -107,7 +107,7 @@ const CheckAppointment = () => {
       <GoogleAnalytics />
       <SimpleBackdrop loading={checkBookingStatus === STATUS_PENDING} />
       <CheckingForm onConfirm={handleChecking} onCancel={handleBack} initialEmail={queryEmail} />
-      {<AppointmentsList appointments={appoinments} onCancel={handleCancel} />}
+      {<AppointmentsList appointments={appointments} onCancel={handleCancel} />}
     </div>
   );
 };
