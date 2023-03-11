@@ -20,7 +20,6 @@ const BookingPage = () => {
   };
   return (
     <MainBackground>
-      <TrackingCode />
       <GoogleAnalytics />
       <div className="container homepage">
         <BookingMenu onMakeAppointment={handleMakeAppointment} onModifyAppointment={handleModifyAppointment} onBack={handleGoBack} />
