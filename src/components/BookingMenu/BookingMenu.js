@@ -1,6 +1,6 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
-
+import Map from "../Map/Map";
 import "./BookingMenu.css";
 const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
   return (
@@ -42,6 +42,7 @@ const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
                 <img alt="Chat on WhatsApp" src="assets/images/whatsapp/WhatsAppButtonGreenLarge.svg" />
               </a>
             </div>
+            <Map/>
             {/* <Button
             className="btn-secondary"
             onClick={() => {
