@@ -27,24 +27,25 @@ const NewBooking = () => {
   }
 
   async function handleConfirm(bookingData) {
-    sendRequest(bookingData);
+    // sendRequest(bookingData);
+    console.log(bookingData);
   }
 
-  useEffect(() => {
-    Swal.fire({
-      title: `Welcome! Incase there are no 
-      slots`,
-      html: `<p>Please contact the owner on WhatsApp (+82 10-9539-9012) and he will help you make an appointment.</p>  <a aria-label="Chat on WhatsApp" href="https://wa.me/821095399012">
-        <img alt="Chat on WhatsApp" src="assets/images/whatsapp/WhatsAppButtonGreenLarge.svg" />
-      </a>`,
-      icon: `info`,
-      iconHtml: `<span>&#128522;</span>`,
-      confirmButtonText: "Okay",
-      customClass: {
-        icon: "no-border",
-      },
-    });
-  }, []);
+  // useEffect(() => {
+  //   Swal.fire({
+  //     title: `Welcome! Incase there are no
+  //     slots`,
+  //     html: `<p>Please contact the owner on WhatsApp (+82 10-9539-9012) and he will help you make an appointment.</p>  <a aria-label="Chat on WhatsApp" href="https://wa.me/821095399012">
+  //       <img alt="Chat on WhatsApp" src="assets/images/whatsapp/WhatsAppButtonGreenLarge.svg" />
+  //     </a>`,
+  //     icon: `info`,
+  //     iconHtml: `<span>&#128522;</span>`,
+  //     confirmButtonText: "Okay",
+  //     customClass: {
+  //       icon: "no-border",
+  //     },
+  //   });
+  // }, []);
 
   useEffect(() => {
     //TODO: fetch for the date today or the provided date when modifying date
