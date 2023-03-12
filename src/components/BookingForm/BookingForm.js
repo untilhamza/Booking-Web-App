@@ -7,7 +7,7 @@ import moment from "moment";
 import { Form, Button } from "react-bootstrap";
 import { DatePicker } from "antd";
 import TimeSelector from "../TimeSelector/TimeSelector";
-import { RecaptchaVerifier, signInWithPhoneNumber, signOut } from "firebase/auth";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../database/firebase-config";
 
 import "./BookingForm.css";
@@ -60,14 +60,24 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
       // user in with confirmationResult.confirm(code).
       setPhoneConfirmationObject(confirmationResult);
     } catch (err) {
-      history.go(0);
+      // history.go(0);
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred!",
+        text: "Please refresh the page and try again.",
+      });
     }
   };
 
   function handlePhoneCode(e) {
     e.preventDefault();
     if (!phoneConfirmationObject) {
-      history.go(0);
+      //history.go(0);
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred!",
+        text: "Please refresh the page and try again.",
+      });
       return;
     }
     phoneConfirmationObject
@@ -123,7 +133,12 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
           "expired-callback": () => {
             setIsRecaptchaVerified(false);
             console.log("reCAPTCHA expired");
-            history.go(0);
+            // history.go(0);
+            Swal.fire({
+              icon: "error",
+              title: "An error occurred!",
+              text: "Please refresh the page and try again.",
+            });
           },
         },
         auth
@@ -165,7 +180,6 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
             e.preventDefault();
             if (phoneIsVerified) {
               handleSubmit();
-              signOut(auth);
             } else {
             }
           }}
