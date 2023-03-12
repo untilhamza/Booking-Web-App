@@ -14,18 +14,7 @@ const AuthContext = React.createContext({
 });
 
 export const AuthContextProvider = (props) => {
-  const [user, setUser] = useState({});
-  // const {
-  //   status: getSettingsStatus,
-  //   data: settings,
-  //   error: getSettingsErrorMessage,
-  //   sendRequest: getSettings,
-  // } = useHttp(httpGetSettings)
-
-  // useEffect(() => {
-  //   //fetch the settings
-  //   getSettings()
-  // }, [])
+  const [user, setUser] = useState(null);
 
   const handleLogout = async () => {
     try {
@@ -54,9 +43,13 @@ export const AuthContextProvider = (props) => {
   };
 
   onAuthStateChanged(auth, (currentUser) => {
-    //console.log("checking auth state");
-    setUser(currentUser);
-    //console.log(currentUser);
+    //TODO: admins should be put in firebase table not here
+    const ADMINS = ["Nwzxrf32Uee9i6hbTXSN2mWVzlC2", "lHxJifUfgHhJkECibwAudvf3MGp1", "lru8dL4JVWTycq0LHhHgyaWqX133"];
+    if (currentUser && ADMINS.includes(currentUser.uid)) {
+      setUser(currentUser);
+    } else {
+      setUser(null);
+    }
   });
   const contextValue = {
     name: user?.displayname,
