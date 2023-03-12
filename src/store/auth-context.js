@@ -43,13 +43,11 @@ export const AuthContextProvider = (props) => {
   };
 
   onAuthStateChanged(auth, (currentUser) => {
-    //console.log("checking auth state");
     //TODO: admins should be put in firebase table not here
     const ADMINS = ["Nwzxrf32Uee9i6hbTXSN2mWVzlC2", "lHxJifUfgHhJkECibwAudvf3MGp1", "lru8dL4JVWTycq0LHhHgyaWqX133"];
     if (currentUser && ADMINS.includes(currentUser.uid)) {
       setUser(currentUser);
     } else {
-      console.log("User is not admin");
       setUser(null);
     }
   });
