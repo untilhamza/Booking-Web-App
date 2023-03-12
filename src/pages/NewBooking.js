@@ -27,8 +27,7 @@ const NewBooking = () => {
   }
 
   async function handleConfirm(bookingData) {
-    // sendRequest(bookingData);
-    console.log(bookingData);
+    sendRequest(bookingData);
   }
 
   // useEffect(() => {
