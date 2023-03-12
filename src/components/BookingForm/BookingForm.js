@@ -60,14 +60,24 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
       // user in with confirmationResult.confirm(code).
       setPhoneConfirmationObject(confirmationResult);
     } catch (err) {
-      history.go(0);
+      // history.go(0);
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred!",
+        text: "Please refresh the page and try again.",
+      });
     }
   };
 
   function handlePhoneCode(e) {
     e.preventDefault();
     if (!phoneConfirmationObject) {
-      history.go(0);
+      //history.go(0);
+      Swal.fire({
+        icon: "error",
+        title: "An error occurred!",
+        text: "Please refresh the page and try again.",
+      });
       return;
     }
     phoneConfirmationObject
@@ -123,7 +133,12 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
           "expired-callback": () => {
             setIsRecaptchaVerified(false);
             console.log("reCAPTCHA expired");
-            history.go(0);
+            // history.go(0);
+            Swal.fire({
+              icon: "error",
+              title: "An error occurred!",
+              text: "Please refresh the page and try again.",
+            });
           },
         },
         auth
