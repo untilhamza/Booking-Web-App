@@ -8,11 +8,12 @@ import TimeSelector from "../TimeSelector/TimeSelector";
 
 import "./BookingForm.css";
 
-const phoneRegex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i;
+// const phoneRegex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i;
+const koreanPhoneRegex = /^(0|(\+82))((10\d{7,8})|(2\d{8}))$/;
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required!"),
-  phone: yup.string().min(8, "*Enter a valid phone number").matches(phoneRegex, "*Enter a valid phone number!").required("*Phone number is required!"),
+  phone: yup.string().min(8, "*Enter a valid phone number").matches(koreanPhoneRegex, "*Enter a valid phone number!").required("*Phone number is required!"),
   email: yup.string().email("Must be a valid email").max(255).required("*Email is required!"),
   date: yup.string().required("*Booking date is required!"),
   time: yup.string().required("*Booking time is required!"),
