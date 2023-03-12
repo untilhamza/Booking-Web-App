@@ -7,7 +7,7 @@ import moment from "moment";
 import { Form, Button } from "react-bootstrap";
 import { DatePicker } from "antd";
 import TimeSelector from "../TimeSelector/TimeSelector";
-import { RecaptchaVerifier, signInWithPhoneNumber, signOut } from "firebase/auth";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { auth } from "../../database/firebase-config";
 
 import "./BookingForm.css";
@@ -180,7 +180,6 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
             e.preventDefault();
             if (phoneIsVerified) {
               handleSubmit();
-              signOut(auth);
             } else {
             }
           }}
