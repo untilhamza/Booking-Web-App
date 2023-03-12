@@ -4,8 +4,7 @@ import Map from "../Map/Map";
 import "./BookingMenu.css";
 const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
   return (
-    <div className="d-flex flex-column px-3 pt-5 pt-md-0 justify-content-md-center booking-page">
-      {/* <h2>Booking Menu</h2> */}
+    <div className="d-flex flex-column px-3 pt-5 pt-md-0 justify-content-md-center booking-page ">
       <div className="d-flex flex-column ">
         <div className="text-capitalize fs-1 text-success big-text mb-4 text-left text-md-left">A good look reflects your story and your spirit</div>
         <div className="text-danger fs-5 small-text text-muted text-left text-md-left mb-3 d-flex flex-column">Need to look fabulous fast? Book your next hair cut today!</div>
@@ -42,15 +41,9 @@ const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
                 <img alt="Chat on WhatsApp" src="assets/images/whatsapp/WhatsAppButtonGreenLarge.svg" />
               </a>
             </div>
-            <Map/>
-            {/* <Button
-            className="btn-secondary"
-            onClick={() => {
-              onBack();
-            }}
-          >
-            Go Back
-          </Button> */}
+          </div>
+          <div className="">
+            <Map />
           </div>
         </div>
       </div>
