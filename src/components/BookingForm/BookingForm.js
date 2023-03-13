@@ -23,8 +23,8 @@ const schema = yup.object().shape({
 });
 
 const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStatus, settings }) => {
-  const [phoneIsVerified, setPhoneIsVerified] = useState(false);
-  const [isVerifyingPhone, setIsVerifyingPhone] = useState(false);
+  const [phoneIsVerified, setPhoneIsVerified] = useState(true);
+  const [isVerifyingPhone, setIsVerifyingPhone] = useState(true);
   const [phoneVerificationCode, setPhoneVerificationCode] = useState("");
   const [isRecaptchaVerified, setIsRecaptchaVerified] = useState(null);
   const [phoneVerificationError, setPhoneVerificationError] = useState("");
@@ -111,50 +111,50 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
     return submittedValue.valueOf() < moment().add(-1, "day") || submittedValue.valueOf() >= moment().add(31, "day");
   };
 
-  useEffect(() => {
-    if (isRecaptchaVerified !== null && !isRecaptchaVerified) {
-      history.push("/");
-      return;
-    }
-  }, [isRecaptchaVerified]);
+  // useEffect(() => {
+  //   if (isRecaptchaVerified !== null && !isRecaptchaVerified) {
+  //     history.push("/");
+  //     return;
+  //   }
+  // }, [isRecaptchaVerified]);
 
-  useEffect(() => {
-    try {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "sign-in-button",
-        {
-          size: "invisible",
-          callback: (response) => {
-            setIsRecaptchaVerified(true);
-            // reCAPTCHA solved, allow signInWithPhoneNumber.
-            console.log("reCAPTCHA solved, allow signInWithPhoneNumber.");
-            //Now handlePhoneVerification(phoneNumber);
-          },
-          "expired-callback": () => {
-            setIsRecaptchaVerified(false);
-            console.log("reCAPTCHA expired");
-            // history.go(0);
-            Swal.fire({
-              icon: "error",
-              title: "An error occurred!",
-              text: "Please refresh the page and try again.",
-            });
-          },
-        },
-        auth
-      );
+  // useEffect(() => {
+  //   try {
+  //     window.recaptchaVerifier = new RecaptchaVerifier(
+  //       "sign-in-button",
+  //       {
+  //         size: "invisible",
+  //         callback: (response) => {
+  //           setIsRecaptchaVerified(true);
+  //           // reCAPTCHA solved, allow signInWithPhoneNumber.
+  //           console.log("reCAPTCHA solved, allow signInWithPhoneNumber.");
+  //           //Now handlePhoneVerification(phoneNumber);
+  //         },
+  //         "expired-callback": () => {
+  //           setIsRecaptchaVerified(false);
+  //           console.log("reCAPTCHA expired");
+  //           // history.go(0);
+  //           Swal.fire({
+  //             icon: "error",
+  //             title: "An error occurred!",
+  //             text: "Please refresh the page and try again.",
+  //           });
+  //         },
+  //       },
+  //       auth
+  //     );
 
-      window.recaptchaVerifier.render().then(function (widgetId) {
-        window.recaptchaWidgetId = widgetId;
-      });
-    } catch (e) {
-      console.log("recapture error", e);
-    }
+  //     window.recaptchaVerifier.render().then(function (widgetId) {
+  //       window.recaptchaWidgetId = widgetId;
+  //     });
+  //   } catch (e) {
+  //     console.log("recapture error", e);
+  //   }
 
-    return () => {
-      window.recaptchaVerifier.clear();
-    };
-  }, []);
+  //   return () => {
+  //     window.recaptchaVerifier.clear();
+  //   };
+  // }, []);
 
   return (
     <Formik
@@ -209,7 +209,7 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
             <div className="text-danger font-italic">
               <ErrorMessage name="phone" />
             </div>
-            {!phoneIsVerified && !isVerifyingPhone && (
+            {/* {!phoneIsVerified && !isVerifyingPhone && (
               <Button
                 id="sign-in-button"
                 onClick={() => {
@@ -230,7 +230,7 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
                   Verify code
                 </button>
               </div>
-            )}
+            )} */}
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -289,9 +289,9 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
               variant="success"
               type="submit"
               className="w-100 me-1"
-              onClick={() => {
-                handleConfirmButtonClick();
-              }}
+              // onClick={() => {
+              //   handleConfirmButtonClick();
+              // }}
               // disabled={!phoneIsVerified}
             >
               Confirm Booking
