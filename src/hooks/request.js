@@ -156,7 +156,7 @@ async function httpSubmitSettings(newSettings) {
 async function httpCheckBooking(phoneNumber) {
   try {
     const yesterdayMoment = new moment().clone().subtract(1, "days");
-    const q = query(bookingsCollectionRef, where("phoneNumber", "==", phoneNumber), where("date", ">", Timestamp.fromMillis(yesterdayMoment.valueOf())), orderBy("date", "desc"));
+    const q = query(bookingsCollectionRef, where("phone", "==", phoneNumber), where("date", ">", Timestamp.fromMillis(yesterdayMoment.valueOf())), orderBy("date", "desc"));
 
     const bookingQuerySnap = await getDocs(q);
 
