@@ -12,8 +12,10 @@ import * as yup from "yup";
 import TrackingCode from "../components/TrackingCode";
 import GoogleAnalytics from "../components/GoogleAnalytics";
 
+const koreanPhoneRegex = /^((\+82))((10\d{7,8})|(2\d{8}))$/;
+
 let schema = yup.object().shape({
-  email: yup.string().email().required(),
+  phoneNumber: yup.string().matches(koreanPhoneRegex, { message: "Must be a valid Korean phone number starting with +82" }).required("*Phone number is required!"),
 });
 
 const CheckAppointment = () => {
@@ -22,30 +24,38 @@ const CheckAppointment = () => {
   const history = useHistory();
 
   let query = useQuery();
-  let queryEmail = query.get("email") || "";
+  // let queryEmail = query.get("email") || "";
+  let queryPhoneNumber = query.get("phone") || "";
+
+  if (queryPhoneNumber !== "") {
+    queryPhoneNumber = "+" + queryPhoneNumber.trim();
+  }
+
+ 
 
   const { status: checkBookingStatus, data: response, error: errorMessage, sendRequest } = useHttp(httpCheckBooking);
 
   const { error: cancelBookingError, sendRequest: cancelRequest } = useHttp(httpCancelBooking, true);
 
-  function handleChecking(userEmail) {
+  function handleChecking(userPhoneNumber) {
     //TODO: add the email to the query
     history.push({
       pathname: window.location.pathname,
-      search: "?email=" + userEmail,
+      search: "?phone=" + userPhoneNumber,
     });
-    sendRequest(userEmail);
+    sendRequest(userPhoneNumber);
   }
 
   useEffect(() => {
-    const email = queryEmail.trim();
+    const phoneNumber = queryPhoneNumber; 
+    console.log(phoneNumber);
     schema
       .isValid({
-        email: email,
+        phoneNumber: phoneNumber,
       })
       .then((valid) => {
         if (valid) {
-          handleChecking(queryEmail);
+          handleChecking(queryPhoneNumber);
         } else {
           //TODO: clear all params
           history.push({
@@ -106,7 +116,7 @@ const CheckAppointment = () => {
       <TrackingCode />
       <GoogleAnalytics />
       <SimpleBackdrop loading={checkBookingStatus === STATUS_PENDING} />
-      <CheckingForm onConfirm={handleChecking} onCancel={handleBack} initialEmail={queryEmail} />
+      <CheckingForm onConfirm={handleChecking} onCancel={handleBack} initialPhoneNumber={queryPhoneNumber} />
       {<AppointmentsList appointments={appointments} onCancel={handleCancel} />}
     </div>
   );
