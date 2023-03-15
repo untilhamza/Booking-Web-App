@@ -12,7 +12,7 @@ const CheckingForm = ({ onConfirm, onCancel, initialPhoneNumber }) => {
       phoneNumber: initialPhoneNumber || "+82",
     },
     validationSchema: yup.object().shape({
-      phoneNumber: yup.string().matches(koreanPhoneRegex, { message: "Must be a valid Korean phone number" }).required("*Phone number is required!"),
+      phoneNumber: yup.string().matches(koreanPhoneRegex, { message: "Must be a valid Korean phone number starting with +82" }).required("*Phone number is required!"),
     }),
     onSubmit: (values) => {
       //const REST_API_URL = "YOUR_REST_API_URL";
