@@ -153,10 +153,10 @@ async function httpSubmitSettings(newSettings) {
 
 //returns bookings for an email since yesterday,
 //TODO: make a new one that returns all bookings for an email every made ahaha
-async function httpCheckBooking(email) {
+async function httpCheckBooking(phoneNumber) {
   try {
     const yesterdayMoment = new moment().clone().subtract(1, "days");
-    const q = query(bookingsCollectionRef, where("email", "==", email), where("date", ">", Timestamp.fromMillis(yesterdayMoment.valueOf())), orderBy("date", "desc"));
+    const q = query(bookingsCollectionRef, where("phoneNumber", "==", phoneNumber), where("date", ">", Timestamp.fromMillis(yesterdayMoment.valueOf())), orderBy("date", "desc"));
 
     const bookingQuerySnap = await getDocs(q);
 
@@ -168,12 +168,13 @@ async function httpCheckBooking(email) {
 
       return result;
     } else {
-      throw new Error(`Found no bookings under  ${email}`);
+      throw new Error(`Found no bookings under ${phoneNumber}`);
     }
   } catch (err) {
     throw err;
   }
 }
+
 
 //load bookings for given date as json
 async function httpGetBookings(dateMoment) {
