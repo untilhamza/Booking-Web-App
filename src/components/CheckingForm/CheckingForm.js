@@ -12,7 +12,7 @@ const CheckingForm = ({ onConfirm, onCancel, initialPhoneNumber }) => {
       phoneNumber: initialPhoneNumber || "+82",
     },
     validationSchema: yup.object().shape({
-      phoneNumber: yup.string().matches(koreanPhoneRegex, { message: "Must be a valid phone number" }).required("*Phone number is required!"),
+      phoneNumber: yup.string().matches(koreanPhoneRegex, { message: "Must be a valid Korean phone number" }).required("*Phone number is required!"),
     }),
     onSubmit: (values) => {
       //const REST_API_URL = "YOUR_REST_API_URL";
@@ -30,7 +30,7 @@ const CheckingForm = ({ onConfirm, onCancel, initialPhoneNumber }) => {
             <h5 className="card-title">Enter Phone Number used to make appointment</h5>
             <form onSubmit={formik.handleSubmit}>
               <div className="form-group mb-3">
-                <input type="text" name="phoneNumber" className={"form-control"} placeholder="Phone number" onChange={formik.handleChange} value={formik.values.phoneNumber} />
+                <input type="tel" name="phoneNumber" className={"form-control"} placeholder="Phone number" onChange={formik.handleChange} value={formik.values.phoneNumber} />
                 {formik.touched.phoneNumber && formik.errors.phoneNumber && <span className="help-block text-danger">{formik.errors.phoneNumber}</span>}
               </div>
               <div className="d-flex justify-content-around ">
