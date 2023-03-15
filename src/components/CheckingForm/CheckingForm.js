@@ -30,7 +30,21 @@ const CheckingForm = ({ onConfirm, onCancel, initialPhoneNumber }) => {
             <h5 className="card-title">Enter Phone Number used to make appointment</h5>
             <form onSubmit={formik.handleSubmit}>
               <div className="form-group mb-3">
-                <input type="tel" name="phoneNumber" className={"form-control"} placeholder="Phone number" onChange={formik.handleChange} value={formik.values.phoneNumber} />
+                <input
+                  type="tel"
+                  name="phoneNumber"
+                  className={"form-control"}
+                  placeholder="Phone number"
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.length > 0) {
+                      formik.setFieldValue("phoneNumber", value.replace(/[^0-9+]/g, ""));
+                    } else {
+                      formik.setFieldValue("phoneNumber", value);
+                    }
+                  }}
+                  value={formik.values.phoneNumber}
+                />
                 {formik.touched.phoneNumber && formik.errors.phoneNumber && <span className="help-block text-danger">{formik.errors.phoneNumber}</span>}
               </div>
               <div className="d-flex justify-content-around ">
