@@ -2,7 +2,13 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Map from "../Map/Map";
 import "./BookingMenu.css";
+
 const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
+
+  const handleViewOnMapClick = () => {
+    window.open(`https://www.google.com/maps/search/?api=1&query=37.5317,127.001`);
+  }
+
   return (
     <div className="d-flex flex-column px-3 pt-5 pt-md-0 justify-content-md-center booking-page ">
       <div className="d-flex flex-column ">
@@ -10,7 +16,6 @@ const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
         <div className="text-danger fs-5 small-text text-muted text-left text-md-left mb-3 d-flex flex-column">Need to look fabulous fast? Book your next hair cut today!</div>
       </div>
 
-      {/* testing about */}
       <div className="mt-4">
         <div className="d-flex flex-column  buttons">
           <div className="mb-2">
@@ -42,9 +47,18 @@ const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
               </a>
             </div>
           </div>
-          <div className="">
-            <Map />
+          <div className="mb-2">
+            <Button
+              variant="outline-primary"
+              className="d-block w-100"
+              onClick={handleViewOnMapClick}
+            >
+              View on Map
+            </Button>
           </div>
+          {/* <div className="">
+            <Map />
+          </div> */}
         </div>
       </div>
     </div>
