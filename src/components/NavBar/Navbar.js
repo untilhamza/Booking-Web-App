@@ -10,7 +10,6 @@ import SideBar from "../SideBar/SideBar";
 import "./NavBar.css";
 const Navbar = () => {
   const [showSidebar, setShowSidebar] = useState(false);
-
   const handleToggleSidebar = () => setShowSidebar((isShown) => !isShown);
 
   // const authCtx = useContext(AuthContext)
