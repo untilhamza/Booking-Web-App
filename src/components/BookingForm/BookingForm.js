@@ -4,6 +4,8 @@ import moment from "moment";
 import { Form, Button } from "react-bootstrap";
 import { DatePicker } from "antd";
 import TimeSelector from "../TimeSelector/TimeSelector";
+import { useContext } from "react";
+import AuthContext from "../../store/auth-context";
 
 import "./BookingForm.css";
 
@@ -18,6 +20,7 @@ const schema = yup.object().shape({
 });
 
 const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStatus, settings }) => {
+  const authCtx = useContext(AuthContext);
   function handleGetSlots(date) {
     onGetSlots(date);
   }
@@ -34,7 +37,11 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
       validationSchema={schema}
       onSubmit={(values, { resetForm }) => {
         //submitting data!
-        onConfirm(values);
+        if (!authCtx.isLoggedIn) {
+          authCtx.handleCustomerLogin();
+          return;
+        }
+        onConfirm({ ...values, userId: authCtx.userId, googleAccountName: authCtx.user.displayName, email: authCtx.user.email });
         resetForm();
       }}
       initialValues={{
