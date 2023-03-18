@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import { Layout } from "antd";
 import Navbar from "./components/NavBar/Navbar";
@@ -36,8 +36,8 @@ const App = () => {
             </Route>
 
             <Route path="/admin">
-              {authCtx.isLoggedIn && <Admin />}
-              {!authCtx.isLoggedIn && <Redirect to="/login" />}
+              {authCtx.isAdmin && <Admin />}
+              {!authCtx.isAdmin && <Redirect to="/login" />}
             </Route>
             <Route path="/check-appointment">
               {/* maybe pass the appointment id so it can be fetched */}
@@ -50,16 +50,20 @@ const App = () => {
               <Logout />
             </Route>
             <Route path="/settings">
-              <SettingsPage />
+              {authCtx.isAdmin && <SettingsPage />}
+              {!authCtx.isAdmin && <Redirect to="/login" />}
             </Route>
             <Route path="/general-settings">
-              <GeneralSettingsPage />
+              {authCtx.isAdmin && <GeneralSettingsPage />}
+              {!authCtx.isAdmin && <Redirect to="/login" />}
             </Route>
             <Route path="/slot-settings">
-              <SlotSettingsPage />
+              {authCtx.isAdmin && <SlotSettingsPage />}
+              {!authCtx.isAdmin && <Redirect to="/login" />}
             </Route>
             <Route path="/special-settings">
-              <SpecialDaySettingsPage />
+              {authCtx.isAdmin && <SpecialDaySettingsPage />}
+              {!authCtx.isAdmin && <Redirect to="/login" />}
             </Route>
             <Route path="/">
               <Customer />
