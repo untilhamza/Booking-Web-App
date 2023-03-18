@@ -175,7 +175,6 @@ async function httpCheckBooking(phoneNumber) {
   }
 }
 
-
 //load bookings for given date as json
 async function httpGetBookings(dateMoment) {
   try {
@@ -284,12 +283,14 @@ async function httpSubmitBooking(bookingData) {
           status: "confirmed",
         };
 
-        await uploadSlot(slot);
+        //alert(JSON.stringify({ ...bookingData, ...slot }));
 
         const response = await addDoc(bookingsCollectionRef, {
           ...bookingData,
           ...slot,
         });
+
+        await uploadSlot(slot);
 
         //pull out the id that was returned here...
         return response.id;
@@ -324,18 +325,23 @@ async function httpCancelBooking(id) {
       //get reference to booking to be deleted
       const bookingDocRef = doc(db, "bookings", id);
 
+      let bookingSnap = await getDoc(bookingDocRef);
+
+      let firebaseTimeStamp = bookingSnap.data().date;
+      await deleteRemoteSlot(firebaseTimeStamp, "confirmed");
+
       //will update the status field on the booking to being updated...
       const newFields = { status: "cancelled" };
 
       //mark booking as deleted in database
       await updateDoc(bookingDocRef, newFields);
 
-      let bookingSnap = await getDoc(bookingDocRef);
+      bookingSnap = await getDoc(bookingDocRef);
 
       if (bookingSnap.exists()) {
         //delete slot for this booking from blocked and confirmed slot collection
-        let firebaseTimeStamp = bookingSnap.data().date;
-        await deleteRemoteSlot(firebaseTimeStamp, "confirmed");
+        // let firebaseTimeStamp = bookingSnap.data().date;
+        // await deleteRemoteSlot(firebaseTimeStamp, "confirmed");
       } else {
         //TODO: stop transaction....
         throw new Error("The booking you are attempting to cancel was not found!");
