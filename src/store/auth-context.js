@@ -8,10 +8,6 @@ import { createUserWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuth
 
 const provider = new GoogleAuthProvider();
 
-provider.setCustomParameters({
-  login_hint: "user@example.com",
-});
-
 const ADMINS = ["Nwzxrf32Uee9i6hbTXSN2mWVzlC2", "lHxJifUfgHhJkECibwAudvf3MGp1", "lru8dL4JVWTycq0LHhHgyaWqX133"];
 
 const AuthContext = React.createContext({
