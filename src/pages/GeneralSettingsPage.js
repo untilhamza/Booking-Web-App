@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import GeneralSettings from "../components/Settings/GeneralSettings";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
-import { httpGetSettings, httpSubmitSettings } from "../hooks/request";
+import { httpGetSettings, httpSubmitSettings } from "../http/serverInterface";
 import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import { useHistory } from "react-router-dom";
 import ErrorModal from "../components/ErrorModal/ErrorModal";
