@@ -38,7 +38,7 @@ const SideBar = ({ show, onToggle }) => {
                   if (!item.protected) {
                     items.push(listItem);
                   }
-                  if (item.protected && authCtx.isLoggedIn) {
+                  if (item.protected && authCtx.isAdmin) {
                     items.push(listItem);
                   }
                   return items;
