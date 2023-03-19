@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import CheckingForm from "../components/CheckingForm/CheckingForm";
 import { useHistory } from "react-router-dom";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
-import { httpCheckBooking, httpCancelBooking } from "../hooks/request";
+import { httpCheckBooking, httpCancelBooking } from "../http/serverInterface";
 import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import ErrorModal from "../components/ErrorModal/ErrorModal";
 import { Modal } from "antd";
@@ -31,8 +31,6 @@ const CheckAppointment = () => {
     queryPhoneNumber = "+" + queryPhoneNumber.trim();
   }
 
- 
-
   const { status: checkBookingStatus, data: response, error: errorMessage, sendRequest } = useHttp(httpCheckBooking);
 
   const { error: cancelBookingError, sendRequest: cancelRequest } = useHttp(httpCancelBooking, true);
@@ -47,7 +45,7 @@ const CheckAppointment = () => {
   }
 
   useEffect(() => {
-    const phoneNumber = queryPhoneNumber; 
+    const phoneNumber = queryPhoneNumber;
     console.log(phoneNumber);
     schema
       .isValid({

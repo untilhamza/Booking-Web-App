@@ -41,7 +41,7 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
           authCtx.handleCustomerLogin();
           return;
         }
-        onConfirm({ ...values, userId: authCtx.userId, googleAccountName: authCtx.user.displayName, email: authCtx.user.email, photoURL: authCtx.user.photoURL });
+        onConfirm({ ...values, userId: authCtx.userId, googleAccountName: authCtx.user.displayName, email: authCtx.user.email, photoURL: authCtx.user.photoURL, createdTime: new Date() });
         resetForm();
       }}
       initialValues={{

@@ -1,5 +1,6 @@
-import moment from "moment";
-import { combineDateTimeMoment } from "../util/helpers";
+import moment, { Moment } from "moment";
+
+import { combineDateTimeMoment } from "../utils/helpers";
 import { db } from "../database/firebase-config";
 import { collection, addDoc, Timestamp, getDoc, updateDoc, doc, query, where, getDocs, orderBy, runTransaction, deleteDoc, writeBatch, limit } from "firebase/firestore";
 
@@ -8,6 +9,19 @@ const slotsCollectionRef = collection(db, "slots");
 const settingsCollectionRef = collection(db, "settings");
 
 const API_URL = "";
+
+interface NewBooking {
+  email: string;
+  googleAccountName: string | null;
+  name: string;
+  phone: string;
+  photoURL: string | null;
+  time: string;
+  userId: string;
+  date: Moment;
+}
+
+type BookingStatus = "confirmed" | "blocked" | "cancelled";
 
 function processBooking(result) {
   const isDone = moment(result.date.toDate()) < moment();
@@ -34,15 +48,32 @@ function processSlot(result) {
   return slotData;
 }
 
-function makeSlotMoment(momentDate, timeString) {
+async function checkUserAlreadyBookedDay(bookingData: NewBooking): Promise<boolean> {
+  const startOfDay = new Date(bookingData.date.toDate().setHours(0, 0, 0, 0));
+  const endOfDay = new Date(bookingData.date.toDate().setHours(23, 59, 59, 999));
+
+  const bookingsQuery = query(
+    bookingsCollectionRef,
+    where("userId", "==", bookingData.userId),
+    where("date", ">=", Timestamp.fromMillis(startOfDay.getTime())),
+    where("date", "<=", Timestamp.fromMillis(endOfDay.getTime())),
+    where("status", "==", "confirmed")
+  );
+
+  const bookingsSnap = await getDocs(bookingsQuery);
+
+  return bookingsSnap.empty;
+}
+
+function makeSlotMoment(momentDate: Moment, timeString) {
   let timeMoment = moment(timeString, "h:mm a");
   let slotMoment = combineDateTimeMoment(momentDate, timeMoment);
   return slotMoment;
 }
 
-async function getSlotsForDay(momentDate, status) {
-  const dateMoment = new moment(momentDate);
-  let time = new moment().set({ hour: 0, minute: 0, second: 0 });
+async function getSlotsForDay(momentDate: Moment, status = null) {
+  const dateMoment = moment(momentDate);
+  let time = moment().set({ hour: 0, minute: 0, second: 0 });
 
   let choosenDate = combineDateTimeMoment(dateMoment, time);
 
@@ -58,7 +89,7 @@ async function getSlotsForDay(momentDate, status) {
 }
 
 //delete bookings
-async function deleteRemoteSlot(slotMoment, status) {
+export async function deleteRemoteSlot(slotMoment: Moment, status: BookingStatus) {
   try {
     const snapQuery = query(slotsCollectionRef, where("date", "==", Timestamp.fromDate(slotMoment.toDate())), where("status", "==", status));
 
@@ -76,7 +107,7 @@ async function deleteRemoteSlot(slotMoment, status) {
 }
 
 //tells you that the slot you have choosen is not in the db
-async function checkSlotNotInDB(slotMoment, status) {
+export async function checkSlotNotInDB(slotMoment: Moment, status: BookingStatus) {
   try {
     const snapQuery = query(
       slotsCollectionRef,
@@ -87,7 +118,7 @@ async function checkSlotNotInDB(slotMoment, status) {
 
     const slotQuerySnap = await getDocs(snapQuery);
 
-    return slotQuerySnap.empty; //it empty is true, the slot is not in the db
+    return slotQuerySnap.empty; //if empty is true, the slot is not in the db
   } catch (err) {
     console.log("error in check slot in db", err);
     throw err;
@@ -102,12 +133,12 @@ async function uploadSlot(slotObject) {
 }
 
 //load bookings for given date as json
-async function httpGetBooking(id) {
+export async function httpGetBooking(id) {
   try {
     const bookingRef = doc(db, "bookings", id);
-    const bookingSnap = await getDoc(bookingRef);
+    const bookingSnap = await getDoc<any>(bookingRef);
     if (bookingSnap.exists()) {
-      let result = { ...bookingSnap.data(), id: bookingSnap.id };
+      let result: any = { ...bookingSnap.data(), id: bookingSnap.id };
       let bookingData = processBooking(result);
 
       return bookingData;
@@ -121,13 +152,13 @@ async function httpGetBooking(id) {
 
 //get the settings from the db
 //TODO: get the latest settings from the collection of settings
-async function httpGetSettings() {
+export async function httpGetSettings() {
   try {
     const settingsSnap = await getDocs(settingsCollectionRef);
 
     if (settingsSnap) {
-      let result = settingsSnap.docs[0];
-      result = { ...result.data(), id: result.id };
+      const currentSettings = settingsSnap.docs[0];
+      const result = { ...currentSettings.data(), id: currentSettings.id };
       return result;
     } else {
       throw new Error(`No default settings found`);
@@ -139,7 +170,7 @@ async function httpGetSettings() {
 
 //post new settings to the db
 //TODO: just let him add new setting each time and then we fetch the latest ones , so we can see what changes he made
-async function httpSubmitSettings(newSettings) {
+export async function httpSubmitSettings(newSettings) {
   try {
     // const settingsSnap = await getDocs(settingsCollectionRef)
     const settingsDoc = doc(db, "settings", newSettings.id);
@@ -153,9 +184,9 @@ async function httpSubmitSettings(newSettings) {
 
 //returns bookings for an email since yesterday,
 //TODO: make a new one that returns all bookings for an email every made ahaha
-async function httpCheckBooking(phoneNumber) {
+export async function httpCheckBooking(phoneNumber) {
   try {
-    const yesterdayMoment = new moment().clone().subtract(1, "days");
+    const yesterdayMoment = moment().clone().subtract(1, "days");
     const q = query(bookingsCollectionRef, where("phone", "==", phoneNumber), where("date", ">", Timestamp.fromMillis(yesterdayMoment.valueOf())), orderBy("date", "desc"));
 
     const bookingQuerySnap = await getDocs(q);
@@ -176,9 +207,9 @@ async function httpCheckBooking(phoneNumber) {
 }
 
 //load bookings for given date as json
-async function httpGetBookings(dateMoment) {
+export async function httpGetBookings(dateMoment) {
   try {
-    dateMoment = new moment(dateMoment);
+    dateMoment = moment(dateMoment);
     let queriedDate = dateMoment.format("YYYY-MM-DD").toString();
     let nextDate = dateMoment.add(1, "day").format("YYYY-MM-DD").toString();
     let parsedqueriedDate = Date.parse(queriedDate + "T00:00");
@@ -201,7 +232,7 @@ async function httpGetBookings(dateMoment) {
 }
 
 //load already booked time slots for given date as json
-async function httpGetSlots(dateMoment) {
+export async function httpGetSlots(dateMoment) {
   try {
     const slotSnap = await getSlotsForDay(dateMoment);
     if (slotSnap) {
@@ -218,7 +249,7 @@ async function httpGetSlots(dateMoment) {
 
 //TODO:
 //submit an array of slot for  a given day to block and if some slots are not in that day then make sure to unblock them!!!
-async function httpSubmitBlockedSlots(momentDate, localTimesArray) {
+export async function httpSubmitBlockedSlots(momentDate: Moment, localTimesArray) {
   try {
     return runTransaction(db, async (transaction) => {
       const batch = writeBatch(db); //TODO: use this to delete all and write all slots
@@ -237,7 +268,8 @@ async function httpSubmitBlockedSlots(momentDate, localTimesArray) {
       //TODO: upload new blocked slots...
       for (let localSlotTime of localTimesArray) {
         const slotMoment = makeSlotMoment(momentDate, localSlotTime);
-        if (checkSlotNotInDB(slotMoment, "confirmed")) {
+        const isNotBookedOrBlockedSlot = await checkSlotNotInDB(slotMoment, "confirmed");
+        if (isNotBookedOrBlockedSlot) {
           //make sure the slot is not already taken
           const slot = {
             date: Timestamp.fromDate(slotMoment.toDate()),
@@ -272,18 +304,25 @@ async function httpSubmitBlockedSlots(momentDate, localTimesArray) {
 }
 
 //submit a new booking to the system
-async function httpSubmitBooking(bookingData) {
+export async function httpSubmitBooking(bookingData) {
   try {
     return await runTransaction(db, async (transaction) => {
       let bookingTimeMoment = makeSlotMoment(bookingData.date, bookingData.time);
+      const isNotBookedOrBlockedSlot = await checkSlotNotInDB(bookingTimeMoment, "confirmed");
 
-      if (checkSlotNotInDB(bookingTimeMoment, "confirmed")) {
+      // const isUserBlocked = await checkUserBlocked(bookingData.phone);
+
+      const hasNotAlreadyBookedOnDay = await checkUserAlreadyBookedDay(bookingData);
+
+      if (!hasNotAlreadyBookedOnDay) {
+        throw new Error("Looks like you have already booked today :).");
+      }
+
+      if (isNotBookedOrBlockedSlot) {
         const slot = {
           date: Timestamp.fromDate(bookingTimeMoment.toDate()),
           status: "confirmed",
         };
-
-        //alert(JSON.stringify({ ...bookingData, ...slot }));
 
         const response = await addDoc(bookingsCollectionRef, {
           ...bookingData,
@@ -304,7 +343,7 @@ async function httpSubmitBooking(bookingData) {
 }
 
 //edit a booking, //NOTE: note being used yet
-async function httpEditBooking(booking) {
+export async function httpEditBooking(booking) {
   try {
     const response = await fetch(`${API_URL}/bookings`, {
       method: "patch",
@@ -319,13 +358,17 @@ async function httpEditBooking(booking) {
   }
 }
 
-async function httpCancelBooking(id) {
+export async function httpCancelBooking(id) {
   try {
     return await runTransaction(db, async (transaction) => {
       //get reference to booking to be deleted
       const bookingDocRef = doc(db, "bookings", id);
 
       let bookingSnap = await getDoc(bookingDocRef);
+
+      if (!bookingSnap || !bookingSnap.exists()) {
+        throw new Error("The booking you are attempting to cancel was not found!");
+      }
 
       let firebaseTimeStamp = bookingSnap.data().date;
       await deleteRemoteSlot(firebaseTimeStamp, "confirmed");
@@ -338,15 +381,6 @@ async function httpCancelBooking(id) {
 
       bookingSnap = await getDoc(bookingDocRef);
 
-      if (bookingSnap.exists()) {
-        //delete slot for this booking from blocked and confirmed slot collection
-        // let firebaseTimeStamp = bookingSnap.data().date;
-        // await deleteRemoteSlot(firebaseTimeStamp, "confirmed");
-      } else {
-        //TODO: stop transaction....
-        throw new Error("The booking you are attempting to cancel was not found!");
-      }
-
       return bookingSnap.data();
     });
   } catch (err) {
@@ -354,5 +388,3 @@ async function httpCancelBooking(id) {
     throw err;
   }
 }
-
-export { httpGetBooking, httpGetBookings, httpGetSlots, httpSubmitBooking, httpEditBooking, httpCancelBooking, httpCheckBooking, httpGetSettings, httpSubmitSettings, httpSubmitBlockedSlots };

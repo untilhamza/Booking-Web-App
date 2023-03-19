@@ -2,7 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Badge from "react-bootstrap/Badge";
 import useModal from "../../hooks/useModal";
-import { setStatus } from "../../util/helpers";
+import { setStatus } from "../../utils/helpers";
 import { Card } from "antd";
 import "./Appointment.css";
 
