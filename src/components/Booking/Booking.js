@@ -2,7 +2,7 @@ import React from "react";
 import Button from "react-bootstrap/esm/Button";
 import Badge from "react-bootstrap/Badge";
 import "./Booking.css";
-import { setStatus } from "../../util/helpers";
+import { setStatus } from "../../utils/helpers";
 
 const Booking = ({ booking, onView }) => {
   // console.log("booking", booking);

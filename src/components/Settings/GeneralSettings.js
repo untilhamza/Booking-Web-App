@@ -1,17 +1,17 @@
-import React, { useState } from "react"
-import { Button } from "react-bootstrap"
-import ClockPicker from "../ClockPicker/ClockPicker"
-import { useFormik } from "formik"
+import React, { useState } from "react";
+import { Button } from "react-bootstrap";
+import ClockPicker from "../ClockPicker/ClockPicker";
+import { useFormik } from "formik";
 
-import * as yup from "yup"
-import { compareTimes } from "../../util/helpers"
-import "./GeneralSettings.css"
+import * as yup from "yup";
+import { compareTimes } from "../../utils/helpers";
+import "./GeneralSettings.css";
 
 const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
-  const [pickerTime, setPickerTime] = useState(null)
-  const [showPicker, setShowPicker] = useState(false)
-  const [pickerFunction, setPickerFunction] = useState(() => () => {})
-  const [editMode, setEditMode] = useState(false)
+  const [pickerTime, setPickerTime] = useState(null);
+  const [showPicker, setShowPicker] = useState(false);
+  const [pickerFunction, setPickerFunction] = useState(() => () => {});
+  const [editMode, setEditMode] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -21,75 +21,62 @@ const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
     validationSchema: yup.object().shape({
       startTime: yup.string().required("Starting time is required!"),
       endTime: yup.string().required("Ending time is required!"),
-      slotSize: yup
-        .number()
-        .min(0, "Minutes must be positive numbers")
-        .max(120, "Max slot size is 120 minutes")
-        .required("*Slot size is required!"),
-      address: yup
-        .string()
-        .min(8, "address is Too Short!")
-        .max(50, "address is Too Long!")
-        .required("*Address is required!"),
+      slotSize: yup.number().min(0, "Minutes must be positive numbers").max(120, "Max slot size is 120 minutes").required("*Slot size is required!"),
+      address: yup.string().min(8, "address is Too Short!").max(50, "address is Too Long!").required("*Address is required!"),
     }),
     onSubmit: (values) => {
       if (validateTime()) {
         // console.log("time is valid")
         // alert(JSON.stringify(values, null, 2))
-        setEditMode(false)
-        onConfirm({ ...values })
+        setEditMode(false);
+        onConfirm({ ...values });
       }
     },
-  })
+  });
 
   const validateTime = () => {
-    const isValid = compareTimes(formik.values.startTime, formik.values.endTime)
+    const isValid = compareTimes(formik.values.startTime, formik.values.endTime);
     if (!isValid) {
-      formik.setFieldError("startTime", "Start time must be before end time")
-      formik.setFieldError("endTime", "Start time must be before end time")
+      formik.setFieldError("startTime", "Start time must be before end time");
+      formik.setFieldError("endTime", "Start time must be before end time");
     } else {
-      formik.setFieldError("startTime", "")
-      formik.setFieldError("endTime", "")
+      formik.setFieldError("startTime", "");
+      formik.setFieldError("endTime", "");
     }
-    return isValid
-  }
+    return isValid;
+  };
 
   const handleChangeStartTime = (value) => {
-    formik.setFieldValue("startTime", value)
-    formik.setFieldTouched("startTime")
-  }
+    formik.setFieldValue("startTime", value);
+    formik.setFieldTouched("startTime");
+  };
 
   const handleChangeEndTime = (value) => {
-    formik.setFieldValue("endTime", value)
-    formik.setFieldTouched("endTime")
-  }
+    formik.setFieldValue("endTime", value);
+    formik.setFieldTouched("endTime");
+  };
 
   const handleUsePicker = (setValueFunction, initalValue = null) => {
-    setPickerTime(initalValue)
-    setPickerFunction(() => setValueFunction)
-    setShowPicker(true)
-  }
+    setPickerTime(initalValue);
+    setPickerFunction(() => setValueFunction);
+    setShowPicker(true);
+  };
 
   const handleClosePicker = () => {
-    setPickerFunction(() => () => {})
-    setPickerTime(null)
-    setShowPicker(false)
-  }
+    setPickerFunction(() => () => {});
+    setPickerTime(null);
+    setShowPicker(false);
+  };
 
   const handleGoBack = () => {
     //TODO: findout why this needs to be called twice
     // onBack()
-    onBack()
-  }
+    onBack();
+  };
 
   return (
     <>
-      <ClockPicker
-        show={showPicker}
-        time={pickerTime}
-        onChange={pickerFunction}
-        onClose={handleClosePicker}
-      />
+      <ClockPicker show={showPicker} time={pickerTime} onChange={pickerFunction} onClose={handleClosePicker} />
       <div className="container min-vh-100 p-3">
         <h2>General Shop Settings</h2>
         <div className="d-flex justify-content-between align-items-center mb-4">
@@ -97,28 +84,16 @@ const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
           <div className="hstack gap-3">
             {editMode ? (
               <>
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  onClick={formik.handleSubmit}
-                >
+                <Button variant="outline-secondary" size="sm" onClick={formik.handleSubmit}>
                   Save
                 </Button>
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  onClick={() => setEditMode(false)}
-                >
+                <Button variant="outline-secondary" size="sm" onClick={() => setEditMode(false)}>
                   Cancel
                 </Button>
               </>
             ) : (
               <>
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  onClick={() => setEditMode(true)}
-                >
+                <Button variant="outline-secondary" size="sm" onClick={() => setEditMode(true)}>
                   Edit
                 </Button>
                 <Button variant="secondary" size="sm" onClick={handleGoBack}>
@@ -137,25 +112,13 @@ const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
             <span>{formik.values.startTime}</span>
             {editMode && (
               <>
-                <span
-                  className="text-primary fw-light fst-italic ms-3 change-text"
-                  onClick={() =>
-                    handleUsePicker(
-                      handleChangeStartTime,
-                      formik.values.startTime
-                    )
-                  }
-                >
+                <span className="text-primary fw-light fst-italic ms-3 change-text" onClick={() => handleUsePicker(handleChangeStartTime, formik.values.startTime)}>
                   Change
                 </span>
               </>
             )}
           </div>
-          {formik.touched.startTime && formik.errors.startTime && (
-            <span className="help-block text-danger col-8 offset-4">
-              {formik.errors.startTime}
-            </span>
-          )}
+          {formik.touched.startTime && formik.errors.startTime && <span className="help-block text-danger col-8 offset-4">{formik.errors.startTime}</span>}
         </div>
 
         <div className="mb-3 row">
@@ -165,21 +128,12 @@ const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
           <div className="col-8 d-flex align-items-center">
             <span>{formik.values.endTime}</span>
             {editMode && (
-              <span
-                className="text-primary fw-light fst-italic ms-3 change-text"
-                onClick={() =>
-                  handleUsePicker(handleChangeEndTime, formik.values.endTime)
-                }
-              >
+              <span className="text-primary fw-light fst-italic ms-3 change-text" onClick={() => handleUsePicker(handleChangeEndTime, formik.values.endTime)}>
                 Change
               </span>
             )}
           </div>
-          {formik.touched.endTime && formik.errors.endTime && (
-            <span className="help-block text-danger col-8 offset-4">
-              {formik.errors.endTime}
-            </span>
-          )}
+          {formik.touched.endTime && formik.errors.endTime && <span className="help-block text-danger col-8 offset-4">{formik.errors.endTime}</span>}
         </div>
 
         <div className="mb-3 row">
@@ -188,56 +142,31 @@ const GeneralSettings = ({ onConfirm, onBack, initialValues: defaults }) => {
           </label>
           <div className="col-8 d-flex align-items-center">
             {editMode ? (
-              <input
-                type="number"
-                className="form-control w-25"
-                id="slotSize"
-                name="slotSize"
-                onChange={formik.handleChange}
-                value={formik.values.slotSize}
-              />
+              <input type="number" className="form-control w-25" id="slotSize" name="slotSize" onChange={formik.handleChange} value={formik.values.slotSize} />
             ) : (
               <span>{formik.values.slotSize}</span>
             )}
             <span className="ms-3">Minutes</span>
           </div>
-          {formik.touched.slotSize && formik.errors.slotSize && (
-            <span className="help-block text-danger col-8 offset-4">
-              {formik.errors.slotSize}
-            </span>
-          )}
+          {formik.touched.slotSize && formik.errors.slotSize && <span className="help-block text-danger col-8 offset-4">{formik.errors.slotSize}</span>}
         </div>
 
         <div className="mb-3 row">
-          <label
-            htmlFor="inputAddress"
-            className="col-4 col-form-label fw-bold"
-          >
+          <label htmlFor="inputAddress" className="col-4 col-form-label fw-bold">
             Address
           </label>
           <div className="col-8 d-flex align-items-center">
             {editMode ? (
-              <textarea
-                className="form-control input-address"
-                id="inputAddress"
-                rows="3"
-                name="address"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-              />
+              <textarea className="form-control input-address" id="inputAddress" rows="3" name="address" value={formik.values.address} onChange={formik.handleChange} />
             ) : (
               <span>{formik.values.address}</span>
             )}
           </div>
-          {formik.touched.address && formik.errors.address && (
-            <span className="help-block text-danger col-8 offset-4">
-              {formik.errors.address}
-            </span>
-          )}
+          {formik.touched.address && formik.errors.address && <span className="help-block text-danger col-8 offset-4">{formik.errors.address}</span>}
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default GeneralSettings
+export default GeneralSettings;
