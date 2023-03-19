@@ -67,7 +67,7 @@ export const AuthContextProvider = (props) => {
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
-        alert("error when logging in" + JSON.stringify(error));
+        alert("Error when logging in" + JSON.stringify(error));
         setUser(null);
       });
   };
@@ -76,13 +76,12 @@ export const AuthContextProvider = (props) => {
     try {
       const user = await createUserWithEmailAndPassword(auth, email, password);
     } catch (err) {
-      console.log("error when registering user", err);
+      console.log("Error when registering user", err);
       throw new Error(err);
     }
   };
 
   onAuthStateChanged(auth, (currentUser) => {
-    console.log("user", currentUser);
     setUser(currentUser);
   });
   const contextValue = {
