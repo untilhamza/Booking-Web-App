@@ -3,7 +3,7 @@ import "./SideBar.css";
 import { IconContext } from "react-icons";
 import { Link } from "react-router-dom";
 import { Backdrop } from "@mui/material";
-import { SIDEITEMS } from "../../util/data";
+import { SIDEITEMS } from "../../utils/data";
 import { useContext } from "react";
 import AuthContext from "../../store/auth-context";
 import styled from "styled-components";

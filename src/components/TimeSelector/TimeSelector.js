@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import "./TimeSelector.css";
 import LinearProgress from "@mui/material/LinearProgress";
 
-import { combineDateTimeMoment } from "../../util/helpers";
+import { combineDateTimeMoment } from "../../utils/helpers";
 import { STATUS_PENDING } from "../../hooks/useHttp";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 
