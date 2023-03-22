@@ -52,7 +52,7 @@ async function checkUserAlreadyBookedDay(bookingData: NewBooking): Promise<boole
   const ADMINS = ["Nwzxrf32Uee9i6hbTXSN2mWVzlC2", "lHxJifUfgHhJkECibwAudvf3MGp1", "lru8dL4JVWTycq0LHhHgyaWqX133"];
 
   if (ADMINS.includes(bookingData.userId)) {
-    return false;
+    return true;
   }
 
   const startOfDay = new Date(bookingData.date.toDate().setHours(0, 0, 0, 0));
