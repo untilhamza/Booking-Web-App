@@ -51,6 +51,8 @@ function processSlot(result) {
 async function checkUserAlreadyBookedDay(bookingData: NewBooking): Promise<boolean> {
   const ADMINS = ["Nwzxrf32Uee9i6hbTXSN2mWVzlC2", "lHxJifUfgHhJkECibwAudvf3MGp1", "lru8dL4JVWTycq0LHhHgyaWqX133"];
 
+  // const BLOCKED_USERS = ["lHxJifUfgHhJkECibwAudvf3MGp1", "lru8dL4JVWTycq0LHhHgyaWqX133"];
+
   if (ADMINS.includes(bookingData.userId)) {
     return true;
   }
@@ -68,7 +70,9 @@ async function checkUserAlreadyBookedDay(bookingData: NewBooking): Promise<boole
 
   const bookingsSnap = await getDocs(bookingsQuery);
 
-  return bookingsSnap.empty;
+  const numberOfBookings = bookingsSnap.size;
+
+  return numberOfBookings <= 1;
 }
 
 function makeSlotMoment(momentDate: Moment, timeString) {
