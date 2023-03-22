@@ -58,7 +58,7 @@ const NewBooking = () => {
     if (submitBookingsError && submitBookingsError.includes("Looks like you have already booked today")) {
       Swal.fire({
         title: `Oops!`,
-        html: `<p>Looks like you have already booked on this day. Please cancel your previous appointment to make a new one.</p>
+        html: `<p>Looks like you have already booked twice on this day. Please cancel one of your previous appointments to make a new one.</p>
           `,
         icon: `info`,
         confirmButtonText: "Okay",
