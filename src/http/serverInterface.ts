@@ -49,6 +49,12 @@ function processSlot(result) {
 }
 
 async function checkUserAlreadyBookedDay(bookingData: NewBooking): Promise<boolean> {
+  const ADMINS = ["Nwzxrf32Uee9i6hbTXSN2mWVzlC2", "lHxJifUfgHhJkECibwAudvf3MGp1", "lru8dL4JVWTycq0LHhHgyaWqX133"];
+
+  if (ADMINS.includes(bookingData.userId)) {
+    return false;
+  }
+
   const startOfDay = new Date(bookingData.date.toDate().setHours(0, 0, 0, 0));
   const endOfDay = new Date(bookingData.date.toDate().setHours(23, 59, 59, 999));
 
