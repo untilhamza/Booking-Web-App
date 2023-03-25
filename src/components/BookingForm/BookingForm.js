@@ -1,24 +1,26 @@
-import React from "react";
 import { Formik, ErrorMessage } from "formik";
 import * as yup from "yup";
 import moment from "moment";
 import { Form, Button } from "react-bootstrap";
 import { DatePicker } from "antd";
 import TimeSelector from "../TimeSelector/TimeSelector";
+import { useContext } from "react";
+import AuthContext from "../../store/auth-context";
 
 import "./BookingForm.css";
 
-const phoneRegex = /^([+]?[\s0-9]+)?(\d{3}|[(]?[0-9]+[)])?([-]?[\s]?[0-9])+$/i;
+const koreanPhoneRegex = /^((\+82))((10\d{7,8})|(2\d{8}))$/;
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required!"),
-  phone: yup.string().min(8, "*Enter a valid phone number").matches(phoneRegex, "*Enter a valid phone number!").required("*Phone number is required!"),
-  email: yup.string().email("Must be a valid email").max(255).required("*Email is required!"),
+  phone: yup.string().min(8, "*Enter a valid phone number").matches(koreanPhoneRegex, "*Enter a valid phone number!").required("*Phone number is required!"),
+  email: yup.string(),
   date: yup.string().required("*Booking date is required!"),
   time: yup.string().required("*Booking time is required!"),
 });
 
 const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStatus, settings }) => {
+  const authCtx = useContext(AuthContext);
   function handleGetSlots(date) {
     onGetSlots(date);
   }
@@ -35,12 +37,16 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
       validationSchema={schema}
       onSubmit={(values, { resetForm }) => {
         //submitting data!
-        onConfirm(values);
+        if (!authCtx.isLoggedIn) {
+          authCtx.handleCustomerLogin();
+          return;
+        }
+        onConfirm({ ...values, userId: authCtx.userId, googleAccountName: authCtx.user.displayName, email: authCtx.user.email, photoURL: authCtx.user.photoURL, createdTime: new Date() });
         resetForm();
       }}
       initialValues={{
         name: "",
-        phone: "",
+        phone: "+82",
         email: "",
         date: moment(),
         time: "",
@@ -50,7 +56,10 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
         <Form
           noValidate
           //   validated={!errors}
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
           className="appointmentForm mx-auto p-3 "
         >
           <Form.Group className="mb-3">
@@ -63,17 +72,19 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
 
           <Form.Group className="mb-3">
             <Form.Label className="fw-bold">Phone Number</Form.Label>
-            <Form.Control type="tel" name="phone" placeholder="Phone number" value={values.phone} onChange={handleChange} isValid={touched.phone && !errors.phone} />
+            <Form.Control
+              type="tel"
+              name="phone"
+              placeholder="Phone number"
+              value={values.phone}
+              onChange={(e) => {
+                const value = e.target.value;
+                setFieldValue("phone", value.replace(/[^0-9+]/g, ""));
+              }}
+              isValid={touched.phone && !errors.phone}
+            />
             <div className="text-danger font-italic">
               <ErrorMessage name="phone" />
-            </div>
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label className="fw-bold">Email</Form.Label>
-            <Form.Control type="email" name="email" placeholder="Email" value={values.email} onChange={handleChange} isValid={touched.email && !errors.email} />
-            <div className="text-danger font-italic">
-              <ErrorMessage name="email" />
             </div>
           </Form.Group>
 
@@ -121,7 +132,7 @@ const BookingForm = ({ onCancel, onConfirm, oldData, slots, onGetSlots, slotStat
           </Form.Group>
 
           <div className="d-flex justify-content-around p-2">
-            <Button variant="success" type="submit" className="w-100 me-1" disabled={false}>
+            <Button variant="success" type="submit" className="w-100 me-1">
               Confirm Booking
             </Button>
 

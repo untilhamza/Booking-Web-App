@@ -1,17 +1,16 @@
-import { useState } from "react"
+import { useState } from "react";
 // import { useContext } from "react"
 // import AuthContext from "../../store/auth-context"
-import { Navbar as RbNavbar, Container, Nav } from "react-bootstrap"
-import { NavLink } from "react-router-dom"
+import { Navbar as RbNavbar, Container, Nav } from "react-bootstrap";
+import { NavLink } from "react-router-dom";
 // import Button from "@mui/material/Button"
-import * as FaIcons from "react-icons/fa"
-import SideBar from "../SideBar/SideBar"
+import * as FaIcons from "react-icons/fa";
+import SideBar from "../SideBar/SideBar";
 
-import "./NavBar.css"
+import "./NavBar.css";
 const Navbar = () => {
-  const [showSidebar, setShowSidebar] = useState(false)
-
-  const handleToggleSidebar = () => setShowSidebar((isShown) => !isShown)
+  const [showSidebar, setShowSidebar] = useState(false);
+  const handleToggleSidebar = () => setShowSidebar((isShown) => !isShown);
 
   // const authCtx = useContext(AuthContext)
   return (
@@ -21,11 +20,7 @@ const Navbar = () => {
           <NavLink to="/"> Elkpro Cut</NavLink>
         </RbNavbar.Brand>
         <Nav className="ms-auto">
-          <NavLink
-            className="nav-link nav-item"
-            activeClassName="active"
-            to="/"
-          >
+          <NavLink className="nav-link nav-item" activeClassName="active" to="/">
             Booking
           </NavLink>
 
@@ -49,7 +44,7 @@ const Navbar = () => {
         <SideBar show={showSidebar} onToggle={handleToggleSidebar} />
       </Container>
     </RbNavbar>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

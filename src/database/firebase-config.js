@@ -18,4 +18,6 @@ const app = initializeApp(firebaseConfig);
 //get authetication service from the app and use it else where
 export const auth = getAuth(app);
 
+auth.languageCode = "en-US";
+
 export const db = getFirestore(app);

@@ -1,20 +1,21 @@
-import React from "react"
-import Button from "react-bootstrap/esm/Button"
-import Badge from "react-bootstrap/Badge"
-import "./Booking.css"
-import { setStatus } from "../../util/helpers"
+import React from "react";
+import Button from "react-bootstrap/esm/Button";
+import Badge from "react-bootstrap/Badge";
+import "./Booking.css";
+import { setStatus } from "../../utils/helpers";
 
 const Booking = ({ booking, onView }) => {
-  const { name, time, status, id } = booking
+  // console.log("booking", booking);
+  const { name, time, status, id, phone } = booking;
 
   function handleView() {
-    onView(id)
+    onView(id);
   }
 
   return (
     <tr>
       <td className="text-center py-2 booking-time table-body-text">{time}</td>
-      <td className="text-start py-2 customer-name table-body-text">{name}</td>
+      <td className="text-start py-2 customer-name table-body-text">{`${name}\n ${phone}`}</td>
       <td className="text-center py-2 table-body-text">
         <Badge pill bg={`${setStatus(status)}`} className="py-2 px-2 px-sm-3">
           {status}
@@ -29,7 +30,7 @@ const Booking = ({ booking, onView }) => {
       </td>
       {}
     </tr>
-  )
-}
+  );
+};
 
-export default Booking
+export default Booking;

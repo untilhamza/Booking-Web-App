@@ -3,7 +3,7 @@ import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
 import Swal from "sweetalert2";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
-import { httpSubmitBlockedSlots, httpGetSlots, httpGetSettings } from "../hooks/request";
+import { httpSubmitBlockedSlots, httpGetSlots, httpGetSettings } from "../http/serverInterface";
 import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import BlockSettingsBoard from "../components/blockSettingsBoard/BlockSettingsBoard";
 import TrackingCode from "../components/TrackingCode";

@@ -3,7 +3,7 @@ import BookingForm from "../components/BookingForm/BookingForm";
 import { useHistory } from "react-router-dom";
 import { Modal } from "antd";
 import useHttp, { STATUS_COMPLETED, STATUS_PENDING } from "../hooks/useHttp";
-import { httpSubmitBooking, httpGetSlots, httpGetSettings } from "../hooks/request";
+import { httpSubmitBooking, httpGetSlots, httpGetSettings } from "../http/serverInterface";
 import SimpleBackdrop from "../components/BackDrop/BackDrop";
 import moment from "moment";
 import Swal from "sweetalert2";
@@ -14,7 +14,7 @@ const NewBooking = () => {
   const history = useHistory();
   const { status: getSettingsStatus, data: settings, error: getSettingsErrorMessage, sendRequest: getSettings } = useHttp(httpGetSettings);
 
-  const { status: submitBookingStatus, data: response, error, sendRequest } = useHttp(httpSubmitBooking);
+  const { status: submitBookingStatus, data: response, error: submitBookingsError, sendRequest } = useHttp(httpSubmitBooking);
 
   const { status: slotStatus, data: slotsArray, sendRequest: sendRequestSlots } = useHttp(httpGetSlots);
 
@@ -27,24 +27,8 @@ const NewBooking = () => {
   }
 
   async function handleConfirm(bookingData) {
-    sendRequest(bookingData);
+    sendRequest({ ...bookingData });
   }
-
-  useEffect(() => {
-    Swal.fire({
-      title: `Welcome! Incase there are no 
-      slots`,
-      html: `<p>Please contact the owner on WhatsApp (+82 10-9539-9012) and he will help you make an appointment.</p>  <a aria-label="Chat on WhatsApp" href="https://wa.me/821095399012">
-        <img alt="Chat on WhatsApp" src="assets/images/whatsapp/WhatsAppButtonGreenLarge.svg" />
-      </a>`,
-      icon: `info`,
-      iconHtml: `<span>&#128522;</span>`,
-      confirmButtonText: "Okay",
-      customClass: {
-        icon: "no-border",
-      },
-    });
-  }, []);
 
   useEffect(() => {
     //TODO: fetch for the date today or the provided date when modifying date
@@ -53,29 +37,45 @@ const NewBooking = () => {
   }, []);
 
   useEffect(() => {
-    if (submitBookingStatus === STATUS_COMPLETED) {
+    if (submitBookingStatus === STATUS_COMPLETED && !submitBookingsError) {
       //navigate to the see appointment page with the made appointment..
       //may be show some status of the appointment..
       history.push(`/appointment/${response}`);
     }
-  }, [submitBookingStatus, response, history]);
+  }, [submitBookingStatus, response, history, submitBookingsError]);
 
-  function modalError(message) {
-    Modal.error({
-      title: "Oops...!!",
-      content: message ? message : "An error occurred. Please try again later",
-      onOk: () => {
+  useEffect(() => {
+    function modalError(message) {
+      Modal.error({
+        title: "Oops...!!",
+        content: message ? message : "An error occurred. Please try again later",
+        onOk: () => {
+          history.push("/");
+        },
+      });
+    }
+
+    if (submitBookingsError && submitBookingsError.includes("Looks like you have already booked today")) {
+      Swal.fire({
+        title: `Oops!`,
+        html: `<p>Looks like you have already booked twice on this day. Please cancel one of your previous appointments to make a new one.</p>
+          `,
+        icon: `info`,
+        confirmButtonText: "Okay",
+      }).then((result) => {
+        //TODO: fetch user appointments and navigate to the appointment page..
+        history.push("/check-appointment");
+      });
+    } else if (submitBookingsError || getSettingsErrorMessage) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Something went wrong!",
+      }).then((result) => {
         history.push("/");
-      },
-    });
-  }
-
-  if (error) {
-    modalError(error);
-  }
-  if (getSettingsErrorMessage) {
-    modalError(getSettingsErrorMessage);
-  }
+      });
+    }
+  }, [submitBookingsError, getSettingsErrorMessage, history]);
 
   return (
     <div>
