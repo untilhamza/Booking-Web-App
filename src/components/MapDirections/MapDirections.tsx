@@ -12,10 +12,10 @@ const MapDirections = () => {
   };
   return (
     <div className="mb-2 row p-3 gap-2">
-      <Button variant="outline-primary col" className="d-block w-100" onClick={handleViewKakaoMapClick}>
+      <Button variant="primary col" className="d-block w-100" onClick={handleViewKakaoMapClick}>
         Kakao Map Directions
       </Button>
-      <Button variant="outline-primary col" className="d-block w-100" onClick={handleViewGoogleMapClick}>
+      <Button variant="primary col" className="d-block w-100" onClick={handleViewGoogleMapClick}>
         Google Map Directions
       </Button>
     </div>
