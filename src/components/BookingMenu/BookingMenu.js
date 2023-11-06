@@ -4,8 +4,6 @@ import MapDirections from "../MapDirections/MapDirections";
 import "./BookingMenu.css";
 
 const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
- 
-
   return (
     <div className="d-flex flex-column px-3 pt-5 pt-md-0 justify-content-md-center booking-page ">
       <div className="d-flex flex-column ">
@@ -39,12 +37,12 @@ const BookingMenu = ({ onMakeAppointment, onModifyAppointment, onBack }) => {
           </div>
           <div className="mb-2 mt-3">
             <div className="">
-              <a aria-label="Chat on WhatsApp" href="https://wa.me/821095399012">
+              <a aria-label="Chat on WhatsApp" href="https://wa.me/821058379012">
                 <img alt="Chat on WhatsApp" src="assets/images/whatsapp/WhatsAppButtonGreenLarge.svg" />
               </a>
             </div>
           </div>
-          <MapDirections/>
+          <MapDirections />
         </div>
       </div>
     </div>
